@@ -4,100 +4,109 @@ import { Upload, MessageSquare, History, BookOpen, Sparkles } from 'lucide-react
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted">
+    <div className="min-h-screen gradient-hero">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-20">
         <div className="text-center max-w-4xl mx-auto">
-          <div className="flex justify-center mb-6">
-            <div className="bg-primary/10 p-4 rounded-full">
-              <BookOpen className="h-12 w-12 text-primary" />
+          <div className="flex justify-center mb-8">
+            <div className="relative">
+              <div className="absolute inset-0 animate-pulse-slow rounded-full bg-primary/20 scale-110"></div>
+              <div className="relative bg-primary/10 p-6 rounded-full shadow-elegant animate-float">
+                <BookOpen className="h-16 w-16 text-primary" />
+              </div>
             </div>
           </div>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+          <h1 className="text-6xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent leading-tight">
             Turn Your Notes Into a Conversation
           </h1>
           
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
             Studying doesn't have to be one-way anymore. Upload your files and start an AI-powered conversation with your study materials.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
             <Button 
               size="lg" 
-              className="text-lg px-8 py-4"
+              className="text-lg px-10 py-6 gradient-primary shadow-glow hover:shadow-lg transition-smooth group"
               onClick={() => window.location.href = '/auth'}
             >
-              <Upload className="h-5 w-5 mr-2" />
+              <Upload className="h-6 w-6 mr-3 group-hover:rotate-12 transition-smooth" />
               Upload a File & Start Chatting
             </Button>
             <Button 
               size="lg" 
               variant="outline"
-              className="text-lg px-8 py-4"
+              className="text-lg px-10 py-6 border-2 hover:bg-primary/5 transition-smooth group"
               onClick={() => window.location.href = '/auth'}
             >
-              <History className="h-5 w-5 mr-2" />
+              <History className="h-6 w-6 mr-3 group-hover:scale-110 transition-smooth" />
               View Chat History
             </Button>
           </div>
         </div>
 
         {/* Features Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          <Card className="text-center">
-            <CardHeader>
-              <div className="flex justify-center mb-4">
-                <div className="bg-blue-100 dark:bg-blue-900/20 p-3 rounded-full">
-                  <Upload className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
+          <Card className="text-center group hover:shadow-elegant transition-smooth border-0 shadow-lg bg-card/80 backdrop-blur-sm">
+            <CardHeader className="pb-8">
+              <div className="flex justify-center mb-6">
+                <div className="bg-blue-500/10 p-4 rounded-2xl group-hover:bg-blue-500/20 transition-smooth group-hover:scale-110">
+                  <Upload className="h-10 w-10 text-blue-500" />
                 </div>
               </div>
-              <CardTitle>Upload Your Files</CardTitle>
-              <CardDescription>
-                Support for PDF, DOCX, and TXT files. Secure storage in the cloud.
+              <CardTitle className="text-xl mb-3">Upload Your Files</CardTitle>
+              <CardDescription className="text-base leading-relaxed">
+                Support for PDF, DOCX, and TXT files. Secure storage in the cloud with instant processing.
               </CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="text-center">
-            <CardHeader>
-              <div className="flex justify-center mb-4">
-                <div className="bg-green-100 dark:bg-green-900/20 p-3 rounded-full">
-                  <MessageSquare className="h-8 w-8 text-green-600 dark:text-green-400" />
+          <Card className="text-center group hover:shadow-elegant transition-smooth border-0 shadow-lg bg-card/80 backdrop-blur-sm">
+            <CardHeader className="pb-8">
+              <div className="flex justify-center mb-6">
+                <div className="bg-green-500/10 p-4 rounded-2xl group-hover:bg-green-500/20 transition-smooth group-hover:scale-110">
+                  <MessageSquare className="h-10 w-10 text-green-500" />
                 </div>
               </div>
-              <CardTitle>Ask Natural Questions</CardTitle>
-              <CardDescription>
-                Chat with your documents like you're talking to a study buddy.
+              <CardTitle className="text-xl mb-3">Ask Natural Questions</CardTitle>
+              <CardDescription className="text-base leading-relaxed">
+                Chat with your documents like you're talking to a study buddy. No complex commands needed.
               </CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="text-center">
-            <CardHeader>
-              <div className="flex justify-center mb-4">
-                <div className="bg-purple-100 dark:bg-purple-900/20 p-3 rounded-full">
-                  <Sparkles className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+          <Card className="text-center group hover:shadow-elegant transition-smooth border-0 shadow-lg bg-card/80 backdrop-blur-sm">
+            <CardHeader className="pb-8">
+              <div className="flex justify-center mb-6">
+                <div className="bg-purple-500/10 p-4 rounded-2xl group-hover:bg-purple-500/20 transition-smooth group-hover:scale-110">
+                  <Sparkles className="h-10 w-10 text-purple-500" />
                 </div>
               </div>
-              <CardTitle>Get Smart Answers</CardTitle>
-              <CardDescription>
-                Powered by Google's Gemini AI for accurate, contextual responses.
+              <CardTitle className="text-xl mb-3">Get Smart Answers</CardTitle>
+              <CardDescription className="text-base leading-relaxed">
+                Powered by Google's Gemini AI for accurate, contextual responses to your questions.
               </CardDescription>
             </CardHeader>
           </Card>
         </div>
 
         {/* CTA Section */}
-        <div className="text-center mt-16">
-          <Card className="max-w-2xl mx-auto bg-primary/5 border-primary/20">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold mb-4">Ready to Transform Your Study Sessions?</h3>
-              <p className="text-muted-foreground mb-6">
+        <div className="text-center">
+          <Card className="max-w-3xl mx-auto bg-card/60 backdrop-blur-lg border-0 shadow-elegant">
+            <CardContent className="p-12">
+              <div className="flex justify-center mb-6">
+                <div className="bg-primary/10 p-3 rounded-full">
+                  <Sparkles className="h-8 w-8 text-primary animate-pulse" />
+                </div>
+              </div>
+              <h3 className="text-3xl font-bold mb-6 text-foreground">Ready to Transform Your Study Sessions?</h3>
+              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                 Join thousands of students who are already having conversations with their notes.
               </p>
               <Button 
                 size="lg"
+                className="text-lg px-12 py-6 gradient-primary shadow-glow hover:shadow-lg transition-smooth"
                 onClick={() => window.location.href = '/auth'}
               >
                 Get Started for Free

@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Upload, MessageSquare, History, LogOut } from 'lucide-react';
+import { Upload, MessageSquare, History, LogOut, BookOpen, FileText, Sparkles } from 'lucide-react';
 
 const Dashboard = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -109,15 +109,30 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b">
+      <header className="border-b bg-card/50 backdrop-blur-lg">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">NoteBot AI Dashboard</h1>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => window.location.href = '/history'}>
+          <div className="flex items-center gap-3">
+            <div className="bg-primary/10 p-2 rounded-lg">
+              <BookOpen className="h-6 w-6 text-primary" />
+            </div>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+              NoteBot AI Dashboard
+            </h1>
+          </div>
+          <div className="flex gap-3">
+            <Button 
+              variant="outline" 
+              onClick={() => window.location.href = '/history'}
+              className="hover:bg-primary/5 transition-smooth"
+            >
               <History className="h-4 w-4 mr-2" />
               Chat History
             </Button>
-            <Button variant="outline" onClick={signOut}>
+            <Button 
+              variant="outline" 
+              onClick={signOut}
+              className="hover:bg-destructive/5 hover:text-destructive transition-smooth"
+            >
               <LogOut className="h-4 w-4 mr-2" />
               Sign Out
             </Button>
@@ -126,37 +141,46 @@ const Dashboard = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* File Upload Section */}
-          <Card>
+          <Card className="shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Upload className="h-5 w-5" />
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <div className="bg-blue-500/10 p-2 rounded-lg">
+                  <Upload className="h-5 w-5 text-blue-500" />
+                </div>
                 Upload Study File
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-base">
                 Upload a PDF, DOCX, or TXT file to start asking questions
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div>
-                  <Label htmlFor="file-upload">Choose File</Label>
+                  <Label htmlFor="file-upload" className="text-sm font-medium">Choose File</Label>
                   <Input
                     id="file-upload"
                     type="file"
                     ref={fileInputRef}
                     onChange={handleFileUpload}
                     accept=".pdf,.docx,.txt"
-                    className="mt-2"
+                    className="mt-2 h-12 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-smooth"
                   />
                 </div>
                 {uploadedFile && (
-                  <div className="p-3 bg-muted rounded-md">
-                    <p className="text-sm font-medium">Uploaded: {uploadedFile.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      Size: {(uploadedFile.size / 1024).toFixed(1)} KB
-                    </p>
+                  <div className="p-4 bg-muted/50 rounded-xl border border-border/50">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-green-500/10 p-2 rounded-lg">
+                        <FileText className="h-4 w-4 text-green-500" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">{uploadedFile.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {(uploadedFile.size / 1024).toFixed(1)} KB • Uploaded successfully
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -164,35 +188,47 @@ const Dashboard = () => {
           </Card>
 
           {/* Chat Section */}
-          <Card>
+          <Card className="shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageSquare className="h-5 w-5" />
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <div className="bg-green-500/10 p-2 rounded-lg">
+                  <MessageSquare className="h-5 w-5 text-green-500" />
+                </div>
                 Ask Questions
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-base">
                 Ask questions about your uploaded file or general study topics
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div>
-                  <Label htmlFor="question">Your Question</Label>
+                  <Label htmlFor="question" className="text-sm font-medium">Your Question</Label>
                   <Textarea
                     id="question"
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                     placeholder="What would you like to know about your file?"
-                    className="mt-2"
-                    rows={3}
+                    className="mt-2 min-h-[100px] resize-none transition-smooth focus:ring-2 focus:ring-primary"
+                    rows={4}
                   />
                 </div>
                 <Button 
                   onClick={handleAskQuestion}
                   disabled={loading}
-                  className="w-full"
+                  className="w-full h-12 text-base gradient-primary shadow-glow hover:shadow-lg transition-smooth"
                 >
-                  {loading ? 'Getting Answer...' : 'Ask Question'}
+                  {loading ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      Getting Answer...
+                    </div>
+                  ) : (
+                    <>
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      Ask Question
+                    </>
+                  )}
                 </Button>
               </div>
             </CardContent>
@@ -201,13 +237,20 @@ const Dashboard = () => {
 
         {/* Answer Section */}
         {answer && (
-          <Card className="mt-6">
+          <Card className="mt-8 shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle>AI Response</CardTitle>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <div className="bg-purple-500/10 p-2 rounded-lg">
+                  <Sparkles className="h-5 w-5 text-purple-500" />
+                </div>
+                AI Response
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="prose max-w-none">
-                <p className="whitespace-pre-wrap">{answer}</p>
+              <div className="prose prose-sm max-w-none">
+                <div className="bg-muted/30 rounded-xl p-6 border border-border/50">
+                  <p className="whitespace-pre-wrap text-foreground leading-relaxed">{answer}</p>
+                </div>
               </div>
             </CardContent>
           </Card>
