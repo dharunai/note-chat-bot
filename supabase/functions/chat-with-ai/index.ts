@@ -32,10 +32,15 @@ serve(async (req) => {
     }
 
     // Call Gemini API
-    const geminiApiKey = Deno.env.get('GEMINI_API_KEY') || 'AIzaSyBbflcbTxjw1QwYAjLOXjyshuMxtubbLaA';
+    const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
+    
+    if (!geminiApiKey) {
+      throw new Error('GEMINI_API_KEY environment variable is not set');
+    }
+    
     const prompt = fileContent 
-      ? `User uploaded this file "${fileName}": ${fileContent}\n\nThey asked: ${question}`
-      : question;
+      ? `You are a helpful AI assistant. A user uploaded a file "${fileName}" with the following content: ${fileContent}\n\nUser's question: ${question}\n\nPlease provide a helpful and detailed response based on the file content and the question.`
+      : `You are a helpful AI assistant. Please answer the following question: ${question}`;
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`,
