@@ -42,6 +42,7 @@ serve(async (req) => {
       ? `You are a helpful AI assistant. A user uploaded a file "${fileName}" with the following content: ${fileContent}\n\nUser's question: ${question}\n\nPlease provide a helpful and detailed response based on the file content and the question.`
       : `You are a helpful AI assistant. Please answer the following question: ${question}`;
 
+    console.log('Making request to Gemini API...');
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`,
       {
@@ -63,7 +64,17 @@ serve(async (req) => {
       }
     );
 
+    console.log('Gemini API response status:', response.status);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Gemini API error:', errorText);
+      throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
+    }
+
     const data = await response.json();
+    console.log('Gemini API response data:', JSON.stringify(data, null, 2));
+    
     const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not generate a response.';
 
     // Save to messages table
