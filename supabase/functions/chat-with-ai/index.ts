@@ -32,7 +32,7 @@ serve(async (req) => {
     }
 
     // Call Gemini API
-    const geminiApiKey = 'AIzaSyBbflcbTxjw1QwYAjLOXjyshuMxtubbLaA';
+    const geminiApiKey = Deno.env.get('GEMINI_API_KEY') || 'AIzaSyBbflcbTxjw1QwYAjLOXjyshuMxtubbLaA';
     const prompt = fileContent 
       ? `User uploaded this file "${fileName}": ${fileContent}\n\nThey asked: ${question}`
       : question;
