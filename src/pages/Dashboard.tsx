@@ -27,10 +27,8 @@ const Dashboard = () => {
   useEffect(() => {
     const saved = sessionStorage.getItem('activeModel');
     if (saved) setModel(saved);
-    else setShowModelDialog(true);
     document.title = 'NoteBot AI — Dashboard';
   }, []);
-
   const handleModelSelect = (choice: "Google Gemini" | "OpenAI GPT") => {
     setModel(choice);
     sessionStorage.setItem('activeModel', choice);
@@ -184,7 +182,7 @@ const { data, error } = await supabase.functions.invoke('chat-with-ai', {
             <p className="text-muted-foreground mb-6">Upload your notes, choose your model, and turn study material into conversations.</p>
             <div className="flex gap-3">
               <Button onClick={() => fileInputRef.current?.click()} className="shadow-glow">Upload a File</Button>
-              <Button variant="secondary" onClick={() => setShowModelDialog(true)}>Choose Model</Button>
+              
             </div>
           </div>
         </section>
