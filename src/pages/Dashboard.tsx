@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Upload, MessageSquare, History, LogOut, BookOpen, FileText, Sparkles } from 'lucide-react';
+import { Upload, MessageSquare, History, LogOut, BookOpen, FileText, Sparkles, Cpu } from 'lucide-react';
+import ModelSelector from '@/components/chat/ModelSelector';
+import { extractTextFromFile } from '@/lib/fileExtractors';
 
 const Dashboard = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -16,10 +18,28 @@ const Dashboard = () => {
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
   const [fileContent, setFileContent] = useState('');
+  const [model, setModel] = useState<string | null>(null);
+  const [showModelDialog, setShowModelDialog] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user, signOut } = useAuth();
   const { toast } = useToast();
 
+  useEffect(() => {
+    const saved = sessionStorage.getItem('activeModel');
+    if (saved) setModel(saved);
+    else setShowModelDialog(true);
+    document.title = 'NoteBot AI — Dashboard';
+  }, []);
+
+  const handleModelSelect = (choice: "Google Gemini" | "OpenAI GPT") => {
+    setModel(choice);
+    sessionStorage.setItem('activeModel', choice);
+    setShowModelDialog(false);
+    toast({ title: 'Model selected', description: `Using ${choice} for this session.` });
+    if (choice === 'OpenAI GPT') {
+      toast({ title: 'Heads up', description: 'OpenAI support will be enabled next. Using Gemini endpoint for now.', variant: 'default' });
+    }
+  };
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
@@ -54,13 +74,17 @@ const Dashboard = () => {
       return;
     }
 
-    // For demo purposes, simulate file content extraction
-    if (file.type === 'text/plain') {
-      const text = await file.text();
+// Extract text client-side
+    try {
+      const text = await extractTextFromFile(file);
       setFileContent(text);
-    } else {
-      // Simulate content for PDF/DOCX files
-      setFileContent(`Content from ${file.name}: This is a sample document about various topics. Students can ask questions about the content and get AI-powered answers.`);
+    } catch (err: any) {
+      toast({
+        title: 'Extraction failed',
+        description: err?.message || 'Unable to read file text.',
+        variant: 'destructive',
+      });
+      setFileContent('');
     }
 
     toast({
@@ -69,7 +93,7 @@ const Dashboard = () => {
     });
   };
 
-  const handleAskQuestion = async () => {
+const handleAskQuestion = async () => {
     if (!question.trim()) {
       toast({
         title: "No Question",
@@ -78,16 +102,21 @@ const Dashboard = () => {
       });
       return;
     }
-
+    if (!model) {
+      setShowModelDialog(true);
+      toast({ title: "Choose a model", description: "Please select Google Gemini or OpenAI GPT to continue." });
+      return;
+    }
     setLoading(true);
     setAnswer('');
 
     try {
-      const { data, error } = await supabase.functions.invoke('chat-with-ai', {
+const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
           question,
           fileContent: uploadedFile ? fileContent : null,
           fileName: uploadedFile?.name || null,
+          model,
         }
       });
 
@@ -119,7 +148,15 @@ const Dashboard = () => {
               NoteBot AI Dashboard
             </h1>
           </div>
-          <div className="flex gap-3">
+<div className="flex flex-wrap gap-3">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowModelDialog(true)}
+              className="hover:bg-primary/5 transition-smooth"
+            >
+              <Cpu className="h-4 w-4 mr-2" />
+              {model ? `Model: ${model}` : 'Choose Model'}
+            </Button>
             <Button 
               variant="outline" 
               onClick={() => window.location.href = '/history'}
@@ -140,7 +177,17 @@ const Dashboard = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
+<div className="container mx-auto px-4 py-8">
+        <section className="relative overflow-hidden rounded-3xl gradient-hero p-10 mb-8 shadow-glow border border-border/50">
+          <div className="max-w-2xl">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Increase Your Impact with AI</h2>
+            <p className="text-muted-foreground mb-6">Upload your notes, choose your model, and turn study material into conversations.</p>
+            <div className="flex gap-3">
+              <Button onClick={() => fileInputRef.current?.click()} className="shadow-glow">Upload a File</Button>
+              <Button variant="secondary" onClick={() => setShowModelDialog(true)}>Choose Model</Button>
+            </div>
+          </div>
+        </section>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* File Upload Section */}
           <Card className="shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
@@ -253,8 +300,9 @@ const Dashboard = () => {
                 </div>
               </div>
             </CardContent>
-          </Card>
+</Card>
         )}
+        <ModelSelector open={showModelDialog} onSelect={handleModelSelect} />
       </div>
     </div>
   );
