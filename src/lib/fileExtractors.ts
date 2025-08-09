@@ -1,9 +1,9 @@
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
-// Vite: import the worker as a URL
-// @ts-ignore Vite url import typing
-import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.js?url';
+// Vite: import the worker as a module Worker (ESM)
+// @ts-ignore - Vite's ?worker returns a Worker constructor
+import PdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?worker';
 
-GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+GlobalWorkerOptions.workerPort = new PdfWorker();
 
 export async function extractTextFromPDF(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
