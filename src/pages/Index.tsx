@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Upload, MessageSquare, History, BookOpen, Sparkles } from 'lucide-react';
+import { Upload, MessageSquare, BookOpen, Sparkles } from 'lucide-react';
 
 const Index = () => {
   return (
@@ -33,15 +33,6 @@ const Index = () => {
             >
               <Upload className="h-6 w-6 mr-3 group-hover:rotate-12 transition-smooth" />
               Upload a File & Start Chatting
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline"
-              className="text-lg px-10 py-6 border-2 hover:bg-primary/5 transition-smooth group"
-              onClick={() => window.location.href = '/auth'}
-            >
-              <History className="h-6 w-6 mr-3 group-hover:scale-110 transition-smooth" />
-              View Chat History
             </Button>
           </div>
         </div>

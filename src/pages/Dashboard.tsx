@@ -5,10 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Upload, MessageSquare, LogOut, BookOpen, FileText, Sparkles, Cpu } from 'lucide-react';
+import { Upload, MessageSquare, LogOut, BookOpen, FileText, Sparkles, Cpu, Mail, Instagram, Linkedin } from 'lucide-react';
 import ModelSelector from '@/components/chat/ModelSelector';
 import { extractTextFromFile } from '@/lib/fileExtractors';
 import ChatMessage from '@/components/chat/ChatMessage';
@@ -23,6 +24,7 @@ const Dashboard = () => {
   const [fileContent, setFileContent] = useState('');
   const [model, setModel] = useState<string | null>(null);
   const [showModelDialog, setShowModelDialog] = useState(false);
+  const [showContactDialog, setShowContactDialog] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user, signOut } = useAuth();
   const { toast } = useToast();
@@ -183,6 +185,14 @@ const handleAskQuestion = async (override?: string) => {
               {model ? `Model: ${model}` : 'Choose Model'}
             </Button>
             <Button 
+              variant="outline"
+              onClick={() => setShowContactDialog(true)}
+              className="hover:bg-primary/5 transition-smooth"
+            >
+              <Mail className="h-4 w-4 mr-2" />
+              Contact Us
+            </Button>
+            <Button 
               variant="outline" 
               onClick={signOut}
               className="hover:bg-destructive/5 hover:text-destructive transition-smooth"
@@ -326,6 +336,28 @@ const handleAskQuestion = async (override?: string) => {
           </Card>
         </div>
 
+        <Dialog open={showContactDialog} onOpenChange={setShowContactDialog}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Contact Us</DialogTitle>
+              <DialogDescription>Reach out anytime.</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-2">
+              <a href="mailto:dharunshanmugavel12@gmail.com" className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-smooth">
+                <Mail className="h-4 w-4 text-primary" />
+                <span>dharunshanmugavel12@gmail.com</span>
+              </a>
+              <a href="https://www.instagram.com/_havoc_dharun_/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-smooth">
+                <Instagram className="h-4 w-4 text-primary" />
+                <span>_havoc_dharun_</span>
+              </a>
+              <a href="https://www.linkedin.com/in/dharun-shanmugavel-bb7304315" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-smooth">
+                <Linkedin className="h-4 w-4 text-primary" />
+                <span>Dharun Shanmugavel</span>
+              </a>
+            </div>
+          </DialogContent>
+        </Dialog>
         <ModelSelector open={showModelDialog} onSelect={handleModelSelect} />
       </div>
     </div>
