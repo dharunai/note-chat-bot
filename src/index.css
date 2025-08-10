@@ -141,6 +141,18 @@ All colors MUST be HSL.
     transition: var(--transition-smooth);
   }
 
+  /* Cosmic full-screen background: subtle stars + brand gradients */
+  .bg-cosmic {
+    background-image:
+      radial-gradient(1000px 600px at 15% -10%, hsl(var(--primary) / 0.18), transparent 60%),
+      radial-gradient(800px 500px at 85% -5%, hsl(var(--accent) / 0.14), transparent 60%),
+      radial-gradient(1px 1px at 20% 10%, hsl(0 0% 100% / 0.18), transparent 2px),
+      radial-gradient(1px 1px at 80% 30%, hsl(0 0% 100% / 0.12), transparent 2px),
+      linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
+    background-size: auto, auto, auto, auto, auto;
+    background-attachment: fixed;
+  }
+
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
