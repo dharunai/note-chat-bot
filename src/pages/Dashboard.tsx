@@ -296,7 +296,7 @@ const Dashboard = () => {
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>Contact Us</DialogTitle>
-              <DialogDescription>Reach out anytime.</DialogDescription>
+              <DialogDescription>Was There Any bugs ..?</DialogDescription>
             </DialogHeader>
             <div className="space-y-2">
               <a href="mailto:dharunshanmugavel12@gmail.com" className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-smooth">
