@@ -24,32 +24,39 @@ const Index = () => {
     <div className="min-h-screen gradient-hero">
       <TopNav />
       <main className="container mx-auto px-4 py-16">
-        {/* Hero Section */}
-        <section className="text-center max-w-4xl mx-auto mb-16">
-          <div className="flex justify-center mb-8">
-            <div className="relative">
-              <div className="absolute inset-0 animate-pulse-slow rounded-full bg-primary/20 scale-110"></div>
-              <div className="relative bg-primary/10 p-6 rounded-full shadow-elegant animate-float">
-                <Sparkles className="h-16 w-16 text-primary" />
+        {/* Hero Section - Remix pulse-robot (purple) */}
+        <section className="relative overflow-hidden rounded-3xl gradient-hero-remix shadow-elegant mb-16">
+          <div className="relative container mx-auto px-4 py-12 md:py-20">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
+              {/* Left: Copy */}
+              <div>
+                <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent leading-tight">
+                  Click, Convert, Create, Conquer, Chat — Your AI Toolbox for Everything
+                </h1>
+                <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl leading-relaxed">
+                  From files to ideas, from PDFs to posters — Note Bot AI turns your work into wow in seconds.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button size="lg" className="px-8 py-6 gradient-primary shadow-glow transition-smooth" asChild>
+                    <a href="#tools" aria-label="Explore all tools">Explore All Tools</a>
+                  </Button>
+                  <Button size="lg" variant="outline" className="px-8 py-6 transition-smooth" asChild>
+                    <Link to="/dashboard" aria-label="Chat with your notes">Chat with Your Notes</Link>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Right: Visual */}
+              <div className="relative">
+                <div className="absolute -inset-8 rounded-[2rem] opacity-60 glow-ellipse-purple" aria-hidden="true" />
+                <img
+                  src="/placeholder.svg"
+                  alt="AI robot assistant illustration"
+                  loading="lazy"
+                  className="relative w-full h-auto rounded-3xl bg-card shadow-elegant"
+                />
               </div>
             </div>
-          </div>
-
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent leading-tight">
-            Click, Convert, Create, Conquer, Chat — Your AI Toolbox for Everything
-          </h1>
-
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-            From files to ideas, from PDFs to posters — Note Bot AI turns your work into wow in seconds.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="px-8 py-6 gradient-primary shadow-glow transition-smooth" asChild>
-              <a href="#tools" aria-label="Explore all tools">Explore All Tools</a>
-            </Button>
-            <Button size="lg" variant="outline" className="px-8 py-6 transition-smooth" asChild>
-              <Link to="/dashboard" aria-label="Chat with your notes">Chat with Your Notes</Link>
-            </Button>
           </div>
         </section>
 
