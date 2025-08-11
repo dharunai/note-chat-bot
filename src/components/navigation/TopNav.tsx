@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import logoMark from "@/assets/logo-mark.webp";
 const TopNav = () => {
   return <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 items-center justify-between px-4">
+      <div className="">
         <Link to="/" className="flex items-center gap-2">
           <img src={logoMark} alt="Note Bot AI logo" loading="lazy" decoding="async" className="shadow-amber-800 " />
           <span className="font-bold tracking-tight text-purple-700 text-lg">NoteBot AI</span>
