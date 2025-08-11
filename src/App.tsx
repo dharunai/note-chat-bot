@@ -24,6 +24,10 @@ const AIEssayWriter = lazy(() => import("./pages/tools/AIEssayWriter"));
 const GrammarChecker = lazy(() => import("./pages/tools/GrammarChecker"));
 const PlagiarismChecker = lazy(() => import("./pages/tools/PlagiarismChecker"));
 const ComingSoon = lazy(() => import("./pages/tools/ComingSoon"));
+// Blog pages
+const Blogs = lazy(() => import("./pages/Blogs"));
+const ChatWithYourNotes = lazy(() => import("./pages/blog/ChatWithYourNotes"));
+const BlogPostComingSoon = lazy(() => import("./pages/BlogPostComingSoon"));
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -48,14 +52,18 @@ const App = () => (
               <Route path="/tools/image-compress" element={<ImageCompressor />} />
               <Route path="/tools/essay-writer" element={<AIEssayWriter />} />
               <Route path="/tools/grammar" element={<GrammarChecker />} />
-              <Route path="/tools/plagiarism-check" element={<PlagiarismChecker />} />
-              {/* Scaffold the rest as coming soon */}
-              <Route path="/tools/:slug" element={<ComingSoon title="Tool" description="This tool will be available soon." />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/history" element={<History />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
+<Route path="/tools/plagiarism-check" element={<PlagiarismChecker />} />
+{/* Scaffold the rest as coming soon */}
+<Route path="/tools/:slug" element={<ComingSoon title="Tool" description="This tool will be available soon." />} />
+{/* Blog routes */}
+<Route path="/blog" element={<Blogs />} />
+<Route path="/blog/chat-with-your-notes" element={<ChatWithYourNotes />} />
+<Route path="/blog/:slug" element={<BlogPostComingSoon />} />
+<Route path="/auth" element={<Auth />} />
+<Route path="/dashboard" element={<Dashboard />} />
+<Route path="/history" element={<History />} />
+{/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+<Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </BrowserRouter>

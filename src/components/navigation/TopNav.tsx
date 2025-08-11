@@ -25,14 +25,17 @@ const TopNav = () => {
           </div>
         </div>
 
-        <nav className="flex items-center gap-2">
-          <Button variant="outline" asChild>
-            <Link to="/auth">Login</Link>
-          </Button>
-          <Button asChild>
-            <Link to="/tools">Explore Tools</Link>
-          </Button>
-        </nav>
+<nav className="flex items-center gap-2">
+  <Button variant="ghost" asChild>
+    <Link to="/blog">Blog</Link>
+  </Button>
+  <Button variant="outline" asChild>
+    <Link to="/auth">Login</Link>
+  </Button>
+  <Button asChild>
+    <Link to="/tools">Explore Tools</Link>
+  </Button>
+</nav>
       </div>
     </header>
   );
