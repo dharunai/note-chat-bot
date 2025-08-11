@@ -54,6 +54,14 @@ All colors MUST be HSL.
       radial-gradient(120% 60% at 85% 40%, hsl(var(--remix-pink) / 0.20) 0%, transparent 60%),
       linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
 
+    /* Remix pulse-robot (orange-gold) tokens */
+    --remix-orange-1: 32 94% 52%;
+    --remix-orange-2: 38 92% 60%;
+    --remix-gold: 44 96% 58%;
+    --gradient-remix-hero-orange: radial-gradient(120% 80% at 20% 30%, hsl(var(--remix-orange-2) / 0.28) 0%, transparent 60%),
+      radial-gradient(120% 60% at 85% 40%, hsl(var(--remix-gold) / 0.20) 0%, transparent 60%),
+      linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
+
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 220 13% 18%;
     --sidebar-primary: 271 81% 56%;
@@ -108,6 +116,14 @@ All colors MUST be HSL.
       radial-gradient(120% 60% at 85% 40%, hsl(var(--remix-pink) / 0.22) 0%, transparent 60%),
       linear-gradient(180deg, hsl(222 84% 5%) 0%, hsl(220 13% 18%) 100%);
 
+    /* Remix pulse-robot (orange-gold) tokens */
+    --remix-orange-1: 32 94% 56%;
+    --remix-orange-2: 38 92% 64%;
+    --remix-gold: 44 96% 64%;
+    --gradient-remix-hero-orange: radial-gradient(120% 80% at 20% 30%, hsl(var(--remix-orange-2) / 0.30) 0%, transparent 60%),
+      radial-gradient(120% 60% at 85% 40%, hsl(var(--remix-gold) / 0.22) 0%, transparent 60%),
+      linear-gradient(180deg, hsl(222 84% 5%) 0%, hsl(220 13% 18%) 100%);
+
     --sidebar-background: 220 13% 18%;
     --sidebar-foreground: 220 14% 96%;
     --sidebar-primary: 271 91% 65%;
@@ -148,8 +164,11 @@ All colors MUST be HSL.
   .gradient-hero-remix {
     background: var(--gradient-remix-hero);
   }
-  
-  
+
+  .gradient-hero-remix-orange {
+    background: var(--gradient-remix-hero-orange);
+  }
+
   .shadow-elegant {
     box-shadow: var(--shadow-elegant);
   }
@@ -164,6 +183,11 @@ All colors MUST be HSL.
 
   .glow-ellipse-purple {
     background: radial-gradient(closest-side, hsl(var(--remix-purple-2) / 0.35), transparent);
+    filter: blur(36px);
+  }
+
+  .glow-ellipse-orange {
+    background: radial-gradient(closest-side, hsl(var(--remix-orange-2) / 0.35), transparent);
     filter: blur(36px);
   }
 

@@ -3,6 +3,7 @@ import TopNav from '@/components/navigation/TopNav';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, FileImage, Layers, Scissors, FileSpreadsheet, Wand2, Paintbrush, Shield, Link as LinkIcon, Lock, QrCode, Image as ImageIcon, MessageSquare, Sparkles } from 'lucide-react';
+import heroRobot from '@/assets/hero-robot.webp';
 
 const Index = () => {
   const tools = [
@@ -25,7 +26,7 @@ const Index = () => {
       <TopNav />
       <main className="container mx-auto px-4 py-16">
         {/* Hero Section - Remix pulse-robot (purple) */}
-        <section className="relative overflow-hidden rounded-3xl gradient-hero-remix shadow-elegant mb-16">
+        <section className="relative overflow-hidden rounded-3xl gradient-hero-remix-orange shadow-elegant mb-16">
           <div className="relative container mx-auto px-4 py-12 md:py-20">
             <div className="grid md:grid-cols-2 gap-10 items-center">
               {/* Left: Copy */}
@@ -48,11 +49,12 @@ const Index = () => {
 
               {/* Right: Visual */}
               <div className="relative">
-                <div className="absolute -inset-8 rounded-[2rem] opacity-60 glow-ellipse-purple" aria-hidden="true" />
+                <div className="absolute -inset-8 rounded-[2rem] opacity-60 glow-ellipse-orange" aria-hidden="true" />
                 <img
-                  src="/placeholder.svg"
-                  alt="AI robot assistant illustration"
+                  src={heroRobot}
+                  alt="Note Bot AI hero illustration in orange-gold style"
                   loading="lazy"
+                  decoding="async"
                   className="relative w-full h-auto rounded-3xl bg-card shadow-elegant"
                 />
               </div>
