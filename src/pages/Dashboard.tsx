@@ -15,7 +15,6 @@ import { extractTextFromFile } from '@/lib/fileExtractors';
 import ChatMessage from '@/components/chat/ChatMessage';
 import SuggestionChips from '@/components/chat/SuggestionChips';
 import DocumentViewer from '@/components/chat/DocumentViewer';
-
 const Dashboard = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [question, setQuestion] = useState('');
@@ -26,13 +25,19 @@ const Dashboard = () => {
   const [showModelDialog, setShowModelDialog] = useState(false);
   const [showContactDialog, setShowContactDialog] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { user, signOut } = useAuth();
-  const { toast } = useToast();
-
-  type ChatMessageType = { role: 'assistant' | 'user'; content: string };
+  const {
+    user,
+    signOut
+  } = useAuth();
+  const {
+    toast
+  } = useToast();
+  type ChatMessageType = {
+    role: 'assistant' | 'user';
+    content: string;
+  };
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-
   useEffect(() => {
     const saved = sessionStorage.getItem('activeModel');
     if (saved) setModel(saved);
@@ -42,46 +47,49 @@ const Dashboard = () => {
     setModel(choice);
     sessionStorage.setItem('activeModel', choice);
     setShowModelDialog(false);
-    toast({ title: 'Model selected', description: `Using ${choice} for this session.` });
+    toast({
+      title: 'Model selected',
+      description: `Using ${choice} for this session.`
+    });
     if (choice === 'OpenAI GPT') {
-      toast({ title: 'Heads up', description: 'OpenAI support will be enabled next. Using Gemini endpoint for now.', variant: 'default' });
+      toast({
+        title: 'Heads up',
+        description: 'OpenAI support will be enabled next. Using Gemini endpoint for now.',
+        variant: 'default'
+      });
     }
   };
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
-
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     if (file.type !== 'application/pdf' && file.type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && file.type !== 'text/plain') {
       toast({
         title: "Invalid File Type",
         description: "Please upload a PDF, DOCX, or TXT file.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
-
     setUploadedFile(file);
 
     // Upload to Supabase Storage
     const fileName = `${user.id}/${Date.now()}-${file.name}`;
-    const { error } = await supabase.storage
-      .from('student-files')
-      .upload(fileName, file);
-
+    const {
+      error
+    } = await supabase.storage.from('student-files').upload(fileName, file);
     if (error) {
       toast({
         title: "Upload Error",
         description: error.message,
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
 
-// Extract text client-side
+    // Extract text client-side
     try {
       const text = await extractTextFromFile(file);
       setFileContent(text);
@@ -89,84 +97,84 @@ const Dashboard = () => {
       toast({
         title: 'Extraction failed',
         description: err?.message || 'Unable to read file text.',
-        variant: 'destructive',
+        variant: 'destructive'
       });
       setFileContent('');
     }
-
     toast({
       title: "File Uploaded",
-      description: `${file.name} has been uploaded successfully.`,
+      description: `${file.name} has been uploaded successfully.`
     });
-
-    const defaultSuggestions = [
-      'Summarize this document',
-      'What are the key points?',
-      'Explain this section in simple terms',
-      `How does this relate to ${file.name.split('.')[0]}?`,
-    ];
+    const defaultSuggestions = ['Summarize this document', 'What are the key points?', 'Explain this section in simple terms', `How does this relate to ${file.name.split('.')[0]}?`];
     setSuggestions(defaultSuggestions);
 
     // Auto-start: greeting + concise summary
     if (model) {
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: "Analyzing your document… generating a quick summary." },
-      ]);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: "Analyzing your document… generating a quick summary."
+      }]);
       const autoPrompt = "Provide a warm, friendly greeting and a concise summary of the uploaded document. Remove any markdown symbols like #, *, `, and keep the formatting clean with short paragraphs or bullet points.";
       await handleAskQuestion(autoPrompt);
     } else {
       setShowModelDialog(true);
     }
   };
-
-const cleanText = (txt: string) =>
-  txt
-    .replace(/^[#>*-]\s?/gm, '')
-    .replace(/[`*_]/g, '')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-
-const handleAskQuestion = async (override?: string) => {
+  const cleanText = (txt: string) => txt.replace(/^[#>*-]\s?/gm, '').replace(/[`*_]/g, '').replace(/\n{3,}/g, '\n\n').trim();
+  const handleAskQuestion = async (override?: string) => {
     const q = (override ?? question).trim();
     if (!q) {
-      toast({ title: "No Question", description: "Please enter a question.", variant: "destructive" });
+      toast({
+        title: "No Question",
+        description: "Please enter a question.",
+        variant: "destructive"
+      });
       return;
     }
     if (!model) {
       setShowModelDialog(true);
-      toast({ title: "Choose a model", description: "Please select Google Gemini or OpenAI GPT to continue." });
+      toast({
+        title: "Choose a model",
+        description: "Please select Google Gemini or OpenAI GPT to continue."
+      });
       return;
     }
     setLoading(true);
     setAnswer('');
     setQuestion('');
-
-    setMessages((prev) => [...prev, { role: 'user', content: q }]);
-
+    setMessages(prev => [...prev, {
+      role: 'user',
+      content: q
+    }]);
     try {
-      const { data, error } = await supabase.functions.invoke('chat-with-ai', {
+      const {
+        data,
+        error
+      } = await supabase.functions.invoke('chat-with-ai', {
         body: {
           question: q,
           fileContent: uploadedFile ? fileContent : null,
           fileName: uploadedFile?.name || null,
-          model,
+          model
         }
       });
-
       if (error) throw error;
-
       const cleaned = cleanText(data.answer || '');
-      setMessages((prev) => [...prev, { role: 'assistant', content: cleaned }]);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: cleaned
+      }]);
     } catch (error: any) {
-      toast({ title: "Error", description: error.message || "Failed to get AI response", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: error.message || "Failed to get AI response",
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
     }
   };
-
-  return (
-    <div className="min-h-screen bg-cosmic">
+  return <div className="min-h-screen bg-cosmic">
       <header className="border-b bg-card/50 backdrop-blur-lg">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -176,27 +184,15 @@ const handleAskQuestion = async (override?: string) => {
             <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight">NoteBot AI</h1>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Button 
-              variant="outline" 
-              onClick={() => setShowModelDialog(true)}
-              className="hover:bg-primary/5 transition-smooth"
-            >
+            <Button variant="outline" onClick={() => setShowModelDialog(true)} className="hover:bg-primary/5 transition-smooth">
               <Cpu className="h-4 w-4 mr-2" />
               {model ? `Model: ${model}` : 'Choose Model'}
             </Button>
-            <Button 
-              variant="outline"
-              onClick={() => setShowContactDialog(true)}
-              className="hover:bg-primary/5 transition-smooth"
-            >
+            <Button variant="outline" onClick={() => setShowContactDialog(true)} className="hover:bg-primary/5 transition-smooth">
               <Mail className="h-4 w-4 mr-2" />
               Contact Us
             </Button>
-            <Button 
-              variant="outline" 
-              onClick={signOut}
-              className="hover:bg-destructive/5 hover:text-destructive transition-smooth"
-            >
+            <Button variant="outline" onClick={signOut} className="hover:bg-destructive/5 hover:text-destructive transition-smooth">
               <LogOut className="h-4 w-4 mr-2" />
               Sign Out
             </Button>
@@ -223,47 +219,8 @@ const handleAskQuestion = async (override?: string) => {
           <div className="space-y-8">
             {/* File Upload Section */}
             <Card className="shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-xl">
-                  <div className="bg-blue-500/10 p-2 rounded-lg">
-                    <Upload className="h-5 w-5 text-blue-500" />
-                  </div>
-                  Upload Study File
-                </CardTitle>
-                <CardDescription className="text-base">
-                  Upload a PDF, DOCX, or TXT file to start asking questions
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div>
-                    <Label htmlFor="file-upload" className="text-sm font-medium">Choose File</Label>
-                    <Input
-                      id="file-upload"
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileUpload}
-                      accept=".pdf,.docx,.txt"
-                      className="mt-2 h-12 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-smooth"
-                    />
-                  </div>
-                  {uploadedFile && (
-                    <div className="p-4 bg-muted/50 rounded-xl border border-border/50">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-green-500/10 p-2 rounded-lg">
-                          <FileText className="h-4 w-4 text-green-500" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">{uploadedFile.name}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {(uploadedFile.size / 1024).toFixed(1)} KB • Uploaded successfully
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
+              
+              
             </Card>
 
             {/* Document Preview */}
@@ -294,42 +251,23 @@ const handleAskQuestion = async (override?: string) => {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex flex-col gap-3 max-h-[60vh] overflow-auto pr-1">
-                  {messages.map((m, idx) => (
-                    <ChatMessage key={idx} role={m.role} content={m.content} />
-                  ))}
+                  {messages.map((m, idx) => <ChatMessage key={idx} role={m.role} content={m.content} />)}
                 </div>
 
-                {messages[messages.length-1]?.role === 'assistant' && suggestions.length > 0 && (
-                  <SuggestionChips suggestions={suggestions} onClick={(t) => handleAskQuestion(t)} />
-                )}
+                {messages[messages.length - 1]?.role === 'assistant' && suggestions.length > 0 && <SuggestionChips suggestions={suggestions} onClick={t => handleAskQuestion(t)} />}
 
                 <div>
                   <Label htmlFor="question" className="text-sm font-medium">Your Question</Label>
-                  <Textarea
-                    id="question"
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                    placeholder="Type a question — or tap a suggestion above"
-                    className="mt-2 min-h-[100px] resize-none transition-smooth focus:ring-2 focus:ring-primary"
-                    rows={4}
-                  />
+                  <Textarea id="question" value={question} onChange={e => setQuestion(e.target.value)} placeholder="Type a question — or tap a suggestion above" className="mt-2 min-h-[100px] resize-none transition-smooth focus:ring-2 focus:ring-primary" rows={4} />
                 </div>
-                <Button 
-                  onClick={() => handleAskQuestion()}
-                  disabled={loading}
-                  className="w-full h-12 text-base gradient-primary shadow-glow hover:shadow-lg transition-smooth"
-                >
-                  {loading ? (
-                    <div className="flex items-center gap-2">
+                <Button onClick={() => handleAskQuestion()} disabled={loading} className="w-full h-12 text-base gradient-primary shadow-glow hover:shadow-lg transition-smooth">
+                  {loading ? <div className="flex items-center gap-2">
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                       Thinking...
-                    </div>
-                  ) : (
-                    <>
+                    </div> : <>
                       <MessageSquare className="h-4 w-4 mr-2" />
                       Send
-                    </>
-                  )}
+                    </>}
                 </Button>
               </div>
             </CardContent>
@@ -360,8 +298,6 @@ const handleAskQuestion = async (override?: string) => {
         </Dialog>
         <ModelSelector open={showModelDialog} onSelect={handleModelSelect} />
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Dashboard;
