@@ -34,6 +34,14 @@ const Index = () => {
               <Upload className="h-6 w-6 mr-3 group-hover:rotate-12 transition-smooth" />
               Upload a File & Start Chatting
             </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-lg px-10 py-6 transition-smooth"
+              onClick={() => (window.location.href = '/tools')}
+            >
+              Explore Tools
+            </Button>
           </div>
         </div>
 
