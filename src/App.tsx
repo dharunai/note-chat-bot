@@ -13,6 +13,16 @@ import { lazy, Suspense } from "react";
 const FeatureHub = lazy(() => import("./pages/FeatureHub"));
 const ImageToPDF = lazy(() => import("./pages/tools/ImageToPDF"));
 const TextToPDF = lazy(() => import("./pages/tools/TextToPDF"));
+const WordToPDF = lazy(() => import("./pages/tools/WordToPDF"));
+const PdfToWord = lazy(() => import("./pages/tools/PdfToWord"));
+const PdfMerge = lazy(() => import("./pages/tools/PdfMerge"));
+const PdfSplit = lazy(() => import("./pages/tools/PdfSplit"));
+const PdfCompressor = lazy(() => import("./pages/tools/PdfCompressor"));
+const ExcelToPDF = lazy(() => import("./pages/tools/ExcelToPDF"));
+const ImageCompressor = lazy(() => import("./pages/tools/ImageCompressor"));
+const AIEssayWriter = lazy(() => import("./pages/tools/AIEssayWriter"));
+const GrammarChecker = lazy(() => import("./pages/tools/GrammarChecker"));
+const PlagiarismChecker = lazy(() => import("./pages/tools/PlagiarismChecker"));
 const ComingSoon = lazy(() => import("./pages/tools/ComingSoon"));
 const queryClient = new QueryClient();
 
@@ -29,6 +39,16 @@ const App = () => (
               <Route path="/tools" element={<FeatureHub />} />
               <Route path="/tools/image-to-pdf" element={<ImageToPDF />} />
               <Route path="/tools/text-to-pdf" element={<TextToPDF />} />
+              <Route path="/tools/word-to-pdf" element={<WordToPDF />} />
+              <Route path="/tools/pdf-to-word" element={<PdfToWord />} />
+              <Route path="/tools/pdf-merge" element={<PdfMerge />} />
+              <Route path="/tools/pdf-split" element={<PdfSplit />} />
+              <Route path="/tools/pdf-compress" element={<PdfCompressor />} />
+              <Route path="/tools/excel-to-pdf" element={<ExcelToPDF />} />
+              <Route path="/tools/image-compress" element={<ImageCompressor />} />
+              <Route path="/tools/essay-writer" element={<AIEssayWriter />} />
+              <Route path="/tools/grammar" element={<GrammarChecker />} />
+              <Route path="/tools/plagiarism-check" element={<PlagiarismChecker />} />
               {/* Scaffold the rest as coming soon */}
               <Route path="/tools/:slug" element={<ComingSoon title="Tool" description="This tool will be available soon." />} />
               <Route path="/auth" element={<Auth />} />
