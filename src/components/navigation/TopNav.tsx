@@ -9,8 +9,8 @@ const TopNav = () => {
         <Link to="/" className="flex items-center gap-2">
           <img src={logoMark} alt="Note Bot AI logo" className="h-8 w-8 rounded-md ring-1 ring-primary/30" loading="lazy" decoding="async" />
           <div className="leading-tight">
-            <span className="font-bold tracking-tight text-primary">NOTEBOT</span>
-            <p className="text-[10px] text-muted-foreground">Made by a student, for students — 100% free, no sign-ups.</p>
+            <span className="font-bold tracking-tight text-primary">NOTEBOT AI</span>
+            <p className="text-muted-foreground text-xs mx-0">Made by a student</p>
           </div>
         </Link>
 
