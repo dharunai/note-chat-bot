@@ -59,9 +59,6 @@ const Dashboard = () => {
       });
     }
   };
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -75,18 +72,18 @@ const Dashboard = () => {
     }
     setUploadedFile(file);
 
-    // Upload to Supabase Storage
-    const fileName = `${user.id}/${Date.now()}-${file.name}`;
-    const {
-      error
-    } = await supabase.storage.from('student-files').upload(fileName, file);
-    if (error) {
-      toast({
-        title: "Upload Error",
-        description: error.message,
-        variant: "destructive"
-      });
-      return;
+    // Upload to Supabase Storage (if logged in)
+    if (user) {
+      const fileName = `${user.id}/${Date.now()}-${file.name}`;
+      const { error } = await supabase.storage.from('student-files').upload(fileName, file);
+      if (error) {
+        toast({
+          title: "Upload Error",
+          description: error.message,
+          variant: "destructive"
+        });
+        return;
+      }
     }
 
     // Extract text client-side
@@ -183,19 +180,21 @@ const Dashboard = () => {
             </div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight md:text-base">NoteBot AI</h1>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <Button variant="outline" onClick={() => setShowModelDialog(true)} className="hover:bg-primary/5 transition-smooth">
-              <Cpu className="h-4 w-4 mr-2" />
+          <div className="flex items-center gap-2">
+            <Button onClick={() => setShowModelDialog(true)} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth">
+              <Cpu className="h-4 w-4" />
               {model ? `Model: ${model}` : 'Choose Model'}
             </Button>
-            <Button variant="outline" onClick={() => setShowContactDialog(true)} className="hover:bg-primary/5 transition-smooth">
-              <Mail className="h-4 w-4 mr-2" />
+            <Button onClick={() => setShowContactDialog(true)} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth">
+              <Mail className="h-4 w-4" />
               Contact Us
             </Button>
-            <Button variant="outline" onClick={signOut} className="hover:bg-destructive/5 hover:text-destructive transition-smooth">
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
+            {user && (
+              <Button onClick={signOut} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth">
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </Button>
+            )}
           </div>
         </div>
       </header>
