@@ -8,7 +8,10 @@ const TopNav = () => {
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
           <img src={logoMark} alt="Note Bot AI logo" className="h-8 w-8 rounded-md ring-1 ring-primary/30" loading="lazy" decoding="async" />
-          <span className="font-bold tracking-tight my-[23px] mx-0 text-purple-700">NOTEBOT</span>
+          <div className="leading-tight">
+            <span className="font-bold tracking-tight text-primary">NOTEBOT</span>
+            <p className="text-[10px] text-muted-foreground">Made by a student, for students — 100% free, no sign-ups.</p>
+          </div>
         </Link>
 
         <div className="hidden md:flex items-center gap-2 w-full max-w-md">
@@ -23,7 +26,7 @@ const TopNav = () => {
             <Link to="/auth">Login</Link>
           </Button>
           <Button asChild>
-            <Link to="/tools">Explore Tools</Link>
+            <Link to="/tools/study">Study Tools</Link>
           </Button>
         </nav>
       </div>

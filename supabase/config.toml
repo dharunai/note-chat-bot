@@ -1,1 +1,22 @@
 project_id = "zmoubbtnzffpvdjhnbxg"
+
+[functions.generate-essay]
+verify_jwt = false
+
+[functions.plagiarism-check]
+verify_jwt = false
+
+[functions.paraphrase]
+verify_jwt = false
+
+[functions.summarize]
+verify_jwt = false
+
+[functions.citations]
+verify_jwt = false
+
+[functions.translate]
+verify_jwt = false
+
+[functions.flashcards]
+verify_jwt = false

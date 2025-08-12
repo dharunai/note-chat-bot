@@ -11,8 +11,8 @@ import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 import { lazy, Suspense } from "react";
 const FeatureHub = lazy(() => import("./pages/FeatureHub"));
+const StudyTools = lazy(() => import("./pages/StudyTools"));
 const ImageToPDF = lazy(() => import("./pages/tools/ImageToPDF"));
-const TextToPDF = lazy(() => import("./pages/tools/TextToPDF"));
 const WordToPDF = lazy(() => import("./pages/tools/WordToPDF"));
 const PdfToWord = lazy(() => import("./pages/tools/PdfToWord"));
 const PdfMerge = lazy(() => import("./pages/tools/PdfMerge"));
@@ -53,6 +53,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/tools" element={<FeatureHub />} />
+              <Route path="/tools/study" element={<StudyTools />} />
               <Route path="/tools/image-to-pdf" element={<ImageToPDF />} />
               <Route path="/tools/text-to-pdf" element={<TextToPDF />} />
               <Route path="/tools/word-to-pdf" element={<WordToPDF />} />
@@ -64,9 +65,9 @@ const App = () => (
               <Route path="/tools/image-compress" element={<ImageCompressor />} />
               <Route path="/tools/essay-writer" element={<AIEssayWriter />} />
               <Route path="/tools/grammar" element={<GrammarChecker />} />
-<Route path="/tools/plagiarism-check" element={<PlagiarismChecker />} />
-{/* Scaffold the rest as coming soon */}
-<Route path="/tools/:slug" element={<ComingSoon title="Tool" description="This tool will be available soon." />} />
+              <Route path="/tools/plagiarism-check" element={<PlagiarismChecker />} />
+              {/* Scaffold the rest as coming soon */}
+              <Route path="/tools/:slug" element={<ComingSoon title="Tool" description="This tool will be available soon." />} />
 {/* Blog routes */}
 <Route path="/blog" element={<Blogs />} />
 <Route path="/blog/chat-with-your-notes" element={<ChatWithYourNotes />} />

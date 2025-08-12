@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import TopNav from "@/components/navigation/TopNav";
-import { FileImage, FileText, Images, FileCog, FilePlus2, FileDown, FileUp, Shrink, ScanText, PenTool, SpellCheck, Quote, Shuffle, ListChecks, Presentation, Image as ImageIcon, FileUser, Hand } from "lucide-react";
+import { FileImage, FileText, Images, FileCog, FilePlus2, FileDown, FileUp, Shrink, ScanText, PenTool, SpellCheck, Quote, Shuffle, ListChecks, Presentation, Image as ImageIcon, FileUser, Hand, GraduationCap } from "lucide-react";
 
 const tools = [
+  { title: "Study Tools (All-in-One)", desc: "Paraphrase, summarize, cite, translate, more.", to: "/tools/study", icon: GraduationCap },
   { title: "Image → PDF", desc: "Convert images into a single PDF.", to: "/tools/image-to-pdf", icon: FileImage },
   { title: "Text → PDF", desc: "Turn notes into a clean PDF.", to: "/tools/text-to-pdf", icon: FileText },
   { title: "Word → PDF", desc: "Save DOCX as PDF.", to: "/tools/word-to-pdf", icon: FileDown },
