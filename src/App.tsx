@@ -27,6 +27,18 @@ const ComingSoon = lazy(() => import("./pages/tools/ComingSoon"));
 // Blog pages
 const Blogs = lazy(() => import("./pages/Blogs"));
 const ChatWithYourNotes = lazy(() => import("./pages/blog/ChatWithYourNotes"));
+// Individual blog posts
+const ChatWithPDFs = lazy(() => import("./pages/blog/ChatWithPDFs"));
+const AISummarization = lazy(() => import("./pages/blog/AISummarization"));
+const MultiFileLearning = lazy(() => import("./pages/blog/MultiFileLearning"));
+const FreeForeverPlan = lazy(() => import("./pages/blog/FreeForeverPlan"));
+const BackbenchersGuide = lazy(() => import("./pages/blog/BackbenchersGuide"));
+const PdfEditingAnnotation = lazy(() => import("./pages/blog/PdfEditingAnnotation"));
+const ImageToPdfPdfToImage = lazy(() => import("./pages/blog/ImageToPdfPdfToImage"));
+const FileFormatConversions = lazy(() => import("./pages/blog/FileFormatConversions"));
+const FileCompression = lazy(() => import("./pages/blog/FileCompression"));
+const AICreativityDesignTools = lazy(() => import("./pages/blog/AICreativityDesignTools"));
+const SecurityPrivacyFeatures = lazy(() => import("./pages/blog/SecurityPrivacyFeatures"));
 const BlogPostComingSoon = lazy(() => import("./pages/BlogPostComingSoon"));
 const queryClient = new QueryClient();
 
@@ -58,6 +70,17 @@ const App = () => (
 {/* Blog routes */}
 <Route path="/blog" element={<Blogs />} />
 <Route path="/blog/chat-with-your-notes" element={<ChatWithYourNotes />} />
+<Route path="/blog/chat-with-pdfs" element={<ChatWithPDFs />} />
+<Route path="/blog/ai-summarization" element={<AISummarization />} />
+<Route path="/blog/multi-file-learning" element={<MultiFileLearning />} />
+<Route path="/blog/free-forever-plan" element={<FreeForeverPlan />} />
+<Route path="/blog/backbenchers-guide" element={<BackbenchersGuide />} />
+<Route path="/blog/pdf-editing-annotation" element={<PdfEditingAnnotation />} />
+<Route path="/blog/image-to-pdf-and-pdf-to-image" element={<ImageToPdfPdfToImage />} />
+<Route path="/blog/file-format-conversions" element={<FileFormatConversions />} />
+<Route path="/blog/file-compression" element={<FileCompression />} />
+<Route path="/blog/ai-creativity-design-tools" element={<AICreativityDesignTools />} />
+<Route path="/blog/security-privacy-features" element={<SecurityPrivacyFeatures />} />
 <Route path="/blog/:slug" element={<BlogPostComingSoon />} />
 <Route path="/auth" element={<Auth />} />
 <Route path="/dashboard" element={<Dashboard />} />

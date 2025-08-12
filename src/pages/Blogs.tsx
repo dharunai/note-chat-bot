@@ -4,7 +4,7 @@ import TopNav from "@/components/navigation/TopNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquare, FileText, Sparkles, Files, BadgeCheck, GraduationCap } from "lucide-react";
+import { MessageSquare, FileText, Sparkles, Files, BadgeCheck, GraduationCap, Wrench, Image as ImageIcon, Recycle, Archive, Palette, Shield } from "lucide-react";
 
 interface BlogCard {
   slug: string;
@@ -76,6 +76,67 @@ const posts: BlogCard[] = [
     category: "Student Hacks",
     date: "Aug 2025",
     icon: GraduationCap,
+  },
+  // New series
+  {
+    slug: "pdf-editing-annotation",
+    title: "PDF Editing & Annotation Tools",
+    seoTitle: "Free PDF Editing & Annotation – No Login",
+    description:
+      "Edit, highlight, and annotate PDFs for assignments and reports—fast and free in your browser.",
+    category: "AI Tools",
+    date: "Aug 2025",
+    icon: Wrench,
+  },
+  {
+    slug: "image-to-pdf-and-pdf-to-image",
+    title: "Image to PDF & PDF to Image Conversions",
+    seoTitle: "Image to PDF & PDF to Image – Free",
+    description:
+      "Convert images to PDF and export PDF pages as images—perfect for submissions and slides.",
+    category: "AI Tools",
+    date: "Aug 2025",
+    icon: ImageIcon,
+  },
+  {
+    slug: "file-format-conversions",
+    title: "File Format Conversions (DOCX, PPT, Excel ↔ PDF, PNG ↔ JPG, WebP ↔ JPG/PNG)",
+    seoTitle: "DOCX/PPT/Excel ↔ PDF Converter – Free",
+    description:
+      "Convert between Word, PowerPoint, Excel and PDF instantly. Clean, fast, and mobile-friendly.",
+    category: "AI Tools",
+    date: "Aug 2025",
+    icon: Recycle,
+  },
+  {
+    slug: "file-compression",
+    title: "File Compression Without Quality Loss",
+    seoTitle: "Compress Files Without Quality Loss",
+    description:
+      "Reduce file size for faster uploads and submissions while keeping clarity and quality.",
+    category: "AI Tools",
+    date: "Aug 2025",
+    icon: Archive,
+  },
+  {
+    slug: "ai-creativity-design-tools",
+    title: "AI Creativity & Design Tools (Posters, Flyers, Background Removal, QR Codes)",
+    seoTitle: "AI Posters, Flyers, QR Codes – Free Tools",
+    description:
+      "Create posters, flyers, remove backgrounds, and generate QR codes—no design skills needed.",
+    category: "Student Hacks",
+    date: "Aug 2025",
+    icon: Palette,
+  },
+  {
+    slug: "security-privacy-features",
+    title: "Security & Privacy Features (Password Protection, Secure Links, Offline Mode)",
+    seoTitle: "Privacy-First Tools: Passwords & Secure Links",
+    description:
+      "Protect your documents with passwords, secure links, and optional offline mode.",
+    category: "AI Tools",
+    date: "Aug 2025",
+    icon: Shield,
   },
 ];
 
