@@ -24,6 +24,7 @@ const ImageCompressor = lazy(() => import("./pages/tools/ImageCompressor"));
 const AIEssayWriter = lazy(() => import("./pages/tools/AIEssayWriter"));
 const GrammarChecker = lazy(() => import("./pages/tools/GrammarChecker"));
 const PlagiarismChecker = lazy(() => import("./pages/tools/PlagiarismChecker"));
+const ResumeBuilder = lazy(() => import("./pages/tools/ResumeBuilder"));
 const ComingSoon = lazy(() => import("./pages/tools/ComingSoon"));
 // Blog pages
 const Blogs = lazy(() => import("./pages/Blogs"));

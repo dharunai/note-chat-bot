@@ -53,7 +53,7 @@ const Index = () => {
   }, {
     title: 'Resume Builder',
     desc: 'Create a job-ready resume.',
-    to: '/tools/resume-builder',
+    to: '/tools/resume',
     icon: FileText
   }, {
     title: 'OCR (Handwriting → Text)',
