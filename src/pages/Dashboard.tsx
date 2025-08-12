@@ -181,7 +181,7 @@ const Dashboard = () => {
             <div className="bg-primary/10 p-2 rounded-lg">
               <BookOpen className="h-6 w-6 text-primary" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight">NoteBot AI</h1>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight md:text-base">NoteBot AI</h1>
           </div>
           <div className="flex flex-wrap gap-3">
             <Button variant="outline" onClick={() => setShowModelDialog(true)} className="hover:bg-primary/5 transition-smooth">
