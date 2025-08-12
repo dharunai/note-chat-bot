@@ -15,8 +15,8 @@ const TopNav = () => {
         </Link>
 
         <nav className="flex items-center gap-2">
-          <Link to="/blogs" aria-label="Blogs" className="rounded-lg p-2 hover:bg-muted transition-smooth">
-            <img src="/icons/blog.svg" alt="Blogs" className="h-5 w-5" loading="lazy" decoding="async" />
+          <Link to="/blog" aria-label="Blog" className="rounded-lg p-2 hover:bg-muted transition-smooth">
+            <img src="/icons/blog.svg" alt="Blog" className="h-5 w-5" loading="lazy" decoding="async" />
           </Link>
           <Button variant="outline" asChild>
             <Link to="/auth">Login</Link>
