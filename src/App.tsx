@@ -13,6 +13,7 @@ import { lazy, Suspense } from "react";
 const FeatureHub = lazy(() => import("./pages/FeatureHub"));
 const StudyTools = lazy(() => import("./pages/StudyTools"));
 const ImageToPDF = lazy(() => import("./pages/tools/ImageToPDF"));
+const TextToPDF = lazy(() => import("./pages/tools/TextToPDF"));
 const WordToPDF = lazy(() => import("./pages/tools/WordToPDF"));
 const PdfToWord = lazy(() => import("./pages/tools/PdfToWord"));
 const PdfMerge = lazy(() => import("./pages/tools/PdfMerge"));

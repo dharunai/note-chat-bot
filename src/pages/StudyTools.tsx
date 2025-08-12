@@ -8,10 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
 import { copyToClipboard, downloadTxt, exportFlashcardsPdf } from "@/lib/clientUtils";
-import { createClient } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { Quote, Shuffle, ListChecks, PenTool, ScanText, Languages, SpellCheck, BadgeCheck } from "lucide-react";
 
-const supabase = createClient();
 
 export default function StudyTools() {
   useMemo(() => { document.title = "Study Tools – Note Bot AI"; }, []);
