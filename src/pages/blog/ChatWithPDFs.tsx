@@ -3,38 +3,38 @@ import TopNav from "@/components/navigation/TopNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+
 export default function ChatWithPDFs() {
   const title = "Chat With Your PDFs for Free – Read Less, Learn More";
   const description = "Turn long PDFs into instant conversations. Ask questions and get answers directly from your documents.";
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/blog/chat-with-pdfs` : "/blog/chat-with-pdfs";
+
   const jsonLd = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: title,
     description,
     mainEntityOfPage: canonical,
-    author: {
-      "@type": "Person",
-      name: "Note Bot AI (Student)"
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Note Bot AI"
-    },
-    datePublished: "2025-08-01"
+    author: { "@type": "Person", name: "Note Bot AI (Student)" },
+    publisher: { "@type": "Organization", name: "Note Bot AI" },
+    datePublished: "2025-08-01",
   }), [canonical]);
+
   useEffect(() => {
     document.title = title;
     const meta = document.querySelector('meta[name="description"]') || document.createElement("meta");
     meta.setAttribute("name", "description");
     meta.setAttribute("content", description);
     document.head.appendChild(meta);
+
     let link = document.querySelector('link[rel="canonical"]') || document.createElement("link");
     link.setAttribute("rel", "canonical");
     link.setAttribute("href", canonical);
     document.head.appendChild(link);
   }, [canonical]);
-  return <div className="min-h-screen bg-background text-foreground">
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
       <TopNav />
 
       <header className="border-b bg-gradient-to-r from-primary/10 to-secondary/10">
@@ -52,7 +52,9 @@ export default function ChatWithPDFs() {
                 <Badge variant="secondary" className="ring-1 ring-border">Made by a Student</Badge>
               </div>
             </div>
-            
+            <div className="hidden md:flex items-center justify-center rounded-md bg-background/60 p-4 ring-1 ring-border">
+              <img src="https://placehold.co/120x120/svg?text=PDF" alt="Chat with PDFs illustration" loading="lazy" decoding="async" className="h-20 w-20 opacity-80" />
+            </div>
           </div>
         </div>
       </header>
@@ -124,8 +126,7 @@ export default function ChatWithPDFs() {
         </div>
       </footer>
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{
-      __html: JSON.stringify(jsonLd)
-    }} />
-    </div>;
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    </div>
+  );
 }
