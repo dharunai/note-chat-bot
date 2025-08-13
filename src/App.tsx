@@ -25,6 +25,8 @@ const AIEssayWriter = lazy(() => import("./pages/tools/AIEssayWriter"));
 const GrammarChecker = lazy(() => import("./pages/tools/GrammarChecker"));
 const PlagiarismChecker = lazy(() => import("./pages/tools/PlagiarismChecker"));
 const ResumeBuilder = lazy(() => import("./pages/tools/ResumeBuilder"));
+const ResumeBuilderPro = lazy(() => import("./pages/tools/ResumeBuilderPro"));
+const RemoveBg = lazy(() => import("./pages/tools/RemoveBg"));
 const ComingSoon = lazy(() => import("./pages/tools/ComingSoon"));
 // Blog pages
 const Blogs = lazy(() => import("./pages/Blogs"));
@@ -68,8 +70,11 @@ const App = () => (
               <Route path="/tools/essay-writer" element={<AIEssayWriter />} />
               <Route path="/tools/grammar" element={<GrammarChecker />} />
               <Route path="/tools/plagiarism-check" element={<PlagiarismChecker />} />
-              {/* Scaffold the rest as coming soon */}
-              <Route path="/tools/:slug" element={<ComingSoon title="Tool" description="This tool will be available soon." />} />
+{/* Explicit tool routes */}
+<Route path="/tools/remove-bg" element={<RemoveBg />} />
+<Route path="/tools/resume-builder" element={<ResumeBuilderPro />} />
+{/* Scaffold the rest as coming soon */}
+<Route path="/tools/:slug" element={<ComingSoon title="Tool" description="This tool will be available soon." />} />
 {/* Blog routes */}
 <Route path="/blog" element={<Blogs />} />
 <Route path="/blog/chat-with-your-notes" element={<ChatWithYourNotes />} />
