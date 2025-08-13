@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import logoMark from "@/assets/logo-main.webp";
 
 const TopNav = () => {
@@ -18,6 +19,7 @@ const TopNav = () => {
           <Link to="/blog" aria-label="Blog" className="rounded-lg p-2 hover:bg-muted transition-smooth">
             <img src="/icons/blog.svg" alt="Blog" className="h-5 w-5" loading="lazy" decoding="async" />
           </Link>
+          <ThemeToggle />
           <Button variant="outline" asChild>
             <Link to="/auth">Login</Link>
           </Button>
