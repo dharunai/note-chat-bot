@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import logoMark from "@/assets/logo-mark.webp";
+import logoMark from "@/assets/logo-main.webp";
 
 const TopNav = () => {
   return (

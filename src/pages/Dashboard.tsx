@@ -178,7 +178,7 @@ const Dashboard = () => {
             <div className="bg-primary/10 p-2 rounded-lg">
               <BookOpen className="h-6 w-6 text-primary" />
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight md:text-base">NoteBot AI</h1>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight">Turn Your Notes Into a Conversation</h1>
           </div>
           <div className="flex items-center gap-2">
             <Button onClick={() => setShowModelDialog(true)} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth">
@@ -295,7 +295,7 @@ const Dashboard = () => {
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>Contact Us</DialogTitle>
-              <DialogDescription>Was There Any bugs ..?</DialogDescription>
+              <DialogDescription>Get in touch with our team for support or feedback.</DialogDescription>
             </DialogHeader>
             <div className="space-y-2">
               <a href="mailto:dharunshanmugavel12@gmail.com" className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-smooth">
