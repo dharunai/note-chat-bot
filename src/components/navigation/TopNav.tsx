@@ -2,16 +2,14 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import logoMark from "@/assets/logo-main.webp";
-
 const TopNav = () => {
-  return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  return <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
           <img src={logoMark} alt="Note Bot AI logo" className="h-8 w-8 object-contain" loading="lazy" decoding="async" />
           <div className="leading-tight">
-            <span className="font-bold tracking-tight text-primary">NOTEBOT AI</span>
-            <p className="text-muted-foreground text-xs mx-0">Made by a student</p>
+            <span className="tracking-tight text-primary font-bold text-sm">NOTEBOT AI</span>
+            <p className="text-muted-foreground mx-0 text-xs text-left">Made by a student</p>
           </div>
         </Link>
 
@@ -28,7 +26,6 @@ const TopNav = () => {
           </Button>
         </nav>
       </div>
-    </header>
-  );
+    </header>;
 };
 export default TopNav;
