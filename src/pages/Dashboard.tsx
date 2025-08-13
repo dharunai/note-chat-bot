@@ -75,7 +75,9 @@ const Dashboard = () => {
     // Upload to Supabase Storage (if logged in)
     if (user) {
       const fileName = `${user.id}/${Date.now()}-${file.name}`;
-      const { error } = await supabase.storage.from('student-files').upload(fileName, file);
+      const {
+        error
+      } = await supabase.storage.from('student-files').upload(fileName, file);
       if (error) {
         toast({
           title: "Upload Error",
@@ -178,23 +180,21 @@ const Dashboard = () => {
             <div className="bg-primary/10 p-2 rounded-lg">
               <BookOpen className="h-6 w-6 text-primary" />
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight">Turn Your Notes Into a Conversation</h1>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight">NoteBot AI</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button onClick={() => setShowModelDialog(true)} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth">
+            <Button onClick={() => setShowModelDialog(true)} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth text-violet-600">
               <Cpu className="h-4 w-4" />
               {model ? `Model: ${model}` : 'Choose Model'}
             </Button>
-            <Button onClick={() => setShowContactDialog(true)} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth">
+            <Button onClick={() => setShowContactDialog(true)} className="px-4 py-2 rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth bg-stone-600 hover:bg-stone-500">
               <Mail className="h-4 w-4" />
               Contact Us
             </Button>
-            {user && (
-              <Button onClick={signOut} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth">
+            {user && <Button onClick={signOut} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth">
                 <LogOut className="h-4 w-4" />
                 Sign Out
-              </Button>
-            )}
+              </Button>}
           </div>
         </div>
       </header>
