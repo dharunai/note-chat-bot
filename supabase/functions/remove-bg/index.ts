@@ -15,7 +15,10 @@ serve(async (req) => {
   }
 
   try {
+    console.log("Remove BG function called");
+    
     if (!EREMOVE_API_KEY) {
+      console.error("Missing EREMOVE_API_KEY server secret");
       return new Response(JSON.stringify({ error: "Missing EREMOVE_API_KEY server secret" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

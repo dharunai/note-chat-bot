@@ -47,6 +47,10 @@ export default function RemoveBg() {
       form.append("size", "auto");
       const resp = await fetch(`${SUPABASE_URL}/functions/v1/remove-bg`, {
         method: "POST",
+        headers: {
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptb3ViYnRuemZmcHZkamhuYnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1Njg5ODIsImV4cCI6MjA3MDE0NDk4Mn0.HsnosAWMperDILZGNILIzF-MgQmeSE2JbrNvqqf8Kn8`,
+          'apikey': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptb3ViYnRuemZmcHZkamhuYnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1Njg5ODIsImV4cCI6MjA3MDE0NDk4Mn0.HsnosAWMperDILZGNILIzF-MgQmeSE2JbrNvqqf8Kn8`,
+        },
         body: form,
       });
       if (!resp.ok) {
