@@ -22,14 +22,14 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
     
-    // Get user from Authorization header
-    const authHeader = req.headers.get('Authorization')!;
+      // Get user from Authorization header (optional)
+  const authHeader = req.headers.get('Authorization');
+  let user: { id: string } | null = null;
+  if (authHeader) {
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user } } = await supabaseClient.auth.getUser(token);
-    
-    if (!user) {
-      throw new Error('User not authenticated');
-    }
+    const { data } = await supabaseClient.auth.getUser(token);
+    user = data?.user ?? null;
+  }
 
     // Call Gemini API
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
@@ -142,17 +142,18 @@ Developed by Havoc Dharun
     const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not generate a response.';
 
     // Save to messages table
-    const { error: insertError } = await supabaseClient
-      .from('messages')
-      .insert({
-        user_id: user.id,
-        file_name: fileName || null,
-        question,
-        answer,
-      });
-
-    if (insertError) {
-      console.error('Error saving message:', insertError);
+    if (user?.id) {
+      const { error: insertError } = await supabaseClient
+        .from('messages')
+        .insert({
+          user_id: user.id,
+          file_name: fileName || null,
+          question,
+          answer,
+        });
+      if (insertError) {
+        console.error('Error saving message:', insertError);
+      }
     }
 
     return new Response(JSON.stringify({ answer }), {
