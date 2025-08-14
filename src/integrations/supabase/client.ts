@@ -9,14 +9,38 @@ export const SUPABASE_ANON_KEY = SUPABASE_PUBLISHABLE_KEY;
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+const IS_DEV = Boolean((import.meta as any).env.DEV);
+
+if ((!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) && !IS_DEV) {
   throw new Error('Missing Supabase env vars: VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY');
 }
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+// In dev, allow app to run without env vars by exporting a minimal stub
+// so pages that don't hit Supabase can still load.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const supabaseStub: any = {
   auth: {
-    storage: localStorage,
-    persistSession: true,
-    autoRefreshToken: true,
-  }
-});
+    onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+    getSession: async () => ({ data: { session: null } }),
+    signUp: async () => ({ error: { message: 'Supabase not configured (dev stub)' } }),
+    signInWithPassword: async () => ({ error: { message: 'Supabase not configured (dev stub)' } }),
+    signOut: async () => ({ error: { message: 'Supabase not configured (dev stub)' } }),
+  },
+  storage: {
+    from: () => ({ upload: async () => ({ error: { message: 'Supabase not configured (dev stub)' } }) }),
+  },
+  functions: {
+    invoke: async () => ({ data: null, error: { message: 'Supabase not configured (dev stub)' } }),
+  },
+};
+
+// Export real client if env is present; otherwise dev stub
+export const supabase = (SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY)
+  ? createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      auth: {
+        storage: localStorage,
+        persistSession: true,
+        autoRefreshToken: true,
+      }
+    })
+  : (IS_DEV ? supabaseStub : undefined as unknown as ReturnType<typeof createClient<Database>>);
