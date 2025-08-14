@@ -15,7 +15,7 @@ export default function AIEssayWriter() {
   const run = async () => {
     if (!prompt.trim()) return;
     setProgress(10);
-    const { data, error } = await supabase.functions.invoke("generate-essay", { body: { prompt } });
+    const { data, error } = await supabase.functions.invoke("generate-essay", { headers: { 'Content-Type': 'application/json' }, body: { prompt } });
     if (error) {
       setOutput(`Error: ${error.message}`);
       setProgress(0);

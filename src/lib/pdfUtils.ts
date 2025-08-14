@@ -1,9 +1,11 @@
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import * as pdfjs from "pdfjs-dist";
 
-// Configure worker from CDN to avoid bundler issues
+// Vite: import the worker as a module Worker (ESM)
+// @ts-ignore - Vite's ?worker returns a Worker constructor
+import PdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?worker";
 // @ts-ignore
-(pdfjs as any).GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.162/pdf.worker.min.js";
+(pdfjs as any).GlobalWorkerOptions.workerPort = new PdfWorker();
 
 export async function mergePdfFiles(files: File[]): Promise<Blob> {
   const out = await PDFDocument.create();

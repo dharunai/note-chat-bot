@@ -18,7 +18,7 @@ export default function PlagiarismChecker() {
   const run = async () => {
     if (!text.trim()) return;
     setProgress(20);
-    const { data, error } = await supabase.functions.invoke("plagiarism-check", { body: { text } });
+    const { data, error } = await supabase.functions.invoke("plagiarism-check", { headers: { 'Content-Type': 'application/json' }, body: { text } });
     if (error) { setScore(null); setSources([]); setProgress(0); return; }
     setScore(data.score);
     setSources(data.sources || []);
