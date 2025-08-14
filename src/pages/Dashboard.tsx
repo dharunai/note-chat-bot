@@ -147,6 +147,7 @@ const Dashboard = () => {
       content: q
     }]);
     try {
+      const modelKey = model === 'Google Gemini' ? 'gemini' : 'openai';
       const {
         data,
         error
@@ -159,7 +160,7 @@ const Dashboard = () => {
           question: q,
           fileContent: (uploadedFile ? (fileContent.length > 20000 ? fileContent.slice(0, 20000) : fileContent) : null),
           fileName: uploadedFile?.name || null,
-          model
+          model: modelKey
         }
       });
       if (error) throw error;
@@ -169,9 +170,18 @@ const Dashboard = () => {
         content: cleaned
       }]);
     } catch (error: any) {
+      let description = error?.message || "Failed to get AI response";
+      const msg = String(description || '').toLowerCase();
+      if (msg.includes('401') || msg.includes('unauthorized') || msg.includes('missing')) {
+        description = 'Unauthorized. Ensure Supabase function secrets OPENAI_API_KEY and GEMINI_API_KEY are set, and VITE_SUPABASE_URL/VITE_SUPABASE_ANON_KEY are configured in the client.';
+      } else if (msg.includes('429') || msg.includes('rate')) {
+        description = 'Rate limit exceeded. Please wait a moment and try again.';
+      } else if (msg.includes('413') || msg.includes('payload')) {
+        description = 'The document is too large. Try with a smaller excerpt or split the file.';
+      }
       toast({
         title: "Error",
-        description: error.message || "Failed to get AI response",
+        description,
         variant: "destructive"
       });
     } finally {
