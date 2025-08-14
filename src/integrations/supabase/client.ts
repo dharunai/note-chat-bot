@@ -4,9 +4,14 @@ import type { Database } from './types';
 
 export const SUPABASE_URL = (import.meta as any).env.VITE_SUPABASE_URL as string;
 const SUPABASE_PUBLISHABLE_KEY = (import.meta as any).env.VITE_SUPABASE_ANON_KEY as string;
+export const SUPABASE_ANON_KEY = SUPABASE_PUBLISHABLE_KEY;
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
+
+if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  throw new Error('Missing Supabase env vars: VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY');
+}
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {

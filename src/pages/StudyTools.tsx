@@ -30,7 +30,7 @@ export default function StudyTools() {
   const [citationOut, setCitationOut] = useState("");
   const genCitations = async () => {
     if (!citationQuery.trim()) return;
-    const { data, error } = await supabase.functions.invoke('citations', { body: { query: citationQuery, style: citationStyle } });
+    const { data, error } = await supabase.functions.invoke('citations', { headers: { 'Content-Type': 'application/json' }, body: { query: citationQuery, style: citationStyle } });
     if (error) { toast({ title: 'Citation error', description: error.message, variant: 'destructive' }); return; }
     const out = citationStyle === 'apa' ? data.apa : citationStyle === 'mla' ? data.mla : citationStyle === 'chicago' ? data.chicago : [data.apa, data.mla, data.chicago].join('\n\n');
     setCitationOut(out);
@@ -42,7 +42,7 @@ export default function StudyTools() {
   const [paraOut, setParaOut] = useState("");
   const paraphrase = async () => {
     if (!paraIn.trim()) return;
-    const { data, error } = await supabase.functions.invoke('paraphrase', { body: { text: paraIn, tone } });
+    const { data, error } = await supabase.functions.invoke('paraphrase', { headers: { 'Content-Type': 'application/json' }, body: { text: paraIn, tone } });
     if (error) { toast({ title: 'Paraphrase error', description: error.message, variant: 'destructive' }); return; }
     setParaOut(data.paraphrased);
   };
@@ -53,7 +53,7 @@ export default function StudyTools() {
   const [sumOut, setSumOut] = useState<string | string[]>("");
   const summarize = async () => {
     if (!sumIn.trim()) return;
-    const { data, error } = await supabase.functions.invoke('summarize', { body: { text: sumIn, mode: sumMode, max_points: 6 } });
+    const { data, error } = await supabase.functions.invoke('summarize', { headers: { 'Content-Type': 'application/json' }, body: { text: sumIn, mode: sumMode, max_points: 6 } });
     if (error) { toast({ title: 'Summarize error', description: error.message, variant: 'destructive' }); return; }
     setSumOut(sumMode === 'bullets' ? data.bullets : data.paragraph);
   };
@@ -66,14 +66,14 @@ export default function StudyTools() {
   const generateEssay = async () => {
     if (!topic.trim()) return;
     const prompt = research ? `Research Mode: Include relevant facts and context with inline mentions when obvious.\n\nTopic: ${topic}` : topic;
-    const { data, error } = await supabase.functions.invoke('generate-essay', { body: { prompt } });
+    const { data, error } = await supabase.functions.invoke('generate-essay', { headers: { 'Content-Type': 'application/json' }, body: { prompt } });
     if (error) { toast({ title: 'Essay error', description: error.message, variant: 'destructive' }); return; }
     setEssay(data.generatedText);
     setPlag(null);
   };
   const runPlag = async () => {
     if (!essay.trim()) return;
-    const { data, error } = await supabase.functions.invoke('plagiarism-check', { body: { text: essay } });
+    const { data, error } = await supabase.functions.invoke('plagiarism-check', { headers: { 'Content-Type': 'application/json' }, body: { text: essay } });
     if (error) { toast({ title: 'Plagiarism error', description: error.message, variant: 'destructive' }); return; }
     setPlag(data);
   };
@@ -84,7 +84,7 @@ export default function StudyTools() {
   const [cards, setCards] = useState<{ q: string; a: string }[]>([]);
   const createCards = async () => {
     if (!notes.trim()) return;
-    const { data, error } = await supabase.functions.invoke('flashcards', { body: { notes, count } });
+    const { data, error } = await supabase.functions.invoke('flashcards', { headers: { 'Content-Type': 'application/json' }, body: { notes, count } });
     if (error) { toast({ title: 'Flashcards error', description: error.message, variant: 'destructive' }); return; }
     setCards(data.cards || []);
   };
@@ -116,7 +116,7 @@ export default function StudyTools() {
   const [trDetected, setTrDetected] = useState("");
   const translate = async () => {
     if (!trIn.trim()) return;
-    const { data, error } = await supabase.functions.invoke('translate', { body: { text: trIn, targetLang: trTarget } });
+    const { data, error } = await supabase.functions.invoke('translate', { headers: { 'Content-Type': 'application/json' }, body: { text: trIn, targetLang: trTarget } });
     if (error) { toast({ title: 'Translate error', description: error.message, variant: 'destructive' }); return; }
     setTrOut(data.translated);
     setTrDetected(data.detected);

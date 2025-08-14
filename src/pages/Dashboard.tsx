@@ -150,9 +150,12 @@ const Dashboard = () => {
         data,
         error
       } = await supabase.functions.invoke('chat-with-ai', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: {
           question: q,
-          fileContent: uploadedFile ? fileContent : null,
+          fileContent: (uploadedFile ? (fileContent.length > 20000 ? fileContent.slice(0, 20000) : fileContent) : null),
           fileName: uploadedFile?.name || null,
           model
         }
