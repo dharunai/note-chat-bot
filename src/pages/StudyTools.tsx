@@ -88,7 +88,14 @@ export default function StudyTools() {
     if (error) { toast({ title: 'Flashcards error', description: error.message, variant: 'destructive' }); return; }
     setCards(data.cards || []);
   };
-  const shuffleCards = () => setCards((c) => [...c].sort(() => Math.random() - 0.5));
+  const shuffleCards = () => setCards((prev) => {
+    const arr = [...prev];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  });
 
   // Grammar Checker (inline)
   const [gramIn, setGramIn] = useState("");
