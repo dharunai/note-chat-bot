@@ -7,6 +7,65 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// AI Provider configurations with failover
+const AI_PROVIDERS = [
+  {
+    name: "Gemini",
+    baseUrl: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent",
+    apiKey: Deno.env.get("GEMINI_API_KEY"),
+    transformRequest: (prompt: string) => ({
+      contents: [{ parts: [{ text: prompt }] }]
+    }),
+    transformResponse: (response: any) => response.candidates?.[0]?.content?.parts?.[0]?.text || ""
+  },
+  {
+    name: "Groq",
+    baseUrl: "https://api.groq.com/openai/v1/chat/completions",
+    apiKey: Deno.env.get("GROQ_API_KEY"),
+    transformRequest: (prompt: string) => ({
+      model: "llama-3.1-70b-versatile",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 2000,
+      temperature: 0.7
+    }),
+    transformResponse: (response: any) => response.choices?.[0]?.message?.content || ""
+  }
+];
+
+async function tryProvider(provider: any, prompt: string) {
+  if (!provider.apiKey) {
+    throw new Error(`${provider.name} API key not configured`);
+  }
+
+  const requestBody = provider.transformRequest(prompt);
+  
+  const response = await fetch(provider.baseUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${provider.apiKey}`,
+    },
+    body: JSON.stringify(requestBody),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    if (response.status === 429) {
+      throw new Error("RATE_LIMITED");
+    }
+    throw new Error(`HTTP ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  const content = provider.transformResponse(data);
+  
+  if (!content) {
+    throw new Error("Empty response from AI provider");
+  }
+
+  return { content, provider: provider.name };
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -31,13 +90,6 @@ serve(async (req) => {
       throw new Error('User not authenticated');
     }
 
-    // Call Gemini API
-    const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
-    
-    if (!geminiApiKey) {
-      throw new Error('GEMINI_API_KEY environment variable is not set');
-    }
-    
     const prompt = fileContent 
       ? `Hey there! I'm NoteBot AI — your personal AI study buddy 🤖📚  
 Tired of reading long notes alone? Just upload your files and ask me anything — I'll turn your content into real conversations!
@@ -106,40 +158,32 @@ Powered by Gemini
 Developed by Havoc Dharun  
 ~ Your AI companion, NoteBot AI 🤖📚`;
 
-    console.log('Making request to Gemini API...');
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: prompt
-                }
-              ]
-            }
-          ]
-        }),
-      }
-    );
+    let lastError: string = "";
+    let answer = "";
 
-    console.log('Gemini API response status:', response.status);
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Gemini API error:', errorText);
-      throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
+    for (const provider of AI_PROVIDERS) {
+      try {
+        console.log(`Trying provider: ${provider.name}`);
+        const result = await tryProvider(provider, prompt);
+        
+        answer = result.content;
+        console.log(`Success with provider: ${provider.name}`);
+        break;
+
+      } catch (error: any) {
+        console.error(`Error with ${provider.name}:`, error.message);
+        lastError = error.message;
+        
+        if (error.message === "RATE_LIMITED") {
+          console.log(`Rate limited on ${provider.name}, trying next provider`);
+          continue;
+        }
+      }
     }
 
-    const data = await response.json();
-    console.log('Gemini API response data:', JSON.stringify(data, null, 2));
-    
-    const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not generate a response.';
+    if (!answer) {
+      throw new Error(`All AI providers failed. Last error: ${lastError}`);
+    }
 
     // Save to messages table
     const { error: insertError } = await supabaseClient
