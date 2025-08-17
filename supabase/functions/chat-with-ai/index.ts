@@ -3,6 +3,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2.54.0';
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
 };
 
 Deno.serve(async (req) => {
@@ -12,34 +13,41 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { question, fileContent, fileName } = await req.json();
+    const { question, fileContent, fileName, model } = await req.json();
+    
+    if (!question) {
+      throw new Error('Question is required');
+    }
     
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     
     if (!supabaseUrl || !supabaseServiceKey) {
-      throw new Error('Missing Supabase environment variables');
+      console.error('Missing Supabase environment variables');
+      throw new Error('Server configuration error');
     }
     
     const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
     
     // Get user from Authorization header
     const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      throw new Error('Authorization header missing');
-    }
+    let user = null;
     
-    const token = authHeader.replace('Bearer ', '');
-    if (!token) {
-      throw new Error('Invalid authorization token');
-    }
-    
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
-    
-    if (authError || !user) {
-      console.error('Authentication error:', authError);
-      throw new Error('User not authenticated');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.replace('Bearer ', '');
+      
+      try {
+        const { data: { user: authUser }, error: authError } = await supabaseClient.auth.getUser(token);
+        
+        if (authError) {
+          console.error('Authentication error:', authError);
+        } else {
+          user = authUser;
+        }
+      } catch (error) {
+        console.error('Error getting user:', error);
+      }
     }
 
     // Call Gemini API
@@ -148,22 +156,29 @@ Developed by Havoc Dharun
     }
 
     const data = await response.json();
-    console.log('Gemini API response data:', JSON.stringify(data, null, 2));
+    console.log('Gemini API response received');
     
     const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not generate a response.';
 
-    // Save to messages table
-    const { error: insertError } = await supabaseClient
-      .from('messages')
-      .insert({
-        user_id: user.id,
-        file_name: fileName || null,
-        question,
-        answer,
-      });
+    // Save to messages table only if user is authenticated
+    if (user) {
+      try {
+        const { error: insertError } = await supabaseClient
+          .from('messages')
+          .insert({
+            user_id: user.id,
+            file_name: fileName || null,
+            question,
+            answer,
+          });
 
-    if (insertError) {
-      console.error('Error saving message:', insertError);
+        if (insertError) {
+          console.error('Error saving message:', insertError);
+        }
+      } catch (saveError) {
+        console.error('Error saving message to database:', saveError);
+        // Don't fail the request if saving fails
+      }
     }
 
     return new Response(JSON.stringify({ answer }), {
