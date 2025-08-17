@@ -13,6 +13,11 @@ import NotFound from "./pages/NotFound";
 import { lazy, Suspense } from "react";
 const FeatureHub = lazy(() => import("./pages/FeatureHub"));
 const StudyTools = lazy(() => import("./pages/StudyTools"));
+const Summarizer = lazy(() => import("./pages/tools/Summarizer"));
+const Translator = lazy(() => import("./pages/tools/Translator"));
+const CitationGenerator = lazy(() => import("./pages/tools/CitationGenerator"));
+const FlashcardCreator = lazy(() => import("./pages/tools/FlashcardCreator"));
+const ParaphraseTool = lazy(() => import("./pages/tools/ParaphraseTool"));
 const ImageToPDF = lazy(() => import("./pages/tools/ImageToPDF"));
 const TextToPDF = lazy(() => import("./pages/tools/TextToPDF"));
 const WordToPDF = lazy(() => import("./pages/tools/WordToPDF"));
@@ -65,6 +70,11 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/tools" element={<FeatureHub />} />
               <Route path="/tools/study" element={<StudyTools />} />
+              <Route path="/tools/summarizer" element={<Summarizer />} />
+              <Route path="/tools/translator" element={<Translator />} />
+              <Route path="/tools/citation-generator" element={<CitationGenerator />} />
+              <Route path="/tools/flashcard-creator" element={<FlashcardCreator />} />
+              <Route path="/tools/paraphrase" element={<ParaphraseTool />} />
               <Route path="/tools/image-to-pdf" element={<ImageToPDF />} />
               <Route path="/tools/text-to-pdf" element={<TextToPDF />} />
               <Route path="/tools/word-to-pdf" element={<WordToPDF />} />

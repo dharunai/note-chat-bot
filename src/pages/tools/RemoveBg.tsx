@@ -3,8 +3,8 @@ import TopNav from "@/components/navigation/TopNav";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
-import { SUPABASE_URL } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
+import { removeBackground, downloadProcessedImage } from "@/lib/removeBgService";
 
 export default function RemoveBg() {
   useMemo(() => { document.title = "Image Background Remover – Note Bot AI"; }, []);
@@ -37,31 +37,33 @@ export default function RemoveBg() {
     onSelect(f);
   };
 
-  const removeBackground = async () => {
+  const processImage = async () => {
     if (!file) return;
     setLoading(true);
     setError(null);
+    
     try {
-      const form = new FormData();
-      form.append("image_file", file, file.name);
-      form.append("size", "auto");
-      const resp = await fetch(`${SUPABASE_URL}/functions/v1/remove-bg`, {
-        method: "POST",
-        headers: {
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptb3ViYnRuemZmcHZkamhuYnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1Njg5ODIsImV4cCI6MjA3MDE0NDk4Mn0.HsnosAWMperDILZGNILIzF-MgQmeSE2JbrNvqqf8Kn8`,
-          'apikey': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptb3ViYnRuemZmcHZkamhuYnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1Njg5ODIsImV4cCI6MjA3MDE0NDk4Mn0.HsnosAWMperDILZGNILIzF-MgQmeSE2JbrNvqqf8Kn8`,
-        },
-        body: form,
-      });
-      if (!resp.ok) {
-        const err = await resp.text();
-        throw new Error(err || "Failed to process image");
+      const result = await removeBackground(file);
+      
+      if (result.success && result.imageUrl) {
+        setAfterUrl(result.imageUrl);
+        toast({ title: "Background removed successfully!" });
+      } else {
+        setError(result.error || "Failed to process image");
+        toast({ 
+          title: "Processing failed", 
+          description: result.error, 
+          variant: "destructive" 
+        });
       }
-      const blob = await resp.blob();
-      const url = URL.createObjectURL(blob);
-      setAfterUrl(url);
-    } catch (e: any) {
-      setError(e?.message || "Something went wrong.");
+    } catch (error: any) {
+      const errorMessage = error?.message || "Something went wrong.";
+      setError(errorMessage);
+      toast({ 
+        title: "Error", 
+        description: errorMessage, 
+        variant: "destructive" 
+      });
     } finally {
       setLoading(false);
     }
@@ -122,14 +124,13 @@ export default function RemoveBg() {
             {error && <div className="mt-4 text-sm text-destructive">{error}</div>}
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90" onClick={removeBackground} disabled={!file || loading}>
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90" onClick={processImage} disabled={!file || loading}>
                 {loading ? "Processing…" : "Remove Background"}
               </Button>
               {afterUrl && (
-                <Button variant="outline" onClick={() => {
-                  const a = document.createElement('a');
-                  a.href = afterUrl; a.download = 'removed-bg.png'; a.click();
-                }}>Download PNG</Button>
+                <Button variant="outline" onClick={() => downloadProcessedImage(afterUrl)}>
+                  Download PNG
+                </Button>
               )}
               <Button variant="ghost" onClick={reset}>Reset</Button>
             </div>

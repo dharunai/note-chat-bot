@@ -48,7 +48,7 @@ serve(async (req) => {
     upstream.append("image_file", file, file.name || "upload.png");
     upstream.append("size", size);
 
-    const upstreamResp = await fetch("https://api.eremovebg.com/v1/remove", {
+    const upstreamResp = await fetch("https://api.remove.bg/v1.0/removebg", {
       method: "POST",
       headers: { "X-Api-Key": EREMOVE_API_KEY },
       body: upstream,
