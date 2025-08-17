@@ -1,53 +1,34 @@
-import { createClient } from 'npm:@supabase/supabase-js@2.54.0';
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.54.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
 };
 
-Deno.serve(async (req) => {
+serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { question, fileContent, fileName, model } = await req.json();
-    
-    if (!question) {
-      throw new Error('Question is required');
-    }
+    const { question, fileContent, fileName } = await req.json();
     
     // Initialize Supabase client
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    
-    if (!supabaseUrl || !supabaseServiceKey) {
-      console.error('Missing Supabase environment variables');
-      throw new Error('Server configuration error');
-    }
-    
-    const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
     
     // Get user from Authorization header
-    const authHeader = req.headers.get('Authorization');
-    let user = null;
+    const authHeader = req.headers.get('Authorization')!;
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user } } = await supabaseClient.auth.getUser(token);
     
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.replace('Bearer ', '');
-      
-      try {
-        const { data: { user: authUser }, error: authError } = await supabaseClient.auth.getUser(token);
-        
-        if (authError) {
-          console.error('Authentication error:', authError);
-        } else {
-          user = authUser;
-        }
-      } catch (error) {
-        console.error('Error getting user:', error);
-      }
+    if (!user) {
+      throw new Error('User not authenticated');
     }
 
     // Call Gemini API
@@ -156,29 +137,22 @@ Developed by Havoc Dharun
     }
 
     const data = await response.json();
-    console.log('Gemini API response received');
+    console.log('Gemini API response data:', JSON.stringify(data, null, 2));
     
     const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not generate a response.';
 
-    // Save to messages table only if user is authenticated
-    if (user) {
-      try {
-        const { error: insertError } = await supabaseClient
-          .from('messages')
-          .insert({
-            user_id: user.id,
-            file_name: fileName || null,
-            question,
-            answer,
-          });
+    // Save to messages table
+    const { error: insertError } = await supabaseClient
+      .from('messages')
+      .insert({
+        user_id: user.id,
+        file_name: fileName || null,
+        question,
+        answer,
+      });
 
-        if (insertError) {
-          console.error('Error saving message:', insertError);
-        }
-      } catch (saveError) {
-        console.error('Error saving message to database:', saveError);
-        // Don't fail the request if saving fails
-      }
+    if (insertError) {
+      console.error('Error saving message:', insertError);
     }
 
     return new Response(JSON.stringify({ answer }), {
