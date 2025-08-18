@@ -22,7 +22,7 @@ const AI_PROVIDERS = [
     baseUrl: "https://api.groq.com/openai/v1/chat/completions",
     apiKey: Deno.env.get("GROQ_API_KEY"),
     transformRequest: (prompt: string) => ({
-      model: "llama-3.1-70b-versatile",
+      model: "llama-3.1-8b-instant",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 1000,
       temperature: 0.5
