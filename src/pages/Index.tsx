@@ -78,7 +78,7 @@ const Index = () => {
     alt: 'Poster maker icon'
   }] as const;
   return <div className="min-h-screen gradient-hero">
-      <TopNav />
+      <TopNav className="bg-purple-50" />
       <main className="container mx-auto px-4 py-16">
         {/* Hero Section - Remix pulse-robot (purple) */}
         <section className="relative overflow-hidden rounded-3xl gradient-hero shadow-elegant mb-16">
