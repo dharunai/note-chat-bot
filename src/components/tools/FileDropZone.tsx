@@ -20,13 +20,13 @@ export default function FileDropZone({ accept, multiple = true, onDrop, classNam
     <div
       {...getRootProps()}
       className={cn(
-        "rounded-lg border-2 border-dashed p-8 text-center cursor-pointer transition-smooth",
+        "rounded-lg border-2 border-dashed p-6 md:p-8 text-center cursor-pointer transition-smooth",
         isDragActive ? "border-primary bg-primary/5" : "border-muted",
         className
       )}
     >
       <input {...getInputProps()} />
-      {children || <p className="text-sm text-muted-foreground">Drag & drop files here, or tap to select</p>}
+      {children || <p className="text-xs md:text-sm text-muted-foreground">Drag & drop files here, or tap to select</p>}
     </div>
   );
 }

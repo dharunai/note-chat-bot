@@ -79,22 +79,22 @@ const Index = () => {
   }] as const;
   return <div className="min-h-screen gradient-hero">
       <TopNav />
-      <main className="container mx-auto px-4 py-16">
+      <main className="container mx-auto px-4 py-8 md:py-16">
         {/* Hero Section - Remix pulse-robot (purple) */}
-        <section className="relative overflow-hidden rounded-3xl gradient-hero shadow-elegant mb-16">
-          <div className="relative container mx-auto px-4 py-12 md:py-20">
-            <div className="grid md:grid-cols-2 gap-10 items-center">
+        <section className="relative overflow-hidden rounded-2xl md:rounded-3xl gradient-hero shadow-elegant mb-8 md:mb-16">
+          <div className="relative container mx-auto px-4 py-8 md:py-12 lg:py-20">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
               {/* Left: Copy */}
               <div>
-                <h1 className="text-5xl mb-6 bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent leading-tight text-left font-bold md:text-4xl">Click, Convert, Create, Conquer, Chat — Notebot AI for Everything</h1>
-                <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl leading-relaxed">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl mb-4 md:mb-6 bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent leading-tight text-left font-bold">Click, Convert, Create, Conquer, Chat — Notebot AI for Everything</h1>
+                <p className="text-base md:text-lg lg:text-xl text-muted-foreground mb-6 md:mb-10 max-w-2xl leading-relaxed">
                   From files to ideas, from PDFs to posters — Note Bot AI turns your work into wow in seconds.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" className="px-8 py-6 gradient-primary shadow-glow transition-smooth" asChild>
+                <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                  <Button size="lg" className="px-6 md:px-8 py-4 md:py-6 gradient-primary shadow-glow transition-smooth" asChild>
                     <Link to="/dashboard" aria-label="Chat with your notes">Chat with Your Notes</Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="px-8 py-6 transition-smooth" asChild>
+                  <Button size="lg" variant="outline" className="px-6 md:px-8 py-4 md:py-6 transition-smooth" asChild>
                     <a href="#tools" aria-label="Explore all tools">Explore All Tools</a>
                   </Button>
                 </div>
@@ -102,16 +102,16 @@ const Index = () => {
 
               {/* Right: Visual */}
               <div className="relative flex items-center justify-center">
-                <div className="absolute -inset-8 rounded-[2rem] opacity-60 glow-ellipse-purple" aria-hidden="true" />
-                <img src={heroRobot} alt="Notebot AI hero illustration" loading="lazy" decoding="async" className="relative w-full h-auto rounded-3xl bg-card shadow-elegant object-contain mx-auto p-2" />
+                <div className="absolute -inset-4 md:-inset-8 rounded-xl md:rounded-[2rem] opacity-60 glow-ellipse-purple" aria-hidden="true" />
+                <img src={heroRobot} alt="Notebot AI hero illustration" loading="lazy" decoding="async" className="relative w-full h-auto rounded-2xl md:rounded-3xl bg-card shadow-elegant object-contain mx-auto p-2" />
               </div>
             </div>
           </div>
         </section>
 
         {/* Tools Grid */}
-        <section id="tools" aria-label="Tools grid" className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+        <section id="tools" aria-label="Tools grid" className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
              {tools.map(({
             title,
             desc,
@@ -119,15 +119,17 @@ const Index = () => {
             iconSrc,
             alt
           }) => <Link key={title} to={to} className="block group focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
-                <Card className="text-left hover:shadow-elegant transition-smooth border-0 shadow-lg bg-card/80 backdrop-blur-sm hover-scale">
-                  <CardHeader className="pb-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="rounded-xl bg-primary/10 p-3">
-                        <img src={iconSrc} alt={alt} className="h-5 w-5 object-contain" loading="lazy" decoding="async" />
+                <Card className="text-left hover:shadow-elegant transition-smooth border-0 shadow-lg bg-card/80 backdrop-blur-sm h-full">
+                  <CardHeader className="pb-4 md:pb-6">
+                    <div className="flex items-start gap-3 mb-2 md:mb-3">
+                      <div className="rounded-lg md:rounded-xl bg-primary/10 p-2 md:p-3 flex-shrink-0">
+                        <img src={iconSrc} alt={alt} className="h-4 w-4 md:h-5 md:w-5 object-contain" loading="lazy" decoding="async" />
                       </div>
-                      <CardTitle className="text-base md:text-lg truncate">{title}</CardTitle>
+                      <div className="min-w-0 flex-1">
+                        <CardTitle className="text-sm md:text-base lg:text-lg leading-tight">{title}</CardTitle>
+                      </div>
                     </div>
-                    <CardDescription className="text-sm md:text-base leading-relaxed break-words">
+                    <CardDescription className="text-xs md:text-sm leading-relaxed break-words">
                       {desc}
                     </CardDescription>
                   </CardHeader>

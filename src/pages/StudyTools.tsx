@@ -298,25 +298,25 @@ export default function StudyTools() {
   const sectionCls = "grid gap-4 md:grid-cols-2";
   return <div className="min-h-screen bg-gradient-to-b from-background to-background/70">
       <TopNav />
-      <main className="container mx-auto px-4 py-8">
-        <header className="mb-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Study Tools</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">Made by a student, for students — 100% free, no sign-ups.</p>
+      <main className="container mx-auto px-4 py-6 md:py-8">
+        <header className="mb-6 md:mb-8 text-center">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">Study Tools</h1>
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">Made by a student, for students — 100% free, no sign-ups.</p>
         </header>
 
         {/* Citation Generator */}
-        <section className="mb-8" aria-labelledby="citation">
+        <section className="mb-6 md:mb-8" aria-labelledby="citation">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Quote className="h-5 w-5 text-primary" /> Citation Generator</CardTitle>
-              <CardDescription>APA, MLA, Chicago. Paste a title, URL, or DOI.</CardDescription>
+              <CardTitle className="flex items-center gap-2 text-lg md:text-xl"><Quote className="h-5 w-5 text-primary" /> Citation Generator</CardTitle>
+              <CardDescription className="text-sm">APA, MLA, Chicago. Paste a title, URL, or DOI.</CardDescription>
             </CardHeader>
-            <CardContent className={sectionCls}>
+            <CardContent className="grid gap-4 lg:grid-cols-2">
               <div className="space-y-3">
-                <Textarea placeholder="e.g., 10.1038/s41586-020-2649-2 or article title" value={citationQuery} onChange={e => setCitationQuery(e.target.value)} />
-                <div className="flex gap-2 items-center">
+                <Textarea placeholder="e.g., 10.1038/s41586-020-2649-2 or article title" value={citationQuery} onChange={e => setCitationQuery(e.target.value)} className="text-sm" />
+                <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
                   <Select value={citationStyle} onValueChange={v => setCitationStyle(v as any)}>
-                    <SelectTrigger className="w-40"><SelectValue placeholder="Style" /></SelectTrigger>
+                    <SelectTrigger className="w-full sm:w-32 md:w-40"><SelectValue placeholder="Style" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All</SelectItem>
                       <SelectItem value="apa">APA</SelectItem>
@@ -324,96 +324,102 @@ export default function StudyTools() {
                       <SelectItem value="chicago">Chicago</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Button onClick={genCitations}>Generate Citation</Button>
-                  <Button variant="outline" onClick={() => {
+                  <div className="flex gap-2">
+                    <Button onClick={genCitations} className="flex-1 sm:flex-none text-sm">Generate</Button>
+                    <Button variant="outline" size="sm" onClick={() => {
                   copyToClipboard(citationOut);
                   toast({
                     title: 'Copied!'
                   });
-                }} disabled={!citationOut}>Copy</Button>
-                  <Button variant="outline" onClick={() => downloadTxt('citation.txt', citationOut)} disabled={!citationOut}>Download .txt</Button>
+                }} disabled={!citationOut} className="text-xs">Copy</Button>
+                    <Button variant="outline" size="sm" onClick={() => downloadTxt('citation.txt', citationOut)} disabled={!citationOut} className="text-xs">Download</Button>
+                  </div>
                 </div>
               </div>
               <div>
-                <Textarea readOnly value={citationOut} placeholder="Your formatted citation will appear here" className="min-h-40" />
+                <Textarea readOnly value={citationOut} placeholder="Your formatted citation will appear here" className="min-h-32 md:min-h-40 text-sm" />
               </div>
             </CardContent>
           </Card>
         </section>
 
         {/* Paraphrasing */}
-        <section className="mb-8" aria-labelledby="paraphrase">
+        <section className="mb-6 md:mb-8" aria-labelledby="paraphrase">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Shuffle className="h-5 w-5 text-primary" /> Paraphrasing Tool</CardTitle>
-              <CardDescription>Choose a tone and compare side-by-side.</CardDescription>
+              <CardTitle className="flex items-center gap-2 text-lg md:text-xl"><Shuffle className="h-5 w-5 text-primary" /> Paraphrasing Tool</CardTitle>
+              <CardDescription className="text-sm">Choose a tone and compare side-by-side.</CardDescription>
             </CardHeader>
-            <CardContent className={sectionCls}>
+            <CardContent className="grid gap-4 lg:grid-cols-2">
               <div className="space-y-3">
-                <Textarea placeholder="Paste text to paraphrase..." value={paraIn} onChange={e => setParaIn(e.target.value)} />
-                <div className="flex gap-2 items-center flex-wrap">
+                <Textarea placeholder="Paste text to paraphrase..." value={paraIn} onChange={e => setParaIn(e.target.value)} className="text-sm" />
+                <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
                   <Select value={tone} onValueChange={v => setTone(v as any)}>
-                    <SelectTrigger className="w-40"><SelectValue placeholder="Tone" /></SelectTrigger>
+                    <SelectTrigger className="w-full sm:w-32 md:w-40"><SelectValue placeholder="Tone" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="formal">Formal</SelectItem>
                       <SelectItem value="casual">Casual</SelectItem>
                       <SelectItem value="academic">Academic</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Button onClick={paraphrase}>Paraphrase Now</Button>
-                  <Button variant="outline" onClick={() => {
+                  <div className="flex gap-2">
+                    <Button onClick={paraphrase} className="flex-1 sm:flex-none text-sm">Paraphrase</Button>
+                    <Button variant="outline" size="sm" onClick={() => {
                   copyToClipboard(paraOut);
                   toast({
                     title: 'Copied!'
                   });
-                }} disabled={!paraOut}>Copy</Button>
-                  <Button variant="outline" onClick={() => downloadTxt('paraphrased.txt', paraOut)} disabled={!paraOut}>Download .txt</Button>
+                }} disabled={!paraOut} className="text-xs">Copy</Button>
+                    <Button variant="outline" size="sm" onClick={() => downloadTxt('paraphrased.txt', paraOut)} disabled={!paraOut} className="text-xs">Download</Button>
+                  </div>
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-sm text-muted-foreground">Paraphrased</label>
-                <Textarea readOnly value={paraOut} className="min-h-40" placeholder="Paraphrased text will appear here" />
+                <Textarea readOnly value={paraOut} className="min-h-32 md:min-h-40 text-sm" placeholder="Paraphrased text will appear here" />
               </div>
             </CardContent>
           </Card>
         </section>
 
         {/* Summarizer */}
-        <section className="mb-8" aria-labelledby="summarizer">
+        <section className="mb-6 md:mb-8" aria-labelledby="summarizer">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><ListChecks className="h-5 w-5 text-primary" /> Summarizer</CardTitle>
-              <CardDescription>Bullet points or a concise paragraph.</CardDescription>
+              <CardTitle className="flex items-center gap-2 text-lg md:text-xl"><ListChecks className="h-5 w-5 text-primary" /> Summarizer</CardTitle>
+              <CardDescription className="text-sm">Bullet points or a concise paragraph.</CardDescription>
             </CardHeader>
-            <CardContent className={sectionCls}>
+            <CardContent className="grid gap-4 lg:grid-cols-2">
               <div className="space-y-3">
-                <Textarea placeholder="Paste long text to summarize..." value={sumIn} onChange={e => setSumIn(e.target.value)} />
-                <div className="flex gap-2 items-center">
+                <Textarea placeholder="Paste long text to summarize..." value={sumIn} onChange={e => setSumIn(e.target.value)} className="text-sm" />
+                <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
                   <Select value={sumMode} onValueChange={v => setSumMode(v as any)}>
-                    <SelectTrigger className="w-44"><SelectValue placeholder="Mode" /></SelectTrigger>
+                    <SelectTrigger className="w-full sm:w-36 md:w-44"><SelectValue placeholder="Mode" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="bullets">Bullet points</SelectItem>
                       <SelectItem value="paragraph">Paragraph</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Button onClick={summarize}>Summarize</Button>
-                  <Button variant="outline" onClick={() => {
+                  <div className="flex gap-2">
+                    <Button onClick={summarize} className="flex-1 sm:flex-none text-sm">Summarize</Button>
+                    <Button variant="outline" size="sm" onClick={() => {
                   const out = Array.isArray(sumOut) ? (sumOut as string[]).map(b => `- ${b}`).join('\n') : String(sumOut);
                   copyToClipboard(out);
                   toast({
                     title: 'Copied!'
                   });
-                }} disabled={!sumOut}>Copy</Button>
-                  <Button variant="outline" onClick={() => {
+                }} disabled={!sumOut} className="text-xs">Copy</Button>
+                    <Button variant="outline" size="sm" onClick={() => {
                   const out = Array.isArray(sumOut) ? (sumOut as string[]).map(b => `- ${b}`).join('\n') : String(sumOut);
                   downloadTxt('summary.txt', out);
-                }} disabled={!sumOut}>Download .txt</Button>
+                }} disabled={!sumOut} className="text-xs">Download</Button>
+                  </div>
                 </div>
               </div>
               <div>
                 {Array.isArray(sumOut) ? <ul className="list-disc pl-5 space-y-1 text-sm">
                     {(sumOut as string[]).map((b, i) => <li key={i}>{b}</li>)}
-                  </ul> : <Textarea readOnly value={String(sumOut)} className="min-h-40" placeholder="Summary will appear here" />}
+                  </ul> : <Textarea readOnly value={String(sumOut)} className="min-h-32 md:min-h-40 text-sm" placeholder="Summary will appear here" />}
               </div>
             </CardContent>
           </Card>

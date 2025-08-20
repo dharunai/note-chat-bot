@@ -175,55 +175,56 @@ const Dashboard = () => {
   };
   return <div className="min-h-screen bg-cosmic">
       <header className="border-b bg-card/50 backdrop-blur-lg">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="bg-primary/10 p-2 rounded-lg">
               <BookOpen className="h-6 w-6 text-primary" />
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight">NoteBot AI</h1>
+            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight">NoteBot AI</h1>
           </div>
-          <div className="flex items-center gap-2">
-            <Button onClick={() => setShowModelDialog(true)} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth text-violet-600">
+          <div className="flex items-center gap-1 md:gap-2">
+            <Button onClick={() => setShowModelDialog(true)} className="px-2 md:px-4 py-2 bg-card rounded-lg shadow text-xs md:text-sm flex items-center gap-1 md:gap-2 border-0 transition-smooth text-violet-600">
               <Cpu className="h-4 w-4" />
-              {model ? `Model: ${model}` : 'Choose Model'}
+              <span className="hidden sm:inline">{model ? `Model: ${model}` : 'Choose Model'}</span>
+              <span className="sm:hidden">{model ? model.split(' ')[0] : 'Model'}</span>
             </Button>
-            <Button onClick={() => setShowContactDialog(true)} className="px-4 py-2 rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth bg-stone-600 hover:bg-stone-500">
+            <Button onClick={() => setShowContactDialog(true)} className="px-2 md:px-4 py-2 rounded-lg shadow text-xs md:text-sm flex items-center gap-1 md:gap-2 border-0 transition-smooth bg-stone-600 hover:bg-stone-500">
               <Mail className="h-4 w-4" />
-              Contact Us
+              <span className="hidden sm:inline">Contact Us</span>
             </Button>
-            {user && <Button onClick={signOut} className="px-4 py-2 bg-card rounded-lg shadow text-sm flex items-center gap-2 border-0 transition-smooth">
+            {user && <Button onClick={signOut} className="px-2 md:px-4 py-2 bg-card rounded-lg shadow text-xs md:text-sm flex items-center gap-1 md:gap-2 border-0 transition-smooth">
                 <LogOut className="h-4 w-4" />
-                Sign Out
+                <span className="hidden sm:inline">Sign Out</span>
               </Button>}
           </div>
         </div>
       </header>
-      <div className="container mx-auto px-4 py-8">
-        <section className="relative overflow-hidden rounded-3xl bg-cosmic p-10 mb-8 shadow-glow border border-border/50">
-          <div className="max-w-3xl">
+      <div className="container mx-auto px-4 py-4 md:py-8">
+        <section className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-cosmic p-6 md:p-10 mb-6 md:mb-8 shadow-glow border border-border/50">
+          <div className="max-w-4xl">
 
-            <h2 className="text-4xl md:text-6xl font-bold mb-3 tracking-tight leading-[0.9]">
+            <h2 className="text-2xl md:text-4xl lg:text-6xl font-bold mb-3 md:mb-4 tracking-tight leading-tight md:leading-[0.9]">
               <span className="relative inline-block">
-                <span className="absolute -inset-1 blur-2xl opacity-20 bg-gradient-to-r from-primary to-accent rounded-2xl"></span>
+                <span className="absolute -inset-1 blur-xl md:blur-2xl opacity-20 bg-gradient-to-r from-primary to-accent rounded-xl md:rounded-2xl"></span>
                 <span className="relative">Turn Your Notes Into a Conversation</span>
               </span>
             </h2>
-            <p className="text-muted-foreground mb-6 max-w-xl">Upload your notes and I’ll summarize them automatically so you can chat with your content right away.</p>
-            <div className="flex gap-3">
+            <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6 max-w-2xl leading-relaxed">Upload your notes and I'll summarize them automatically so you can chat with your content right away.</p>
+            <div className="flex flex-col sm:flex-row gap-3">
               <Button onClick={() => fileInputRef.current?.click()} className="shadow-glow">Upload a File</Button>
             </div>
           </div>
         </section>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+          <div className="space-y-6 md:space-y-8">
             {/* File Upload Section */}
             <Card className="shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
               
               <CardContent>
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   <div>
                     <Label htmlFor="file-upload" className="text-sm font-medium">Choose File</Label>
-                    <Input id="file-upload" type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".pdf,.docx,.txt" className="mt-2 h-12 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-smooth" />
+                    <Input id="file-upload" type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".pdf,.docx,.txt" className="mt-2 h-10 md:h-12 file:mr-2 md:file:mr-4 file:py-1 md:file:py-2 file:px-2 md:file:px-4 file:rounded-md md:file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-smooth text-sm" />
                   </div>
                   {uploadedFile && <div className="p-4 bg-muted/50 rounded-xl border border-border/50">
                       <div className="flex items-center gap-3">
@@ -245,7 +246,7 @@ const Dashboard = () => {
             {/* Document Preview */}
             <Card className="shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-xl">Document Preview</CardTitle>
+                <CardTitle className="text-lg md:text-xl">Document Preview</CardTitle>
                 <CardDescription>Embedded preview or extracted text</CardDescription>
               </CardHeader>
               <CardContent>
@@ -257,17 +258,17 @@ const Dashboard = () => {
           {/* Chat Section */}
           <Card className="shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-xl">
+              <CardTitle className="flex items-center gap-3 text-lg md:text-xl">
                 <div className="bg-green-500/10 p-2 rounded-lg">
                   <MessageSquare className="h-5 w-5 text-green-500" />
                 </div>
                 Chat
               </CardTitle>
-              <CardDescription className="text-base">Don't worry Notebot AI is here to Assist You </CardDescription>
+              <CardDescription className="text-sm md:text-base">Don't worry Notebot AI is here to Assist You </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex flex-col gap-3 max-h-[60vh] overflow-auto pr-1">
+              <div className="space-y-3 md:space-y-4">
+                <div className="flex flex-col gap-2 md:gap-3 max-h-[50vh] md:max-h-[60vh] overflow-auto pr-1">
                   {messages.map((m, idx) => <ChatMessage key={idx} role={m.role} content={m.content} />)}
                 </div>
 
@@ -275,9 +276,9 @@ const Dashboard = () => {
 
                 <div>
                   <Label htmlFor="question" className="text-sm font-medium"></Label>
-                  <Textarea id="question" value={question} onChange={e => setQuestion(e.target.value)} placeholder="Type a question — or tap a suggestion above" className="mt-2 min-h-[100px] resize-none transition-smooth focus:ring-2 focus:ring-primary" rows={4} />
+                  <Textarea id="question" value={question} onChange={e => setQuestion(e.target.value)} placeholder="Type a question — or tap a suggestion above" className="mt-2 min-h-[80px] md:min-h-[100px] resize-none transition-smooth focus:ring-2 focus:ring-primary text-sm md:text-base" rows={3} />
                 </div>
-                <Button onClick={() => handleAskQuestion()} disabled={loading} className="w-full h-12 text-base gradient-primary shadow-glow hover:shadow-lg transition-smooth">
+                <Button onClick={() => handleAskQuestion()} disabled={loading} className="w-full h-10 md:h-12 text-sm md:text-base gradient-primary shadow-glow hover:shadow-lg transition-smooth">
                   {loading ? <div className="flex items-center gap-2">
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                       Thinking...
@@ -292,21 +293,21 @@ const Dashboard = () => {
         </div>
 
         <Dialog open={showContactDialog} onOpenChange={setShowContactDialog}>
-          <DialogContent className="max-w-md">
+          <DialogContent className="max-w-sm md:max-w-md mx-4">
             <DialogHeader>
               <DialogTitle>Contact Us</DialogTitle>
               <DialogDescription>Get in touch with our team for support or feedback.</DialogDescription>
             </DialogHeader>
-            <div className="space-y-2">
-              <a href="mailto:dharunshanmugavel12@gmail.com" className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-smooth">
+            <div className="space-y-1 md:space-y-2">
+              <a href="mailto:dharunshanmugavel12@gmail.com" className="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-primary/5 transition-smooth text-sm md:text-base">
                 <Mail className="h-4 w-4 text-primary" />
-                <span>dharunshanmugavel12@gmail.com</span>
+                <span className="break-all">dharunshanmugavel12@gmail.com</span>
               </a>
-              <a href="https://www.instagram.com/_havoc_dharun_/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-smooth">
+              <a href="https://www.instagram.com/_havoc_dharun_/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-primary/5 transition-smooth text-sm md:text-base">
                 <Instagram className="h-4 w-4 text-primary" />
                 <span>_havoc_dharun_</span>
               </a>
-              <a href="https://www.linkedin.com/in/dharun-shanmugavel-bb7304315" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-smooth">
+              <a href="https://www.linkedin.com/in/dharun-shanmugavel-bb7304315" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-primary/5 transition-smooth text-sm md:text-base">
                 <Linkedin className="h-4 w-4 text-primary" />
                 <span>Dharun Shanmugavel</span>
               </a>

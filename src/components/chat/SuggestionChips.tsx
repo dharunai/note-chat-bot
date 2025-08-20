@@ -11,7 +11,7 @@ const icons = [Sparkles, MessageSquare, ListChecks, HelpCircle];
 
 const SuggestionChips: React.FC<SuggestionChipsProps> = ({ suggestions, onClick }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 mt-2 md:mt-3">
       {suggestions.map((s, i) => {
         const Icon = icons[i % icons.length];
         return (
@@ -20,10 +20,10 @@ const SuggestionChips: React.FC<SuggestionChipsProps> = ({ suggestions, onClick 
             type="button"
             variant="secondary"
             onClick={() => onClick(s)}
-            className="justify-start h-auto py-3 px-4 text-left rounded-xl bg-secondary hover:bg-secondary/80 shadow-elegant"
+            className="justify-start h-auto py-2 md:py-3 px-3 md:px-4 text-left rounded-lg md:rounded-xl bg-secondary hover:bg-secondary/80 shadow-elegant"
           >
             <Icon className="h-4 w-4 mr-2 text-primary" />
-            <span className="text-sm">{s}</span>
+            <span className="text-xs md:text-sm leading-tight">{s}</span>
           </Button>
         );
       })}

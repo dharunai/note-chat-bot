@@ -182,23 +182,23 @@ export default function Blogs() {
       <TopNav />
 
       <header className="relative border-b">
-        <div className="container mx-auto px-4 py-10 md:py-14">
+        <div className="container mx-auto px-4 py-6 md:py-10 lg:py-14">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
                 Note Bot AI Blog – Tools, Tips & Hacks for Smarter Study
               </h1>
-              <p className="mt-3 max-w-2xl text-muted-foreground">
+              <p className="mt-2 md:mt-3 max-w-2xl text-sm md:text-base text-muted-foreground leading-relaxed">
                 Built by a student, for students. We share quick wins, friendly walkthroughs, and AI tricks that save time, cut stress, and make studying way less boring.
               </p>
-              <div className="mt-4 flex flex-wrap items-center gap-2">
+              <div className="mt-3 md:mt-4 flex flex-wrap items-center gap-2">
                 <Badge className="bg-primary/10 text-primary ring-1 ring-primary/20">No logins required</Badge>
-                <Badge variant="secondary" className="ring-1 ring-border">Note Bot AI Features – Explained & Explored</Badge>
+                <Badge variant="secondary" className="ring-1 ring-border text-xs md:text-sm">Note Bot AI Features – Explained & Explored</Badge>
               </div>
             </div>
 
             <div className="hidden md:block relative">
-              <span className="absolute -top-3 right-0 rotate-3 rounded-sm bg-secondary px-3 py-1 text-xs font-semibold text-secondary-foreground shadow-sm ring-1 ring-border">
+              <span className="absolute -top-3 right-0 rotate-3 rounded-sm bg-secondary px-2 md:px-3 py-1 text-xs font-semibold text-secondary-foreground shadow-sm ring-1 ring-border">
                 Made by a Student
               </span>
             </div>
@@ -206,11 +206,11 @@ export default function Blogs() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 md:py-12">
+      <main className="container mx-auto px-4 py-6 md:py-8 lg:py-12">
         <section aria-labelledby="blog-list">
           <h2 id="blog-list" className="sr-only">Blog posts</h2>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post, idx) => {
               const Icon = post.icon;
               const to = idx === 0 ? `/blog/${post.slug}` : `/blog/${post.slug}`;
@@ -219,27 +219,27 @@ export default function Blogs() {
                 <article key={post.slug} className="group">
                   <Card className="h-full overflow-hidden">
                     <CardHeader className="p-0">
-                      <div className="relative h-40 w-full bg-gradient-to-r from-primary/20 via-primary/10 to-secondary/20">
+                      <div className="relative h-32 md:h-40 w-full bg-gradient-to-r from-primary/20 via-primary/10 to-secondary/20">
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <Icon className="h-10 w-10 text-primary" aria-hidden="true" />
+                          <Icon className="h-8 w-8 md:h-10 md:w-10 text-primary" aria-hidden="true" />
                         </div>
                         {isFeatured && (
                           <div className="absolute left-3 top-3">
-                            <Badge className="bg-primary text-primary-foreground">Featured</Badge>
+                            <Badge className="bg-primary text-primary-foreground text-xs">Featured</Badge>
                           </div>
                         )}
                       </div>
                     </CardHeader>
-                    <CardContent className="pt-4">
+                    <CardContent className="pt-3 md:pt-4 px-4 md:px-6">
                       <div className="mb-2 flex items-center gap-2">
-                        <Badge variant="secondary">{post.category}</Badge>
+                        <Badge variant="secondary" className="text-xs">{post.category}</Badge>
                         <span className="text-xs text-muted-foreground">{post.date}</span>
                       </div>
-                      <CardTitle className="text-xl">{post.title}</CardTitle>
-                      <CardDescription className="mt-2 line-clamp-3">{post.description}</CardDescription>
+                      <CardTitle className="text-base md:text-lg lg:text-xl leading-tight">{post.title}</CardTitle>
+                      <CardDescription className="mt-2 text-sm leading-relaxed line-clamp-3">{post.description}</CardDescription>
                     </CardContent>
-                    <CardFooter className="pt-2">
-                      <Button asChild>
+                    <CardFooter className="pt-2 px-4 md:px-6 pb-4 md:pb-6">
+                      <Button asChild className="text-sm">
                         <Link to={to} aria-label={`Read more: ${post.title}`}>Read More</Link>
                       </Button>
                     </CardFooter>
@@ -250,15 +250,15 @@ export default function Blogs() {
           </div>
         </section>
 
-        <section className="mt-12 border-t pt-8">
-          <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
-            <nav className="flex flex-wrap items-center gap-4">
+        <section className="mt-8 md:mt-12 border-t pt-6 md:pt-8">
+          <div className="flex flex-col md:flex-row md:flex-wrap items-start md:items-center gap-4 md:gap-6 text-sm text-muted-foreground">
+            <nav className="flex flex-wrap items-center gap-3 md:gap-4">
               <Link to="/" className="hover:text-foreground">About</Link>
               <Link to="/tools" className="hover:text-foreground">Features</Link>
               <Link to="/tools" className="hover:text-foreground">Tools</Link>
               <Link to="/privacy" className="hover:text-foreground">Privacy Policy</Link>
             </nav>
-            <p className="w-full md:w-auto">
+            <p className="text-xs md:text-sm">
               Note Bot AI – Built by a Student. Loved by Students. No ads. No logins. Just tools.
             </p>
           </div>

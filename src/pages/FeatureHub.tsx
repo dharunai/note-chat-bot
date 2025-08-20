@@ -36,30 +36,30 @@ const FeatureHub = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-background/70">
       <TopNav />
 
-      <main className="container mx-auto px-4 py-10">
-        <header className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3">
+      <main className="container mx-auto px-4 py-6 md:py-10">
+        <header className="text-center mb-6 md:mb-10">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-foreground mb-2 md:mb-3">
             Note Bot AI – Your all-in-one hub to chat, convert, create, and conquer
           </h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Fast, lightweight, mobile-first tools for documents, writing, and creativity.
           </p>
         </header>
 
-        <section aria-label="Tools" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <section aria-label="Tools" className="grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {tools.map((t) => (
             <Card key={t.title} className="group hover:shadow-elegant transition-smooth">
-              <CardHeader className="flex-row items-center gap-3">
-                <div className="p-2 rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-                  <img src={t.iconPath} alt={`${t.title} icon`} className="h-5 w-5" loading="lazy" decoding="async" />
+              <CardHeader className="flex-row items-start gap-3 p-4 md:p-6">
+                <div className="p-2 rounded-lg md:rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20 flex-shrink-0">
+                  <img src={t.iconPath} alt={`${t.title} icon`} className="h-4 w-4 md:h-5 md:w-5" loading="lazy" decoding="async" />
                 </div>
-                <div className="min-w-0">
-                  <CardTitle className="text-base truncate">{t.title}</CardTitle>
-                  <CardDescription className="break-words whitespace-normal">{t.desc}</CardDescription>
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="text-sm md:text-base leading-tight mb-1">{t.title}</CardTitle>
+                  <CardDescription className="text-xs md:text-sm break-words whitespace-normal leading-relaxed">{t.desc}</CardDescription>
                 </div>
               </CardHeader>
-              <CardContent>
-                <Button className="w-full" asChild>
+              <CardContent className="pt-0 px-4 md:px-6 pb-4 md:pb-6">
+                <Button className="w-full text-sm" asChild>
                   <Link to={t.to} aria-label={`Open ${t.title}`}>Open</Link>
                 </Button>
               </CardContent>

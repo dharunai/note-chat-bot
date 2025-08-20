@@ -34,39 +34,39 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen gradient-hero flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-elegant border-0 bg-card/80 backdrop-blur-lg">
+      <Card className="w-full max-w-sm md:max-w-md shadow-elegant border-0 bg-card/80 backdrop-blur-lg">
         <CardHeader className="text-center space-y-2">
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-3 md:mb-4">
             <div className="bg-primary/10 p-3 rounded-full">
               <BookOpen className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+          <CardTitle className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
             NoteBot AI
           </CardTitle>
-          <CardDescription className="text-base">
+          <CardDescription className="text-sm md:text-base">
             Turn your notes into a conversation
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4 md:space-y-6">
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-muted/50">
               <TabsTrigger 
                 value="signin" 
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-smooth"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-smooth text-sm"
               >
                 Sign In
               </TabsTrigger>
               <TabsTrigger 
                 value="signup"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-smooth"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-smooth text-sm"
               >
                 Sign Up
               </TabsTrigger>
             </TabsList>
             
-            <TabsContent value="signin" className="space-y-4 mt-6">
-              <form onSubmit={handleSignIn} className="space-y-4">
+            <TabsContent value="signin" className="space-y-3 md:space-y-4 mt-4 md:mt-6">
+              <form onSubmit={handleSignIn} className="space-y-3 md:space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="signin-email" className="text-sm font-medium">Email</Label>
                   <Input
@@ -75,7 +75,7 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="h-12 transition-smooth focus:ring-2 focus:ring-primary"
+                    className="h-10 md:h-12 transition-smooth focus:ring-2 focus:ring-primary text-sm md:text-base"
                     required
                   />
                 </div>
@@ -87,13 +87,13 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
-                    className="h-12 transition-smooth focus:ring-2 focus:ring-primary"
+                    className="h-10 md:h-12 transition-smooth focus:ring-2 focus:ring-primary text-sm md:text-base"
                     required
                   />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full h-12 text-base gradient-primary shadow-glow hover:shadow-lg transition-smooth" 
+                  className="w-full h-10 md:h-12 text-sm md:text-base gradient-primary shadow-glow hover:shadow-lg transition-smooth" 
                   disabled={loading}
                 >
                   {loading ? (
@@ -108,8 +108,8 @@ const Auth = () => {
               </form>
             </TabsContent>
             
-            <TabsContent value="signup" className="space-y-4 mt-6">
-              <form onSubmit={handleSignUp} className="space-y-4">
+            <TabsContent value="signup" className="space-y-3 md:space-y-4 mt-4 md:mt-6">
+              <form onSubmit={handleSignUp} className="space-y-3 md:space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="signup-email" className="text-sm font-medium">Email</Label>
                   <Input
@@ -118,7 +118,7 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="h-12 transition-smooth focus:ring-2 focus:ring-primary"
+                    className="h-10 md:h-12 transition-smooth focus:ring-2 focus:ring-primary text-sm md:text-base"
                     required
                   />
                 </div>
@@ -130,14 +130,14 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Create a password (min 6 characters)"
-                    className="h-12 transition-smooth focus:ring-2 focus:ring-primary"
+                    className="h-10 md:h-12 transition-smooth focus:ring-2 focus:ring-primary text-sm md:text-base"
                     minLength={6}
                     required
                   />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full h-12 text-base gradient-primary shadow-glow hover:shadow-lg transition-smooth" 
+                  className="w-full h-10 md:h-12 text-sm md:text-base gradient-primary shadow-glow hover:shadow-lg transition-smooth" 
                   disabled={loading}
                 >
                   {loading ? (
