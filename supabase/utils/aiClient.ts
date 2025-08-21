@@ -99,7 +99,7 @@ const AI_PROVIDERS: AIProvider[] = [
 
 async function tryProvider(provider: AIProvider, prompt: string): Promise<string> {
   if (!provider.apiKey) {
-    throw new Error(`${provider.name} API key not configured`);
+    throw new Error("API_KEY_MISSING");
   }
 
   console.log(`Attempting ${provider.name} with model ${provider.model}`);
@@ -168,6 +168,12 @@ export async function callAI(prompt: string): Promise<{ content: string; provide
       console.error(`${provider.name} failed:`, errorMessage);
       lastError = errorMessage;
       
+      // Skip providers with missing API keys
+      if (errorMessage === "API_KEY_MISSING") {
+        console.log(`Skipping ${provider.name} - API key not configured`);
+        continue;
+      }
+      
       // Continue to next provider on rate limits or model issues
       if (errorMessage === "RATE_LIMITED" || errorMessage === "MODEL_DECOMMISSIONED") {
         console.log(`Skipping ${provider.name} due to: ${errorMessage}`);
@@ -180,7 +186,11 @@ export async function callAI(prompt: string): Promise<{ content: string; provide
   }
 
   // All providers failed
-  throw new Error(`All AI providers failed. Last error: ${lastError}`);
+  const configuredProviders = AI_PROVIDERS.filter(p => p.apiKey).length;
+  if (configuredProviders === 0) {
+    throw new Error("No AI provider API keys are configured. Please set up at least one API key in your Supabase environment variables.");
+  }
+  throw new Error(`All configured AI providers failed. Last error: ${lastError}`);
 }
 
 /**
