@@ -15,7 +15,15 @@ import { extractTextFromFile } from '@/lib/fileExtractors';
 import ChatMessage from '@/components/chat/ChatMessage';
 import SuggestionChips from '@/components/chat/SuggestionChips';
 import DocumentViewer from '@/components/chat/DocumentViewer';
+
 const Dashboard = () => {
+  const { user, signOut } = useAuth();
+  
+  // Redirect to auth if user is not authenticated
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
+
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
@@ -25,10 +33,6 @@ const Dashboard = () => {
   const [showModelDialog, setShowModelDialog] = useState(false);
   const [showContactDialog, setShowContactDialog] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const {
-    user,
-    signOut
-  } = useAuth();
   const {
     toast
   } = useToast();
