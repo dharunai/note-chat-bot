@@ -150,6 +150,19 @@ async function tryProvider(provider: AIProvider, prompt: string): Promise<string
  * @param prompt - The text prompt to send to AI
  * @returns Promise<{ content: string; provider: string }> - The response and which provider succeeded
  */
+// Clean markdown artifacts from AI responses
+function cleanMarkdownArtifacts(text: string): string {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1')  // Remove bold markdown
+    .replace(/\*(.*?)\*/g, '$1')     // Remove italic markdown
+    .replace(/#{1,6}\s*/g, '')      // Remove headers
+    .replace(/```[\s\S]*?```/g, '') // Remove code blocks
+    .replace(/`([^`]*)`/g, '$1')    // Remove inline code
+    .replace(/^[\s]*[-\*]\s+/gm, '• ') // Convert markdown bullets to simple bullets
+    .replace(/\n{3,}/g, '\n\n')     // Reduce multiple newlines
+    .trim();
+}
+
 export async function callAI(prompt: string): Promise<{ content: string; provider: string }> {
   if (!prompt || typeof prompt !== 'string') {
     throw new Error('Invalid prompt provided');
@@ -161,7 +174,9 @@ export async function callAI(prompt: string): Promise<{ content: string; provide
   for (const provider of AI_PROVIDERS) {
     try {
       const content = await tryProvider(provider, prompt);
-      return { content, provider: provider.name };
+      // Clean response from markdown artifacts
+      const cleanedContent = cleanMarkdownArtifacts(content);
+      return { content: cleanedContent, provider: provider.name };
       
     } catch (error: any) {
       const errorMessage = error.message || "Unknown error";

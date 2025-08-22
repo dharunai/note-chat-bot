@@ -67,13 +67,13 @@ const Index = () => {
   }, {
     title: 'OCR (Handwriting → Text)',
     desc: 'Scan and digitize notes.',
-    to: '/tools/ocr',
+    to: '/tools/ocr-tool',
     iconSrc: '/icons/ocr.svg',
     alt: 'OCR icon'
   }, {
     title: 'Poster / Flyer Maker',
     desc: 'Design eye-catching posters.',
-    to: '/tools/poster-maker',
+    to: '/tools/flyer-creator',
     iconSrc: '/icons/poster.svg',
     alt: 'Poster maker icon'
   }] as const;

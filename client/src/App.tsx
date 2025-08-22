@@ -22,7 +22,15 @@ const PdfSplit = lazy(() => import("./pages/tools/PdfSplit"));
 const PdfCompressor = lazy(() => import("./pages/tools/PdfCompressor"));
 const ExcelToPDF = lazy(() => import("./pages/tools/ExcelToPDF"));
 const ImageCompressor = lazy(() => import("./pages/tools/ImageCompressor"));
+const Summarizer = lazy(() => import("./pages/tools/Summarizer"));
+const Translator = lazy(() => import("./pages/tools/Translator"));
+const CitationGenerator = lazy(() => import("./pages/tools/CitationGenerator"));
+const FlashcardCreator = lazy(() => import("./pages/tools/FlashcardCreator"));
+const ParaphraseTool = lazy(() => import("./pages/tools/ParaphraseTool"));
 const GrammarChecker = lazy(() => import("./pages/tools/GrammarChecker"));
+const FlyerCreator = lazy(() => import("./pages/tools/FlyerCreator"));
+const PresentationCreator = lazy(() => import("./pages/tools/PresentationCreator"));
+const OCRTool = lazy(() => import("./pages/tools/OCRTool"));
 const ResumeBuilder = lazy(() => import("./pages/tools/ResumeBuilder"));
 const ResumeBuilderPro = lazy(() => import("./pages/tools/ResumeBuilderPro"));
 const RemoveBg = lazy(() => import("./pages/tools/RemoveBg"));
@@ -72,7 +80,15 @@ const App = () => (
               <Route path="/tools/pdf-compress" element={<PdfCompressor />} />
               <Route path="/tools/excel-to-pdf" element={<ExcelToPDF />} />
               <Route path="/tools/image-compress" element={<ImageCompressor />} />
+              <Route path="/tools/summarizer" element={<Summarizer />} />
+              <Route path="/tools/translator" element={<Translator />} />
+              <Route path="/tools/citation-generator" element={<CitationGenerator />} />
+              <Route path="/tools/flashcard-creator" element={<FlashcardCreator />} />
+              <Route path="/tools/paraphrase" element={<ParaphraseTool />} />
               <Route path="/tools/grammar" element={<GrammarChecker />} />
+              <Route path="/tools/flyer-creator" element={<FlyerCreator />} />
+              <Route path="/tools/presentation-creator" element={<PresentationCreator />} />
+              <Route path="/tools/ocr-tool" element={<OCRTool />} />
 {/* Explicit tool routes */}
 <Route path="/tools/remove-bg" element={<RemoveBg />} />
 <Route path="/tools/resume-builder" element={<ResumeBuilderPro />} />
