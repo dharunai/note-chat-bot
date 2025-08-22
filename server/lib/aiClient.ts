@@ -126,6 +126,16 @@ async function tryProvider(provider: AIProvider, prompt: string): Promise<string
       throw new Error("RATE_LIMITED");
     }
     
+    // Handle credit/quota exhaustion
+    if (response.status === 402 || 
+        errorText.includes("quota") || 
+        errorText.includes("credit") || 
+        errorText.includes("billing") ||
+        errorText.includes("insufficient funds") ||
+        errorText.includes("payment required")) {
+      throw new Error("CREDIT_EXHAUSTED");
+    }
+    
     // Handle model decommissioned errors
     if (errorText.includes("decommissioned") || errorText.includes("deprecated")) {
       throw new Error("MODEL_DECOMMISSIONED");
@@ -189,8 +199,13 @@ export async function callAI(prompt: string): Promise<{ content: string; provide
         continue;
       }
       
-      // Continue to next provider on rate limits or model issues
-      if (errorMessage === "RATE_LIMITED" || errorMessage === "MODEL_DECOMMISSIONED") {
+      // Continue to next provider on rate limits, credit issues, or model issues
+      if (errorMessage === "RATE_LIMITED" || 
+          errorMessage === "MODEL_DECOMMISSIONED" ||
+          errorMessage.includes("quota") ||
+          errorMessage.includes("credit") ||
+          errorMessage.includes("billing") ||
+          errorMessage.includes("insufficient funds")) {
         console.log(`Skipping ${provider.name} due to: ${errorMessage}`);
         continue;
       }

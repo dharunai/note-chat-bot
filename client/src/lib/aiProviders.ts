@@ -145,6 +145,8 @@ interface ProviderUsage {
   lastRequest: number;
   failures: number;
   lastFailure: number;
+  lastFailureType?: string;
+  creditExhausted?: boolean;
 }
 
 const providerUsage = new Map<string, ProviderUsage>();
@@ -165,23 +167,37 @@ function isProviderAvailable(provider: AIProvider): boolean {
   }
 
   // Check rate limits
-  if (usage.requests >= provider.limits.requestsPerMinute) return false;
-  if (usage.lastRequest > hourAgo && usage.requests >= provider.limits.requestsPerHour) return false;
-  if (usage.lastRequest > dayAgo && usage.requests >= provider.limits.requestsPerDay) return false;
+  if (usage.requests >= provider.limits.requestsPerMinute) {
+    console.log(`${provider.name} rate limited: ${usage.requests}/${provider.limits.requestsPerMinute} requests per minute`);
+    return false;
+  }
+  if (usage.lastRequest > hourAgo && usage.requests >= provider.limits.requestsPerHour) {
+    console.log(`${provider.name} rate limited: ${usage.requests}/${provider.limits.requestsPerHour} requests per hour`);
+    return false;
+  }
+  if (usage.lastRequest > dayAgo && usage.requests >= provider.limits.requestsPerDay) {
+    console.log(`${provider.name} rate limited: ${usage.requests}/${provider.limits.requestsPerDay} requests per day`);
+    return false;
+  }
 
-  // Check if provider failed recently (wait 5 minutes after failure)
-  if (usage.failures > 3 && usage.lastFailure > now - 5 * 60 * 1000) return false;
+  // Check if provider failed recently - longer cooldown for credit exhaustion
+  const cooldownTime = usage.lastFailureType === 'CREDIT_EXHAUSTED' ? 30 * 60 * 1000 : 5 * 60 * 1000; // 30 min vs 5 min
+  if (usage.failures > 3 && usage.lastFailure > now - cooldownTime) {
+    console.log(`${provider.name} in cooldown: ${usage.failures} failures, last: ${usage.lastFailureType}`);
+    return false;
+  }
 
   return true;
 }
 
 // Update provider usage tracking
-function updateProviderUsage(providerName: string, success: boolean) {
+function updateProviderUsage(providerName: string, success: boolean, failureType?: string) {
   const usage = providerUsage.get(providerName) || {
     requests: 0,
     lastRequest: 0,
     failures: 0,
-    lastFailure: 0
+    lastFailure: 0,
+    creditExhausted: false
   };
 
   usage.requests++;
@@ -190,9 +206,18 @@ function updateProviderUsage(providerName: string, success: boolean) {
   if (!success) {
     usage.failures++;
     usage.lastFailure = Date.now();
+    usage.lastFailureType = failureType;
+    
+    // Mark as credit exhausted for specific failure types
+    if (failureType === 'CREDIT_EXHAUSTED' || failureType === 'QUOTA_EXCEEDED') {
+      usage.creditExhausted = true;
+      console.warn(`${providerName} credits exhausted - will cooldown for 30 minutes`);
+    }
   } else {
-    // Reset failure count on success
+    // Reset failure count and credit status on success
     usage.failures = 0;
+    usage.creditExhausted = false;
+    usage.lastFailureType = undefined;
   }
 
   providerUsage.set(providerName, usage);
@@ -241,11 +266,27 @@ export async function requestAI(prompt: string, options: {
 
       if (!response.ok) {
         const errorText = await response.text();
+        const errorLower = errorText.toLowerCase();
         
-        // Check for rate limit errors
-        if (response.status === 429 || errorText.includes("quota") || errorText.includes("rate limit")) {
-          updateProviderUsage(provider.name, false);
-          console.log(`Rate limited on ${provider.name}, trying next provider`);
+        // Classify different types of failures for better handling
+        let failureType = 'UNKNOWN';
+        
+        if (response.status === 429 || errorLower.includes("rate limit") || errorLower.includes("too many requests")) {
+          failureType = 'RATE_LIMITED';
+        } else if (errorLower.includes("quota") || errorLower.includes("credit") || errorLower.includes("billing") || 
+                   errorLower.includes("insufficient funds") || errorLower.includes("payment required") ||
+                   response.status === 402) {
+          failureType = 'CREDIT_EXHAUSTED';
+        } else if (errorLower.includes("unauthorized") || response.status === 401) {
+          failureType = 'AUTH_ERROR';
+        } else if (errorLower.includes("forbidden") || response.status === 403) {
+          failureType = 'FORBIDDEN';
+        }
+        
+        updateProviderUsage(provider.name, false, failureType);
+        
+        if (failureType === 'RATE_LIMITED' || failureType === 'CREDIT_EXHAUSTED') {
+          console.log(`${provider.name} ${failureType.toLowerCase().replace('_', ' ')}, trying next provider`);
           continue;
         }
         
@@ -268,7 +309,17 @@ export async function requestAI(prompt: string, options: {
 
     } catch (error) {
       lastError = error as Error;
-      updateProviderUsage(provider.name, false);
+      const errorMessage = error.message || "Unknown error";
+      
+      // Classify error type for better tracking
+      let failureType = 'UNKNOWN';
+      if (errorMessage.includes('quota') || errorMessage.includes('credit')) {
+        failureType = 'CREDIT_EXHAUSTED';
+      } else if (errorMessage.includes('rate limit')) {
+        failureType = 'RATE_LIMITED';
+      }
+      
+      updateProviderUsage(provider.name, false, failureType);
       console.error(`Error with ${provider.name}:`, error);
     }
   }
@@ -287,9 +338,22 @@ export async function generateText(prompt: string, options?: {
 
 // Export provider info for UI
 export function getProviderStatus() {
-  return AI_PROVIDERS.map(provider => ({
-    name: provider.name,
-    available: isProviderAvailable(provider),
-    usage: providerUsage.get(provider.name) || { requests: 0, lastRequest: 0, failures: 0, lastFailure: 0 }
-  }));
+  return AI_PROVIDERS.map(provider => {
+    const usage = providerUsage.get(provider.name) || { 
+      requests: 0, 
+      lastRequest: 0, 
+      failures: 0, 
+      lastFailure: 0,
+      creditExhausted: false
+    };
+    
+    return {
+      name: provider.name,
+      available: isProviderAvailable(provider),
+      usage,
+      status: usage.creditExhausted ? 'Credit Exhausted' : 
+              usage.failures > 3 ? 'Temporarily Unavailable' :
+              'Available'
+    };
+  });
 }
