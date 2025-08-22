@@ -44,10 +44,25 @@ export default function ImageCompressor() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/70">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 relative overflow-hidden">
+      {/* Floating text animations */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="floating-text text-6xl font-bold text-primary/5 absolute top-20 left-10 animate-float">COMPRESS</div>
+        <div className="floating-text text-4xl font-bold text-accent/5 absolute top-40 right-20 animate-float-delayed">IMAGE</div>
+        <div className="floating-text text-5xl font-bold text-primary/5 absolute bottom-32 left-20 animate-float-slow">OPTIMIZE</div>
+        <div className="floating-text text-3xl font-bold text-accent/5 absolute bottom-20 right-10 animate-bounce-slow">RESIZE</div>
+      </div>
+      
       <TopNav />
-      <main className="container mx-auto px-4 py-10">
-        <Card className="max-w-3xl mx-auto">
+      <main className="container mx-auto px-4 py-10 relative z-10">
+        <div className="text-center mb-8 animate-slide-in-up">
+          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Image Compressor
+          </h1>
+          <p className="text-muted-foreground text-lg">Resize and compress images without quality loss</p>
+        </div>
+        
+        <Card className="max-w-3xl mx-auto backdrop-blur-sm bg-card/80 shadow-2xl border-primary/10 animate-scale-in">
           <CardHeader>
             <CardTitle>Image Compressor</CardTitle>
             <CardDescription>Resize and compress images in your browser.</CardDescription>

@@ -79,10 +79,25 @@ export default function RemoveBg() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/70">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 relative overflow-hidden">
+      {/* Floating text animations */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="floating-text text-6xl font-bold text-primary/5 absolute top-20 left-10 animate-float">REMOVE</div>
+        <div className="floating-text text-4xl font-bold text-accent/5 absolute top-40 right-20 animate-float-delayed">BG</div>
+        <div className="floating-text text-5xl font-bold text-primary/5 absolute bottom-32 left-20 animate-float-slow">MAGIC</div>
+        <div className="floating-text text-3xl font-bold text-accent/5 absolute bottom-20 right-10 animate-bounce-slow">CLEAN</div>
+      </div>
+      
       <TopNav />
-      <main className="max-w-6xl mx-auto p-4 md:p-8">
-        <Card className="rounded-2xl bg-card shadow-lg">
+      <main className="max-w-6xl mx-auto p-4 md:p-8 relative z-10">
+        <div className="text-center mb-8 animate-slide-in-up">
+          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            AI Background Remover
+          </h1>
+          <p className="text-muted-foreground text-lg">Remove backgrounds with one click using advanced AI</p>
+        </div>
+        
+        <Card className="rounded-2xl bg-card/80 backdrop-blur-sm shadow-2xl border-primary/10 animate-scale-in">
           <CardHeader>
             <CardTitle className="text-2xl">Image Background Remover</CardTitle>
             <CardDescription>Remove backgrounds in 1 click (Eremove.bg)</CardDescription>

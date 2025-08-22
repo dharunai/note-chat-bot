@@ -83,25 +83,33 @@ export default function Translator() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 relative overflow-hidden">
+      {/* Floating text animations */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="floating-text text-6xl font-bold text-primary/5 absolute top-20 left-10 animate-float">TRANSLATE</div>
+        <div className="floating-text text-4xl font-bold text-accent/5 absolute top-40 right-20 animate-float-delayed">LANGUAGE</div>
+        <div className="floating-text text-5xl font-bold text-primary/5 absolute bottom-32 left-20 animate-float-slow">GLOBAL</div>
+        <div className="floating-text text-3xl font-bold text-accent/5 absolute bottom-20 right-10 animate-bounce-slow">AI</div>
+      </div>
+      
       <TopNav />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 relative z-10">
         <div className="max-w-4xl mx-auto space-y-6">
-          <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold flex items-center justify-center gap-2">
-              <Languages className="h-8 w-8" />
+          <div className="text-center space-y-2 animate-slide-in-up">
+            <h1 className="text-4xl font-bold flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <Languages className="h-8 w-8 text-primary" />
               AI Language Translator
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-lg">
               Translate text between multiple languages with AI precision
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Input Section */}
-            <Card>
+            <Card className="backdrop-blur-sm bg-card/80 shadow-xl border-primary/10 animate-scale-in">
               <CardHeader>
-                <CardTitle>Source Text</CardTitle>
+                <CardTitle className="text-2xl">Source Text</CardTitle>
                 <CardDescription>
                   Enter text in any language to translate
                 </CardDescription>
@@ -151,9 +159,9 @@ export default function Translator() {
             </Card>
 
             {/* Output Section */}
-            <Card>
+            <Card className="backdrop-blur-sm bg-card/80 shadow-xl border-primary/10 animate-scale-in">
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
+                <CardTitle className="flex items-center justify-between text-2xl">
                   Translation Result
                   {provider && (
                     <Badge variant="secondary" className="text-xs">
