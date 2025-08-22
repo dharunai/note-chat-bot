@@ -1,0 +1,40 @@
+🔹 Backend / LLM Logic
+
+Chat with AI → must properly read and process uploaded documents (PDF, DOCX, TXT). Implement embeddings + context retrieval.
+
+Plagiarism Checker & AI Essay Writer → backend code missing, implement proper logic with LLM + optional plagiarism API (or embeddings-based similarity check).
+
+Summariser, Citation Generator, Translator, Flashcard Generator → each should have its own backend route and frontend page, not redirect to the generic “Study Tools” page.
+
+Remove formatting artifacts (*, #, markdown bullets) from LLM replies before sending them to frontend.     You are an expert full-stack developer helping me build a **Creative Tools Suite** inside my student web application in Lovable (Lovebird).  
+
+Features required:  
+
+### 1. Poster / Flyer Creator
+- Add a **Flyer Builder page**.  
+- Left side → form inputs (Event Title, Date, Venue, Description, Contact Info).  
+- Right side → live flyer preview with selectable templates (5–6 styles).  
+- Support image/logo uploads.  
+- Provide AI button for auto-generating headlines & text.  
+- Allow download as **PDF, PNG, JPG** using html2canvas + jsPDF.  
+
+### 2. Presentation Creator
+- Add a **Presentation Builder page**.  
+- User inputs Title, Agenda, and Slide content.  
+- Provide **4–5 slide themes**.  
+- Generate slides dynamically using `pptxgenjs`.  
+- Provide AI button to auto-create slides from topic/outline.  
+- Download/export as **PPTX & PDF**.  
+
+### 3. OCR Handwriting to Text Converter
+- Add an **OCR Tool page**.  
+- Allow user to upload a handwritten note image.  
+- Use **tesseract.js** for OCR extraction.  
+- Pass result through AI for cleanup (grammar + formatting).  
+- Display editable text in a card with copy & download (TXT, DOCX, PDF) options.  
+
+### UI/UX Notes:
+- Use **Card layout** with proper alignment, TailwindCSS styling, rounded corners, and shadows.  
+- Ensure all pages are **responsive** on desktop and mobile.  
+- Add navigation in sidebar: Flyer Tool | Presentation Tool | OCR Tool.  
+- Deliver clean, production-ready React code with Tailwind.  

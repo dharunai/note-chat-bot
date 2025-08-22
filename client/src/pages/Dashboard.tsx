@@ -18,10 +18,7 @@ import DocumentViewer from '@/components/chat/DocumentViewer';
 const Dashboard = () => {
   const { user, signOut } = useAuth();
   
-  // Redirect to auth if user is not authenticated
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
+  // Dashboard is now available without authentication
 
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [question, setQuestion] = useState('');
@@ -75,21 +72,7 @@ const Dashboard = () => {
     }
     setUploadedFile(file);
 
-    // Upload to Supabase Storage (if logged in)
-    if (user) {
-      const fileName = `${user.id}/${Date.now()}-${file.name}`;
-      const {
-        error
-      } = await supabase.storage.from('student-files').upload(fileName, file);
-      if (error) {
-        toast({
-          title: "Upload Error",
-          description: error.message,
-          variant: "destructive"
-        });
-        return;
-      }
-    }
+    // File uploaded locally, no cloud storage needed
 
     // Extract text client-side
     try {
