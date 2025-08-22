@@ -46,24 +46,43 @@ const FeatureHub = () => {
           </p>
         </header>
 
-        <section aria-label="Tools" className="grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {tools.map((t) => (
-            <Card key={t.title} className="group hover:shadow-elegant transition-smooth">
-              <CardHeader className="flex-row items-start gap-3 p-4 md:p-6">
-                <div className="p-2 rounded-lg md:rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20 flex-shrink-0">
-                  <img src={t.iconPath} alt={`${t.title} icon`} className="h-4 w-4 md:h-5 md:w-5" loading="lazy" decoding="async" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <CardTitle className="text-sm md:text-base leading-tight mb-1">{t.title}</CardTitle>
-                  <CardDescription className="text-xs md:text-sm break-words whitespace-normal leading-relaxed">{t.desc}</CardDescription>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0 px-4 md:px-6 pb-4 md:pb-6">
-                <Button className="w-full text-sm" asChild>
-                  <Link to={t.to} aria-label={`Open ${t.title}`}>Open</Link>
-                </Button>
-              </CardContent>
-            </Card>
+        <section aria-label="Tools" className="grid gap-5 md:gap-6 lg:gap-7 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {tools.map(({ title, desc, to, iconPath }, index) => (
+            <Link 
+              key={title} 
+              to={to} 
+              className={`block group focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl animate-scale-in opacity-0 animate-stagger-${(index % 6) + 1}`}
+            >
+              <Card className="text-left hover-lift hover-glow morphing-border relative overflow-hidden border-2 border-border/50 hover:border-primary/30 shadow-lg bg-gradient-to-br from-card/95 to-card/85 backdrop-blur-sm h-full group-hover:shadow-2xl transition-all duration-500">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-accent/3 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <CardHeader className="relative z-10 p-5 md:p-6">
+                  <div className="flex items-start gap-4 mb-3 md:mb-4">
+                    <div className="relative rounded-xl bg-gradient-to-br from-primary/15 to-primary/10 p-3 md:p-3.5 flex-shrink-0 group-hover:from-primary/25 group-hover:to-primary/15 transition-all duration-300 group-hover:scale-110 group-hover:rotate-2">
+                      <div className="absolute inset-0 rounded-xl bg-primary/20 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
+                      <img 
+                        src={iconPath} 
+                        alt={`${title} icon`} 
+                        className="relative h-5 w-5 md:h-6 md:w-6 object-contain filter group-hover:brightness-110 transition-all duration-300" 
+                        loading="lazy" 
+                        decoding="async" 
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <CardTitle className="text-base md:text-lg font-semibold leading-tight text-foreground group-hover:text-primary transition-colors duration-300 tracking-tight">
+                        {title}
+                      </CardTitle>
+                    </div>
+                  </div>
+                  <CardDescription className="text-sm md:text-sm leading-relaxed text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300 font-medium break-words">
+                    {desc}
+                  </CardDescription>
+
+                  {/* Progress bar effect on hover */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-glow to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </CardHeader>
+              </Card>
+            </Link>
           ))}
         </section>
       </main>
