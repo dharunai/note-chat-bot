@@ -400,20 +400,111 @@ All colors MUST be HSL.
     z-index: -1;
   }
 
-  /* Floating text effects */
+  /* Floating text effects - Fixed positioning for desktop */
   .floating-text {
     pointer-events: none;
     user-select: none;
+    position: absolute;
+    opacity: 0.4;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--primary));
     animation: floatingText 8s ease-in-out infinite;
     transform-origin: center;
+    z-index: 1;
   }
 
   .floating-text:nth-child(2n) {
     animation-direction: reverse;
+    color: hsl(var(--accent));
   }
 
   .floating-text:nth-child(3n) {
     animation-duration: 10s;
+    color: hsl(var(--primary-glow));
+  }
+
+  /* Responsive floating text positioning */
+  .floating-text-1 { top: 10%; left: 15%; animation-delay: 0s; }
+  .floating-text-2 { top: 20%; right: 20%; animation-delay: 2s; }
+  .floating-text-3 { bottom: 30%; left: 10%; animation-delay: 4s; }
+  .floating-text-4 { bottom: 15%; right: 15%; animation-delay: 6s; }
+  .floating-text-5 { top: 60%; left: 25%; animation-delay: 1s; }
+  .floating-text-6 { top: 40%; right: 30%; animation-delay: 3s; }
+
+  @media (max-width: 768px) {
+    .floating-text {
+      font-size: 0.75rem;
+    }
+    .floating-text-1 { top: 8%; left: 5%; }
+    .floating-text-2 { top: 15%; right: 5%; }
+    .floating-text-3 { bottom: 25%; left: 8%; }
+    .floating-text-4 { bottom: 12%; right: 8%; }
+    .floating-text-5 { top: 50%; left: 10%; }
+    .floating-text-6 { top: 35%; right: 10%; }
+  }
+
+  /* Enhanced tool page hero section */
+  .tool-hero-section {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--muted)) 30%,
+      hsl(var(--accent) / 0.05) 70%,
+      hsl(var(--background)) 100%
+    );
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  .tool-hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(2px 2px at 20% 20%, hsl(var(--primary) / 0.2), transparent),
+      radial-gradient(1px 1px at 80% 40%, hsl(var(--accent) / 0.15), transparent),
+      radial-gradient(1px 1px at 40% 80%, hsl(var(--primary-glow) / 0.1), transparent);
+    background-size: 100px 100px, 150px 150px, 200px 200px;
+    animation: floatingParticles 20s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Tool card enhanced hover effects */
+  .tool-card-enhanced {
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--card) / 0.8) 100%
+    );
+  }
+
+  .tool-card-enhanced::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+      hsl(var(--primary) / 0.1) 0%, 
+      transparent 50%, 
+      hsl(var(--accent) / 0.1) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
+    z-index: 0;
+  }
+
+  .tool-card-enhanced:hover::before {
+    opacity: 1;
+  }
+
+  .tool-card-enhanced:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+      0 25px 50px -12px hsl(var(--primary) / 0.25),
+      0 0 40px hsl(var(--primary) / 0.1);
   }
 
   /* Enhanced card hover effects */

@@ -191,7 +191,7 @@ export default function Blogs() {
           <div className="floating-text absolute top-40 left-1/2 text-primary/10 font-bold text-xs animate-float" style={{animationDelay: '4s'}}>Smart</div>
           <div className="floating-text absolute top-24 right-1/4 text-accent/10 font-bold text-xs animate-float" style={{animationDelay: '5s'}}>Free</div>
         </div>
-        
+
         <div className="container mx-auto px-4 py-6 md:py-10 lg:py-14 relative z-10">
           <div className="flex items-start justify-between gap-4">
             <div className="animate-slide-in-left">
@@ -237,7 +237,7 @@ export default function Blogs() {
                           <div className="absolute top-4 right-4 w-1 h-1 bg-accent rounded-full animate-pulse-slow" style={{animationDelay: '1s'}}></div>
                           <div className="absolute bottom-3 left-6 w-1 h-1 bg-primary rounded-full animate-pulse-slow" style={{animationDelay: '2s'}}></div>
                         </div>
-                        
+
                         <div className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                           <Icon className="h-8 w-8 md:h-10 md:w-10 text-primary drop-shadow-sm" aria-hidden="true" />
                         </div>
@@ -246,7 +246,7 @@ export default function Blogs() {
                             <Badge className="bg-primary text-primary-foreground text-xs shadow-lg">Featured</Badge>
                           </div>
                         )}
-                        
+
                         {/* Hover overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
@@ -281,7 +281,7 @@ export default function Blogs() {
             <div className="absolute bottom-8 right-20 w-1 h-1 bg-accent rounded-full animate-float" style={{animationDelay: '2s'}}></div>
             <div className="absolute bottom-6 left-1/3 w-1 h-1 bg-primary rounded-full animate-float" style={{animationDelay: '4s'}}></div>
           </div>
-          
+
           <div className="flex flex-col md:flex-row md:flex-wrap items-start md:items-center gap-4 md:gap-6 text-sm text-muted-foreground relative z-10 animate-slide-up">
             <nav className="flex flex-wrap items-center gap-3 md:gap-4">
               <Link to="/" className="hover:text-foreground transition-colors duration-300 hover-lift">About</Link>
