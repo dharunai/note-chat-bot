@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { ArrowLeft, MessageSquare, FileText, Calendar, BookOpen, Sparkles } from 'lucide-react';
 
 interface Message {
@@ -21,9 +20,7 @@ const History = () => {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
+  // History is now available without authentication
 
   useEffect(() => {
     fetchMessages();
@@ -31,14 +28,9 @@ const History = () => {
 
   const fetchMessages = async () => {
     try {
-      const { data, error } = await supabase
-        .from('messages')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      setMessages(data || []);
+      // For now, show empty history since we don't have user-specific messages
+      // without authentication. This could be enhanced later.
+      setMessages([]);
     } catch (error: any) {
       toast({
         title: "Error",

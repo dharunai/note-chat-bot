@@ -8,7 +8,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
 import { copyToClipboard, downloadTxt, exportFlashcardsPdf } from "@/lib/clientUtils";
-import { supabase } from "@/integrations/supabase/client";
 import { Quote, Shuffle, ListChecks, PenTool, ScanText, Languages, SpellCheck, BadgeCheck } from "lucide-react";
 export default function StudyTools() {
   useMemo(() => {
@@ -30,23 +29,23 @@ export default function StudyTools() {
   const [citationOut, setCitationOut] = useState("");
   const genCitations = async () => {
     if (!citationQuery.trim()) return;
-    const {
-      data,
-      error
-    } = await supabase.functions.invoke('citations', {
-      body: {
-        query: citationQuery,
-        style: citationStyle
-      }
+    const response = await fetch('/api/citations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: citationQuery, style: citationStyle })
     });
-    if (error) {
+    
+    if (!response.ok) {
+      const errorData = await response.json();
       toast({
         title: 'Citation error',
-        description: error.message,
+        description: errorData.error || 'Failed to generate citations',
         variant: 'destructive'
       });
       return;
     }
+    
+    const data = await response.json();
     const out = citationStyle === 'apa' ? data.apa : citationStyle === 'mla' ? data.mla : citationStyle === 'chicago' ? data.chicago : [data.apa, data.mla, data.chicago].join('\n\n');
     setCitationOut(out);
   };
@@ -57,23 +56,23 @@ export default function StudyTools() {
   const [paraOut, setParaOut] = useState("");
   const paraphrase = async () => {
     if (!paraIn.trim()) return;
-    const {
-      data,
-      error
-    } = await supabase.functions.invoke('paraphrase', {
-      body: {
-        text: paraIn,
-        tone
-      }
+    const response = await fetch('/api/paraphrase', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: paraIn, style: tone })
     });
-    if (error) {
+    
+    if (!response.ok) {
+      const errorData = await response.json();
       toast({
         title: 'Paraphrase error',
-        description: error.message,
+        description: errorData.error || 'Failed to paraphrase text',
         variant: 'destructive'
       });
       return;
     }
+    
+    const data = await response.json();
     setParaOut(data.paraphrased);
   };
 
@@ -83,24 +82,23 @@ export default function StudyTools() {
   const [sumOut, setSumOut] = useState<string | string[]>("");
   const summarize = async () => {
     if (!sumIn.trim()) return;
-    const {
-      data,
-      error
-    } = await supabase.functions.invoke('summarize', {
-      body: {
-        text: sumIn,
-        mode: sumMode,
-        max_points: 6
-      }
+    const response = await fetch('/api/summarize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: sumIn, mode: sumMode, max_points: 6 })
     });
-    if (error) {
+    
+    if (!response.ok) {
+      const errorData = await response.json();
       toast({
         title: 'Summarize error',
-        description: error.message,
+        description: errorData.error || 'Failed to summarize text',
         variant: 'destructive'
       });
       return;
     }
+    
+    const data = await response.json();
     setSumOut(sumMode === 'bullets' ? data.bullets : data.paragraph);
   };
 
@@ -119,43 +117,45 @@ export default function StudyTools() {
   const generateEssay = async () => {
     if (!topic.trim()) return;
     const prompt = research ? `Research Mode: Include relevant facts and context with inline mentions when obvious.\n\nTopic: ${topic}` : topic;
-    const {
-      data,
-      error
-    } = await supabase.functions.invoke('generate-essay', {
-      body: {
-        prompt
-      }
+    const response = await fetch('/api/generate-essay', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: prompt })
     });
-    if (error) {
+    
+    if (!response.ok) {
+      const errorData = await response.json();
       toast({
         title: 'Essay error',
-        description: error.message,
+        description: errorData.error || 'Failed to generate essay',
         variant: 'destructive'
       });
       return;
     }
-    setEssay(data.generatedText);
+    
+    const data = await response.json();
+    setEssay(data.essay);
     setPlag(null);
   };
   const runPlag = async () => {
     if (!essay.trim()) return;
-    const {
-      data,
-      error
-    } = await supabase.functions.invoke('plagiarism-check', {
-      body: {
-        text: essay
-      }
+    const response = await fetch('/api/plagiarism-check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: essay })
     });
-    if (error) {
+    
+    if (!response.ok) {
+      const errorData = await response.json();
       toast({
         title: 'Plagiarism error',
-        description: error.message,
+        description: errorData.error || 'Failed to check plagiarism',
         variant: 'destructive'
       });
       return;
     }
+    
+    const data = await response.json();
     setPlag(data);
   };
 
@@ -168,23 +168,23 @@ export default function StudyTools() {
   }[]>([]);
   const createCards = async () => {
     if (!notes.trim()) return;
-    const {
-      data,
-      error
-    } = await supabase.functions.invoke('flashcards', {
-      body: {
-        notes,
-        count
-      }
+    const response = await fetch('/api/flashcards', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ notes, count })
     });
-    if (error) {
+    
+    if (!response.ok) {
+      const errorData = await response.json();
       toast({
         title: 'Flashcards error',
-        description: error.message,
+        description: errorData.error || 'Failed to create flashcards',
         variant: 'destructive'
       });
       return;
     }
+    
+    const data = await response.json();
     setCards(data.cards || []);
   };
   const shuffleCards = () => setCards(c => [...c].sort(() => Math.random() - 0.5));
@@ -214,23 +214,23 @@ export default function StudyTools() {
   const [trDetected, setTrDetected] = useState("");
   const translate = async () => {
     if (!trIn.trim()) return;
-    const {
-      data,
-      error
-    } = await supabase.functions.invoke('translate', {
-      body: {
-        text: trIn,
-        targetLang: trTarget
-      }
+    const response = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: trIn, targetLang: trTarget })
     });
-    if (error) {
+    
+    if (!response.ok) {
+      const errorData = await response.json();
       toast({
         title: 'Translate error',
-        description: error.message,
+        description: errorData.error || 'Failed to translate text',
         variant: 'destructive'
       });
       return;
     }
+    
+    const data = await response.json();
     setTrOut(data.translated);
     setTrDetected(data.detected);
   };

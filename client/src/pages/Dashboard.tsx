@@ -8,7 +8,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { Upload, MessageSquare, LogOut, BookOpen, FileText, Sparkles, Cpu, Mail, Instagram, Linkedin } from 'lucide-react';
 import ModelSelector from '@/components/chat/ModelSelector';
 import { extractTextFromFile } from '@/lib/fileExtractors';
@@ -150,18 +149,25 @@ const Dashboard = () => {
       content: q
     }]);
     try {
-      const {
-        data,
-        error
-      } = await supabase.functions.invoke('chat-with-ai', {
-        body: {
-          question: q,
+      const response = await fetch('/api/chat-with-ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: q,
           fileContent: uploadedFile ? fileContent : null,
           fileName: uploadedFile?.name || null,
-          model
-        }
+          userId: null // No user authentication needed for basic features
+        })
       });
-      if (error) throw error;
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to get AI response');
+      }
+      
+      const data = await response.json();
       const cleaned = cleanText(data.answer || '');
       setMessages(prev => [...prev, {
         role: 'assistant',

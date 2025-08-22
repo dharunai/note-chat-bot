@@ -16,7 +16,7 @@ const AI_PROVIDERS: AIProvider[] = [
   {
     name: "Groq",
     baseUrl: "https://api.groq.com/openai/v1/chat/completions",
-    apiKey: Deno.env.get("GROQ_API_KEY"),
+    apiKey: process.env.GROQ_API_KEY,
     model: "llama-3.1-8b-instant",
     transformRequest: (prompt: string) => ({
       model: "llama-3.1-8b-instant",
@@ -29,7 +29,7 @@ const AI_PROVIDERS: AIProvider[] = [
   {
     name: "OpenRouter",
     baseUrl: "https://openrouter.ai/api/v1/chat/completions",
-    apiKey: Deno.env.get("OPENROUTER_API_KEY"),
+    apiKey: process.env.OPENROUTER_API_KEY,
     model: "mistralai/mistral-7b-instruct",
     transformRequest: (prompt: string) => ({
       model: "mistralai/mistral-7b-instruct",
@@ -42,7 +42,7 @@ const AI_PROVIDERS: AIProvider[] = [
   {
     name: "HuggingFace",
     baseUrl: "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium",
-    apiKey: Deno.env.get("HUGGINGFACE_API_KEY"),
+    apiKey: process.env.HUGGINGFACE_API_KEY,
     model: "microsoft/DialoGPT-medium",
     transformRequest: (prompt: string) => ({
       inputs: prompt,
@@ -62,7 +62,7 @@ const AI_PROVIDERS: AIProvider[] = [
   {
     name: "TogetherAI",
     baseUrl: "https://api.together.xyz/v1/chat/completions",
-    apiKey: Deno.env.get("TOGETHER_API_KEY"),
+    apiKey: process.env.TOGETHER_API_KEY,
     model: "meta-llama/Llama-2-7b-chat-hf",
     transformRequest: (prompt: string) => ({
       model: "meta-llama/Llama-2-7b-chat-hf",
@@ -75,7 +75,7 @@ const AI_PROVIDERS: AIProvider[] = [
   {
     name: "Gemini",
     baseUrl: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
-    apiKey: Deno.env.get("GEMINI_API_KEY"),
+    apiKey: process.env.GEMINI_API_KEY,
     model: "gemini-1.5-flash",
     transformRequest: (prompt: string) => ({
       contents: [{ parts: [{ text: prompt }] }]
@@ -85,7 +85,7 @@ const AI_PROVIDERS: AIProvider[] = [
   {
     name: "Mistral",
     baseUrl: "https://api.mistral.ai/v1/chat/completions",
-    apiKey: Deno.env.get("MISTRAL_API_KEY"),
+    apiKey: process.env.MISTRAL_API_KEY,
     model: "mistral-tiny",
     transformRequest: (prompt: string) => ({
       model: "mistral-tiny",
@@ -188,7 +188,7 @@ export async function callAI(prompt: string): Promise<{ content: string; provide
   // All providers failed
   const configuredProviders = AI_PROVIDERS.filter(p => p.apiKey).length;
   if (configuredProviders === 0) {
-    throw new Error("No AI provider API keys are configured. Please set up at least one API key in your Supabase environment variables.");
+    throw new Error("No AI provider API keys are configured. Please set up at least one API key in your environment variables.");
   }
   throw new Error(`All configured AI providers failed. Last error: ${lastError}`);
 }

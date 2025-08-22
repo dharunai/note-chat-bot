@@ -13,11 +13,6 @@ import NotFound from "./pages/NotFound";
 import { lazy, Suspense } from "react";
 const FeatureHub = lazy(() => import("./pages/FeatureHub"));
 const StudyTools = lazy(() => import("./pages/StudyTools"));
-const Summarizer = lazy(() => import("./pages/tools/Summarizer"));
-const Translator = lazy(() => import("./pages/tools/Translator"));
-const CitationGenerator = lazy(() => import("./pages/tools/CitationGenerator"));
-const FlashcardCreator = lazy(() => import("./pages/tools/FlashcardCreator"));
-const ParaphraseTool = lazy(() => import("./pages/tools/ParaphraseTool"));
 const ImageToPDF = lazy(() => import("./pages/tools/ImageToPDF"));
 const TextToPDF = lazy(() => import("./pages/tools/TextToPDF"));
 const WordToPDF = lazy(() => import("./pages/tools/WordToPDF"));
@@ -27,9 +22,7 @@ const PdfSplit = lazy(() => import("./pages/tools/PdfSplit"));
 const PdfCompressor = lazy(() => import("./pages/tools/PdfCompressor"));
 const ExcelToPDF = lazy(() => import("./pages/tools/ExcelToPDF"));
 const ImageCompressor = lazy(() => import("./pages/tools/ImageCompressor"));
-const AIEssayWriter = lazy(() => import("./pages/tools/AIEssayWriter"));
 const GrammarChecker = lazy(() => import("./pages/tools/GrammarChecker"));
-const PlagiarismChecker = lazy(() => import("./pages/tools/PlagiarismChecker"));
 const ResumeBuilder = lazy(() => import("./pages/tools/ResumeBuilder"));
 const ResumeBuilderPro = lazy(() => import("./pages/tools/ResumeBuilderPro"));
 const RemoveBg = lazy(() => import("./pages/tools/RemoveBg"));
@@ -70,11 +63,6 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/tools" element={<FeatureHub />} />
               <Route path="/tools/study" element={<StudyTools />} />
-              <Route path="/tools/summarizer" element={<Summarizer />} />
-              <Route path="/tools/translator" element={<Translator />} />
-              <Route path="/tools/citation-generator" element={<CitationGenerator />} />
-              <Route path="/tools/flashcard-creator" element={<FlashcardCreator />} />
-              <Route path="/tools/paraphrase" element={<ParaphraseTool />} />
               <Route path="/tools/image-to-pdf" element={<ImageToPDF />} />
               <Route path="/tools/text-to-pdf" element={<TextToPDF />} />
               <Route path="/tools/word-to-pdf" element={<WordToPDF />} />
@@ -84,9 +72,7 @@ const App = () => (
               <Route path="/tools/pdf-compress" element={<PdfCompressor />} />
               <Route path="/tools/excel-to-pdf" element={<ExcelToPDF />} />
               <Route path="/tools/image-compress" element={<ImageCompressor />} />
-              <Route path="/tools/essay-writer" element={<AIEssayWriter />} />
               <Route path="/tools/grammar" element={<GrammarChecker />} />
-              <Route path="/tools/plagiarism-check" element={<PlagiarismChecker />} />
 {/* Explicit tool routes */}
 <Route path="/tools/remove-bg" element={<RemoveBg />} />
 <Route path="/tools/resume-builder" element={<ResumeBuilderPro />} />

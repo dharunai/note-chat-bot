@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import { supabase } from "@/integrations/supabase/client";
 
 export default function AIEssayWriter() {
   const [prompt, setPrompt] = useState("");
@@ -15,13 +14,21 @@ export default function AIEssayWriter() {
   const run = async () => {
     if (!prompt.trim()) return;
     setProgress(10);
-    const { data, error } = await supabase.functions.invoke("generate-essay", { body: { prompt } });
-    if (error) {
-      setOutput(`Error: ${error.message}`);
+    const response = await fetch('/api/generate-essay', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: prompt })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      setOutput(`Error: ${errorData.error || 'Failed to generate essay'}`);
       setProgress(0);
       return;
     }
-    setOutput(data.generatedText || "");
+    
+    const data = await response.json();
+    setOutput(data.essay || "");
     setProgress(100);
   };
 

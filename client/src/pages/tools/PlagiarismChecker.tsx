@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import { supabase } from "@/integrations/supabase/client";
 
 interface Source { title: string; url: string; snippet: string; }
 
@@ -18,10 +17,17 @@ export default function PlagiarismChecker() {
   const run = async () => {
     if (!text.trim()) return;
     setProgress(20);
-    const { data, error } = await supabase.functions.invoke("plagiarism-check", { body: { text } });
-    if (error) { setScore(null); setSources([]); setProgress(0); return; }
+    const response = await fetch('/api/plagiarism-check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    
+    if (!response.ok) { setScore(null); setSources([]); setProgress(0); return; }
+    
+    const data = await response.json();
     setScore(data.score);
-    setSources(data.sources || []);
+    setSources(data.suggestions || []);
     setProgress(100);
   };
 
