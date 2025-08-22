@@ -37,11 +37,11 @@ const FeatureHub = () => {
       <TopNav />
 
       <main className="container mx-auto px-4 py-6 md:py-10">
-        <header className="text-center mb-6 md:mb-10">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-foreground mb-2 md:mb-3">
+        <header className="text-center mb-6 md:mb-10 animate-fade-in-scale opacity-0 animate-stagger-1">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight text-foreground mb-2 md:mb-3 gradient-text-shimmer">
             Note Bot AI – Your all-in-one hub to chat, convert, create, and conquer
           </h1>
-          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed animate-typewriter">
             Fast, lightweight, mobile-first tools for documents, writing, and creativity.
           </p>
         </header>
@@ -53,8 +53,9 @@ const FeatureHub = () => {
               to={to} 
               className={`block group focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl animate-scale-in opacity-0 animate-stagger-${(index % 6) + 1}`}
             >
-              <Card className="text-left hover-lift hover-glow morphing-border relative overflow-hidden border-2 border-border/50 hover:border-primary/30 shadow-lg bg-gradient-to-br from-card/95 to-card/85 backdrop-blur-sm h-full group-hover:shadow-2xl transition-all duration-500">
+              <Card className="text-left hover-lift hover-glow hover-magnetic morphing-border ripple-effect relative overflow-hidden border-2 border-border/50 hover:border-primary/30 shadow-lg bg-gradient-to-br from-card/95 to-card/85 backdrop-blur-sm h-full group-hover:shadow-2xl transition-all duration-500 glass-effect">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-accent/3 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-accent/20 rounded-xl opacity-0 group-hover:opacity-100 blur-sm transition-all duration-500 -z-10" />
 
                 <CardHeader className="relative z-10 p-5 md:p-6">
                   <div className="flex items-start gap-4 mb-3 md:mb-4">

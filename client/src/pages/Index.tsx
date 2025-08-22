@@ -142,25 +142,25 @@ const Index = () => {
       <TopNav />
       <main className="container mx-auto px-4 py-8 md:py-16">
         {/* Hero Section - Enhanced with animations */}
-        <section className="relative overflow-hidden rounded-2xl md:rounded-3xl gradient-hero shadow-elegant mb-12 md:mb-20 border border-border/20">
+        <section className="relative overflow-hidden rounded-2xl md:rounded-3xl gradient-hero shadow-elegant mb-12 md:mb-20 border border-border/20 particles-bg">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-50" />
           <div className="relative container mx-auto px-4 py-12 md:py-16 lg:py-24">
             <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
               {/* Left: Copy */}
               <div className="animate-slide-in-left opacity-0">
-                <h1 className="text-3xl md:text-4xl lg:text-6xl mb-6 md:mb-8 gradient-text-animated leading-tight text-left font-bold tracking-tight">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-4 md:mb-6 gradient-text-animated leading-tight text-left font-bold tracking-tight max-w-4xl">
                   Click, Convert, Create, Conquer, Chat — Notebot AI for Everything
                 </h1>
-                <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground mb-8 md:mb-12 max-w-2xl leading-relaxed font-medium">
+                <p className="text-base md:text-lg lg:text-xl text-muted-foreground mb-6 md:mb-8 max-w-2xl leading-relaxed font-medium">
                   From files to ideas, from PDFs to posters — Note Bot AI turns your work into wow in seconds.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
-                  <Button size="lg" className="px-8 md:px-10 py-5 md:py-7 text-lg gradient-primary shadow-glow hover-glow transition-all duration-300 font-semibold group" asChild>
+                <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                  <Button size="default" className="px-6 md:px-8 py-3 md:py-4 text-base gradient-primary shadow-glow hover-glow transition-all duration-300 font-semibold group animate-pulse-glow" asChild>
                     <Link to="/dashboard" aria-label="Chat with your notes">
                       <span className="group-hover:scale-105 transition-transform duration-200">Chat with Your Notes</span>
                     </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="px-8 md:px-10 py-5 md:py-7 text-lg hover-lift border-2 hover:border-primary/50 transition-all duration-300 font-semibold" asChild>
+                  <Button size="default" variant="outline" className="px-6 md:px-8 py-3 md:py-4 text-base hover-lift border-2 hover:border-primary/50 transition-all duration-300 font-semibold animate-border-dance" asChild>
                     <a href="#tools" aria-label="Explore all tools">Explore All Tools</a>
                   </Button>
                 </div>
@@ -198,8 +198,9 @@ const Index = () => {
                 to={to} 
                 className={`block group focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl animate-fade-in opacity-0 animate-stagger-${(index % 6) + 1}`}
               >
-                <Card className="text-left hover-lift hover-glow morphing-border relative overflow-hidden border-2 border-border/50 hover:border-primary/30 shadow-lg bg-gradient-to-br from-card/95 to-card/80 backdrop-blur-sm h-full group-hover:bg-gradient-to-br group-hover:from-card group-hover:to-primary/5 transition-all duration-500">
+                <Card className="text-left hover-lift hover-glow hover-magnetic morphing-border ripple-effect relative overflow-hidden border-2 border-border/50 hover:border-primary/30 shadow-lg bg-gradient-to-br from-card/95 to-card/80 backdrop-blur-sm h-full group-hover:bg-gradient-to-br group-hover:from-card group-hover:to-primary/5 transition-all duration-500 glass-effect">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-accent/20 rounded-xl opacity-0 group-hover:opacity-100 blur-sm transition-all duration-500 -z-10" />
                   
                   <CardHeader className="relative z-10 p-5 md:p-6">
                     <div className="flex items-start gap-4 mb-3 md:mb-4">

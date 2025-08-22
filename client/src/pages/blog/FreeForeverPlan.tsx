@@ -37,11 +37,11 @@ export default function FreeForeverPlan() {
     <div className="min-h-screen bg-background text-foreground">
       <TopNav />
 
-      <header className="border-b bg-gradient-to-r from-primary/10 to-secondary/10">
+      <header className="border-b bg-gradient-to-r from-primary/10 to-secondary/10 particles-bg">
         <div className="container mx-auto px-4 py-10 md:py-14">
           <div className="flex items-start justify-between gap-4">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+            <div className="animate-fade-in-scale opacity-0">
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight gradient-text-shimmer">
                 Free Forever Plan – Premium Power Without Paying
               </h1>
               <p className="mt-3 max-w-2xl text-muted-foreground">
