@@ -181,24 +181,34 @@ export default function Blogs() {
     <div className="min-h-screen bg-background text-foreground">
       <TopNav />
 
-      <header className="relative border-b">
-        <div className="container mx-auto px-4 py-6 md:py-10 lg:py-14">
+      <header className="relative border-b overflow-hidden">
+        {/* Floating particles background */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="floating-text absolute top-10 left-10 text-primary/20 font-bold text-lg animate-float">AI</div>
+          <div className="floating-text absolute top-20 right-20 text-accent/20 font-bold text-lg animate-float" style={{animationDelay: '1s'}}>Tools</div>
+          <div className="floating-text absolute top-32 left-1/4 text-primary/15 font-bold text-sm animate-float" style={{animationDelay: '2s'}}>Study</div>
+          <div className="floating-text absolute top-16 right-1/3 text-accent/15 font-bold text-sm animate-float" style={{animationDelay: '3s'}}>Learn</div>
+          <div className="floating-text absolute top-40 left-1/2 text-primary/10 font-bold text-xs animate-float" style={{animationDelay: '4s'}}>Smart</div>
+          <div className="floating-text absolute top-24 right-1/4 text-accent/10 font-bold text-xs animate-float" style={{animationDelay: '5s'}}>Free</div>
+        </div>
+        
+        <div className="container mx-auto px-4 py-6 md:py-10 lg:py-14 relative z-10">
           <div className="flex items-start justify-between gap-4">
-            <div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
+            <div className="animate-slide-in-left">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight gradient-text-animated">
                 Note Bot AI Blog – Tools, Tips & Hacks for Smarter Study
               </h1>
-              <p className="mt-2 md:mt-3 max-w-2xl text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p className="mt-2 md:mt-3 max-w-2xl text-sm md:text-base text-muted-foreground leading-relaxed animate-fade-in-scale" style={{animationDelay: '0.3s'}}>
                 Built by a student, for students. We share quick wins, friendly walkthroughs, and AI tricks that save time, cut stress, and make studying way less boring.
               </p>
-              <div className="mt-3 md:mt-4 flex flex-wrap items-center gap-2">
-                <Badge className="bg-primary/10 text-primary ring-1 ring-primary/20">No logins required</Badge>
-                <Badge variant="secondary" className="ring-1 ring-border text-xs md:text-sm">Note Bot AI Features – Explained & Explored</Badge>
+              <div className="mt-3 md:mt-4 flex flex-wrap items-center gap-2 animate-slide-up" style={{animationDelay: '0.6s'}}>
+                <Badge className="bg-primary/10 text-primary ring-1 ring-primary/20 hover-glow">No logins required</Badge>
+                <Badge variant="secondary" className="ring-1 ring-border text-xs md:text-sm hover-lift">Note Bot AI Features – Explained & Explored</Badge>
               </div>
             </div>
 
-            <div className="hidden md:block relative">
-              <span className="absolute -top-3 right-0 rotate-3 rounded-sm bg-secondary px-2 md:px-3 py-1 text-xs font-semibold text-secondary-foreground shadow-sm ring-1 ring-border">
+            <div className="hidden md:block relative animate-bounce-in" style={{animationDelay: '0.9s'}}>
+              <span className="absolute -top-3 right-0 rotate-3 rounded-sm bg-secondary px-2 md:px-3 py-1 text-xs font-semibold text-secondary-foreground shadow-sm ring-1 ring-border hover-magnetic">
                 Made by a Student
               </span>
             </div>
@@ -215,32 +225,46 @@ export default function Blogs() {
               const Icon = post.icon;
               const to = idx === 0 ? `/blog/${post.slug}` : `/blog/${post.slug}`;
               const isFeatured = idx === 0;
+              const animationClass = `animate-fade-in-scale animate-stagger-${Math.min(idx % 6 + 1, 6)}`;
               return (
-                <article key={post.slug} className="group">
-                  <Card className="h-full overflow-hidden">
+                <article key={post.slug} className={`group ${animationClass}`}>
+                  <Card className="h-full overflow-hidden hover-lift transition-smooth border-border/50 hover:border-primary/30 bg-card/50 backdrop-blur-sm">
                     <CardHeader className="p-0">
-                      <div className="relative h-32 md:h-40 w-full bg-gradient-to-r from-primary/20 via-primary/10 to-secondary/20">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <Icon className="h-8 w-8 md:h-10 md:w-10 text-primary" aria-hidden="true" />
+                      <div className="relative h-32 md:h-40 w-full bg-gradient-to-r from-primary/20 via-primary/10 to-secondary/20 overflow-hidden">
+                        {/* Animated background pattern */}
+                        <div className="absolute inset-0 opacity-20">
+                          <div className="absolute top-2 left-2 w-1 h-1 bg-primary rounded-full animate-pulse-slow"></div>
+                          <div className="absolute top-4 right-4 w-1 h-1 bg-accent rounded-full animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+                          <div className="absolute bottom-3 left-6 w-1 h-1 bg-primary rounded-full animate-pulse-slow" style={{animationDelay: '2s'}}></div>
+                        </div>
+                        
+                        <div className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                          <Icon className="h-8 w-8 md:h-10 md:w-10 text-primary drop-shadow-sm" aria-hidden="true" />
                         </div>
                         {isFeatured && (
-                          <div className="absolute left-3 top-3">
-                            <Badge className="bg-primary text-primary-foreground text-xs">Featured</Badge>
+                          <div className="absolute left-3 top-3 animate-pulse-glow">
+                            <Badge className="bg-primary text-primary-foreground text-xs shadow-lg">Featured</Badge>
                           </div>
                         )}
+                        
+                        {/* Hover overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
                     </CardHeader>
                     <CardContent className="pt-3 md:pt-4 px-4 md:px-6">
                       <div className="mb-2 flex items-center gap-2">
-                        <Badge variant="secondary" className="text-xs">{post.category}</Badge>
+                        <Badge variant="secondary" className="text-xs hover-magnetic">{post.category}</Badge>
                         <span className="text-xs text-muted-foreground">{post.date}</span>
                       </div>
-                      <CardTitle className="text-base md:text-lg lg:text-xl leading-tight">{post.title}</CardTitle>
+                      <CardTitle className="text-base md:text-lg lg:text-xl leading-tight group-hover:text-primary transition-colors duration-300">{post.title}</CardTitle>
                       <CardDescription className="mt-2 text-sm leading-relaxed line-clamp-3">{post.description}</CardDescription>
                     </CardContent>
                     <CardFooter className="pt-2 px-4 md:px-6 pb-4 md:pb-6">
-                      <Button asChild className="text-sm">
-                        <Link to={to} aria-label={`Read more: ${post.title}`}>Read More</Link>
+                      <Button asChild className="text-sm w-full group-hover:shadow-glow transition-all duration-300 ripple-effect">
+                        <Link to={to} aria-label={`Read more: ${post.title}`}>
+                          Read More
+                          <span className="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                        </Link>
                       </Button>
                     </CardFooter>
                   </Card>
@@ -250,15 +274,22 @@ export default function Blogs() {
           </div>
         </section>
 
-        <section className="mt-8 md:mt-12 border-t pt-6 md:pt-8">
-          <div className="flex flex-col md:flex-row md:flex-wrap items-start md:items-center gap-4 md:gap-6 text-sm text-muted-foreground">
+        <section className="mt-8 md:mt-12 border-t pt-6 md:pt-8 relative overflow-hidden">
+          {/* Floating background elements */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute bottom-4 left-10 w-2 h-2 bg-primary rounded-full animate-float"></div>
+            <div className="absolute bottom-8 right-20 w-1 h-1 bg-accent rounded-full animate-float" style={{animationDelay: '2s'}}></div>
+            <div className="absolute bottom-6 left-1/3 w-1 h-1 bg-primary rounded-full animate-float" style={{animationDelay: '4s'}}></div>
+          </div>
+          
+          <div className="flex flex-col md:flex-row md:flex-wrap items-start md:items-center gap-4 md:gap-6 text-sm text-muted-foreground relative z-10 animate-slide-up">
             <nav className="flex flex-wrap items-center gap-3 md:gap-4">
-              <Link to="/" className="hover:text-foreground">About</Link>
-              <Link to="/tools" className="hover:text-foreground">Features</Link>
-              <Link to="/tools" className="hover:text-foreground">Tools</Link>
-              <Link to="/privacy" className="hover:text-foreground">Privacy Policy</Link>
+              <Link to="/" className="hover:text-foreground transition-colors duration-300 hover-lift">About</Link>
+              <Link to="/tools" className="hover:text-foreground transition-colors duration-300 hover-lift">Features</Link>
+              <Link to="/tools" className="hover:text-foreground transition-colors duration-300 hover-lift">Tools</Link>
+              <Link to="/privacy" className="hover:text-foreground transition-colors duration-300 hover-lift">Privacy Policy</Link>
             </nav>
-            <p className="text-xs md:text-sm">
+            <p className="text-xs md:text-sm gradient-text-shimmer">
               Note Bot AI – Built by a Student. Loved by Students. No ads. No logins. Just tools.
             </p>
           </div>
