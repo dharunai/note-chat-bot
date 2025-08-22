@@ -160,8 +160,10 @@ const Index = () => {
                       <span className="group-hover:scale-105 transition-transform duration-200">Chat with Your Notes</span>
                     </Link>
                   </Button>
-                  <Button size="default" variant="outline" className="px-6 md:px-8 py-3 md:py-4 text-base hover-lift border-2 hover:border-primary/50 transition-all duration-300 font-semibold animate-border-dance" asChild>
-                    <a href="#tools" aria-label="Explore all tools">Explore All Tools</a>
+                  <Button size="default" className="px-6 md:px-8 py-3 md:py-4 text-base gradient-secondary shadow-glow hover-glow transition-all duration-300 font-semibold group animate-pulse-glow border-0" asChild>
+                    <a href="#tools" aria-label="Explore all tools">
+                      <span className="group-hover:scale-105 transition-transform duration-200">Explore All Tools</span>
+                    </a>
                   </Button>
                 </div>
               </div>

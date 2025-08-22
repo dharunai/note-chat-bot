@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import TopNav from "@/components/navigation/TopNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageSquare, FileText, Sparkles, Files, BadgeCheck, GraduationCap, Wrench, Image as ImageIcon, Recycle, Archive, Palette, Shield } from "lucide-react";
 
 interface BlogCard {
