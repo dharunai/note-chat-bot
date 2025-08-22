@@ -59,6 +59,66 @@ const Index = () => {
     iconSrc: '/icons/image.svg',
     alt: 'PDF and JPG icon'
   }, {
+    title: 'Grammar Checker',
+    desc: 'Fix errors, improve clarity.',
+    to: '/tools/grammar',
+    iconSrc: '/icons/grammar.svg',
+    alt: 'Grammar checker icon'
+  }, {
+    title: 'AI Essay Writer',
+    desc: 'Get help with academic writing.',
+    to: '/tools/essay-writer',
+    iconSrc: '/icons/essay.svg',
+    alt: 'Essay writer icon'
+  }, {
+    title: 'Citation Generator',
+    desc: 'APA, MLA, Chicago formats.',
+    to: '/tools/citation-generator',
+    iconSrc: '/icons/citation.svg',
+    alt: 'Citation generator icon'
+  }, {
+    title: 'Plagiarism Checker',
+    desc: 'Ensure originality.',
+    to: '/tools/plagiarism-check',
+    iconSrc: '/icons/plagiarism.svg',
+    alt: 'Plagiarism checker icon'
+  }, {
+    title: 'Paraphrasing Tool',
+    desc: 'Rewrite with better clarity.',
+    to: '/tools/paraphrase',
+    iconSrc: '/icons/paraphrase.svg',
+    alt: 'Paraphrasing tool icon'
+  }, {
+    title: 'Summarizer',
+    desc: 'Condense long texts.',
+    to: '/tools/summarizer',
+    iconSrc: '/icons/summarize.svg',
+    alt: 'Summarizer icon'
+  }, {
+    title: 'Translator',
+    desc: 'Translate to 20+ languages.',
+    to: '/tools/translator',
+    iconSrc: '/icons/translator.svg',
+    alt: 'Translator icon'
+  }, {
+    title: 'Flashcard Creator',
+    desc: 'Turn notes into Q&A cards.',
+    to: '/tools/flashcard-creator',
+    iconSrc: '/icons/flashcards.svg',
+    alt: 'Flashcard creator icon'
+  }, {
+    title: 'Image Compressor',
+    desc: 'Reduce file size without quality loss.',
+    to: '/tools/image-compress',
+    iconSrc: '/icons/image.svg',
+    alt: 'Image compressor icon'
+  }, {
+    title: 'Background Remover',
+    desc: 'Clean images for presentations.',
+    to: '/tools/remove-bg',
+    iconSrc: '/icons/magic-wand.svg',
+    alt: 'Background remover icon'
+  }, {
     title: 'Resume Builder',
     desc: 'Create a job-ready resume.',
     to: '/tools/resume',

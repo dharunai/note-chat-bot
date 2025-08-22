@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import TopNav from "@/components/navigation/TopNav";
 
 const tools = [
-  { title: "Image → PDF", desc: "Convert images into a single PDF.", to: "/tools/image-to-pdf", iconPath: "/icons/pdf.svg" },
+  { title: "Image → PDF", desc: "Convert images into a single PDF.", to: "/tools/image-to-pdf", iconPath: "/icons/image.svg" },
   { title: "Text → PDF", desc: "Turn notes into a clean PDF.", to: "/tools/text-to-pdf", iconPath: "/icons/text.svg" },
   { title: "Word → PDF", desc: "Save DOCX as PDF.", to: "/tools/word-to-pdf", iconPath: "/icons/word.svg" },
   { title: "PDF → Word", desc: "Convert PDFs back to DOCX.", to: "/tools/pdf-to-word", iconPath: "/icons/word.svg" },
@@ -23,7 +23,7 @@ const tools = [
   { title: "Translator", desc: "Translate to 20+ languages.", to: "/tools/translator", iconPath: "/icons/translator.svg" },
   { title: "Flashcard Creator", desc: "Turn notes into Q&A.", to: "/tools/flashcard-creator", iconPath: "/icons/flashcards.svg" },
   { title: "Image Background Remover", desc: "Remove backgrounds in 1 click (Eremove.bg)", to: "/tools/remove-bg", iconPath: "/icons/magic-wand.svg" },
-  { title: "Resume Builder", desc: "Live preview, templates, export", to: "/tools/resume-builder", iconPath: "/icons/document-text.svg" },
+  { title: "Resume Builder", desc: "Live preview, templates, export", to: "/tools/resume-builder", iconPath: "/icons/resume.svg" },
   { title: "Presentation Maker", desc: "Slides from notes.", to: "/tools/presentation-creator", iconPath: "/icons/presentation.svg" },
   { title: "Poster / Flyer", desc: "Generate designs.", to: "/tools/flyer-creator", iconPath: "/icons/poster.svg" },
   { title: "OCR (Handwriting → Text)", desc: "OCR handwritten notes.", to: "/tools/ocr-tool", iconPath: "/icons/ocr.svg" },
