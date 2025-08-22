@@ -1,14 +1,14 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { callAI } from '../utils/aiClient.ts';
+import { callAI } from '../../utils/aiClient.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-Deno.serve(async (req) => {
+serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -47,75 +47,29 @@ Deno.serve(async (req) => {
       );
     }
 
-    const { message, conversationHistory } = await req.json();
+    const { question, fileContent, fileName, model } = await req.json();
 
-    const prompt = fileContent 
-      ? `Hey there! I'm NoteBot AI — your personal AI study buddy 🤖📚  
-Tired of reading long notes alone? Just upload your files and ask me anything — I'll turn your content into real conversations!
+    if (!question || typeof question !== 'string') {
+      return new Response(
+        JSON.stringify({ error: 'Missing question' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
-📁 Content from the uploaded file:  
+    const prompt = fileContent
+      ? `You are NoteBot AI, a helpful study buddy. The user uploaded a document. Use the provided content to answer the user's question. If the answer is not present in the file content, clearly state: "This response is based on general knowledge — not found in the uploaded file." Keep responses clear with short paragraphs or bullet points.
+
+File name: ${fileName || 'N/A'}
+
+File content:
 ${fileContent}
 
-🧑‍💬 User's question:  
-${question}
+User question:
+${question}`
+      : `You are NoteBot AI, a helpful study buddy. Answer the user's question clearly using short paragraphs or bullet points.
 
-Supported file types and topics include:  
-- Class notes (Science, Social, Commerce, etc.)  
-- Storybooks and novels  
-- Journals and research papers  
-- Essays, summaries, revision guides  
-- Exam preparation (UPSC, NEET, CUET, etc.)  
-- Maths problems (from the file)  
-- Current affairs, general knowledge, and more!
-
-When answering, always:  
-- Stay friendly and helpful  
-- Keep responses clear and structured  
-- Use bullet points or short paragraphs  
-- Add section titles like "Summary", "Explanation", "Key Points"  
-- Solve step-by-step when needed (especially math)
-
-Important guidelines:  
-- If the file does not contain the answer, respond with:  
-  ⚠️ This response is based on general knowledge — not found in the uploaded file.  
-- Never guess without making that clear
-
-User examples may include:  
-- Summarize this content  
-- Explain the meaning of a paragraph  
-- What is the message of this story?  
-- What are the key points?  
-- Solve this question  
-- And many more — across different subjects
-
-Talk like a study buddy. Be useful, friendly, and engaging.
-
-Powered by AI Fallback Chain  
-Developed by Havoc Dharun  
-~ Your AI companion, NoteBot AI 🤖📚`
-      : `Hey there! I'm NoteBot AI — your personal AI study buddy 🤖📚  
-
-🧑‍💬 User's question:  
-${question}
-
-I'm here to help with various topics including:  
-- Academic subjects (Science, Social, Commerce, etc.)  
-- General knowledge and current affairs  
-- Problem-solving and explanations  
-- Study guidance and tips  
-
-When answering, I'll:  
-- Stay friendly and helpful  
-- Keep responses clear and structured  
-- Use bullet points or short paragraphs  
-- Add section titles when helpful  
-- Solve step-by-step when needed  
-
-Talk like a study buddy. Be useful, friendly, and engaging.
-
-Powered by AI Fallback Chain  
-Developed by Havoc Dharun  
-~ Your AI companion, NoteBot AI 🤖📚`;
+User question:
+${question}`;
 
     const result = await callAI(prompt);
 
