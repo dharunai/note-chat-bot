@@ -3,6 +3,7 @@ import TopNav from '@/components/navigation/TopNav';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import heroRobot from '@/assets/hero-robot.webp';
+import { useMemo, lazy, Suspense } from 'react';
 const Index = () => {
   const tools = [{
     title: 'Image → PDF',

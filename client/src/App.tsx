@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard";
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 import { lazy, Suspense } from "react";
+import LoadingSpinner from "@/components/ui/loading-spinner";
+
 const FeatureHub = lazy(() => import("./pages/FeatureHub"));
 const StudyTools = lazy(() => import("./pages/StudyTools"));
 const ImageToPDF = lazy(() => import("./pages/tools/ImageToPDF"));
@@ -66,7 +68,14 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-          <Suspense fallback={<div className="p-6 text-muted-foreground">Loading…</div>}>
+          <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center">
+              <div className="text-center space-y-4">
+                <LoadingSpinner size="lg" />
+                <p className="text-muted-foreground">Loading...</p>
+              </div>
+            </div>
+          }>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/tools" element={<FeatureHub />} />
