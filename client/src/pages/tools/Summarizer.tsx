@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
 import { copyToClipboard, downloadTxt } from '@/lib/clientUtils';
 import { FileText, Copy, Download, Loader2 } from 'lucide-react';
-import TopNav from '@/components/navigation/TopNav';
+import ToolLayout from '@/components/tools/ToolLayout';
 
 export default function Summarizer() {
   const [inputText, setInputText] = useState('');
@@ -32,10 +30,10 @@ export default function Summarizer() {
       const response = await fetch('/api/summarize', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          text: inputText, 
-          mode, 
-          max_points: maxPoints 
+        body: JSON.stringify({
+          text: inputText,
+          mode,
+          max_points: maxPoints
         })
       });
 
@@ -69,148 +67,116 @@ export default function Summarizer() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5 relative overflow-hidden">
-      {/* Floating text animations */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="floating-text text-6xl font-bold text-primary/5 absolute top-20 left-10 animate-float">SUMMARIZE</div>
-        <div className="floating-text text-4xl font-bold text-accent/5 absolute top-40 right-20 animate-float-delayed">AI</div>
-        <div className="floating-text text-5xl font-bold text-primary/5 absolute bottom-32 left-20 animate-float-slow">TEXT</div>
-        <div className="floating-text text-3xl font-bold text-accent/5 absolute bottom-20 right-10 animate-bounce-slow">SMART</div>
-      </div>
+  const inputContent = (
+    <>
+      <Textarea
+        placeholder="Enter or paste your text here..."
+        value={inputText}
+        onChange={(e) => setInputText(e.target.value)}
+        className="min-h-[300px]"
+      />
       
-      <TopNav />
-      <div className="container mx-auto px-4 py-8 relative z-10">
-        <div className="max-w-4xl mx-auto space-y-6">
-          <div className="text-center space-y-2 animate-slide-in-up">
-            <h1 className="text-4xl font-bold flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              <FileText className="h-8 w-8 text-primary" />
-              AI Text Summarizer
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              Transform long content into concise summaries using AI
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Input Section */}
-            <Card className="backdrop-blur-sm bg-card/80 shadow-xl border-primary/10 animate-scale-in">
-              <CardHeader>
-                <CardTitle className="text-2xl">Input Text</CardTitle>
-                <CardDescription>
-                  Paste your text, article, or document to summarize
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Textarea
-                  placeholder="Enter or paste your text here..."
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  className="min-h-[300px]"
-                />
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Summary Type</label>
-                    <Select value={mode} onValueChange={(value) => setMode(value as 'paragraph' | 'bullets')}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="paragraph">Paragraph</SelectItem>
-                        <SelectItem value="bullets">Bullet Points</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  {mode === 'bullets' && (
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Max Points</label>
-                      <Select value={maxPoints.toString()} onValueChange={(value) => setMaxPoints(parseInt(value))}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="3">3 Points</SelectItem>
-                          <SelectItem value="5">5 Points</SelectItem>
-                          <SelectItem value="8">8 Points</SelectItem>
-                          <SelectItem value="10">10 Points</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                </div>
-
-                <Button 
-                  onClick={handleSummarize} 
-                  disabled={loading || !inputText.trim()}
-                  className="w-full"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Summarizing...
-                    </>
-                  ) : (
-                    <>
-                      <FileText className="h-4 w-4 mr-2" />
-                      Generate Summary
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Output Section */}
-            <Card className="backdrop-blur-sm bg-card/80 shadow-xl border-primary/10 animate-scale-in">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between text-2xl">
-                  Summary Result
-                  {provider && (
-                    <Badge variant="secondary" className="text-xs">
-                      Powered by {provider}
-                    </Badge>
-                  )}
-                </CardTitle>
-                <CardDescription>
-                  AI-generated summary of your content
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Textarea
-                  value={result}
-                  placeholder="Your summary will appear here..."
-                  className="min-h-[300px]"
-                  readOnly
-                />
-                
-                {result && (
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => copyToClipboard(result)}
-                      className="flex-1"
-                    >
-                      <Copy className="h-4 w-4 mr-2" />
-                      Copy
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => downloadTxt(result, 'summary.txt')}
-                      className="flex-1"
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Download
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Summary Type</label>
+          <Select value={mode} onValueChange={(value) => setMode(value as 'paragraph' | 'bullets')}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="paragraph">Paragraph</SelectItem>
+              <SelectItem value="bullets">Bullet Points</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
+        
+        {mode === 'bullets' && (
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Max Points</label>
+            <Select value={maxPoints.toString()} onValueChange={(value) => setMaxPoints(parseInt(value))}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="3">3 Points</SelectItem>
+                <SelectItem value="5">5 Points</SelectItem>
+                <SelectItem value="8">8 Points</SelectItem>
+                <SelectItem value="10">10 Points</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
       </div>
-    </div>
+
+      <Button 
+        onClick={handleSummarize} 
+        disabled={loading || !inputText.trim()}
+        className="w-full hover-lift hover-glow ripple-effect bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300"
+      >
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            Summarizing...
+          </>
+        ) : (
+          <>
+            <FileText className="h-4 w-4 mr-2" />
+            Generate Summary
+          </>
+        )}
+      </Button>
+    </>
+  );
+
+  const outputContent = (
+    <>
+      <Textarea
+        value={result}
+        placeholder="Your summary will appear here..."
+        className="min-h-[300px]"
+        readOnly
+      />
+      
+      {result && (
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => copyToClipboard(result)}
+            className="flex-1 flex items-center gap-1 hover-lift hover-magnetic transition-all duration-300 border-primary/30 hover:bg-primary/10"
+          >
+            <Copy className="h-3 w-3" />
+            Copy
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => downloadTxt(result, 'summary.txt')}
+            className="flex-1 flex items-center gap-1 hover-lift hover-magnetic transition-all duration-300 border-primary/30 hover:bg-primary/10"
+          >
+            <Download className="h-3 w-3" />
+            Download
+          </Button>
+        </div>
+      )}
+    </>
+  );
+
+  return (
+    <ToolLayout
+      pageTitle="AI Text Summarizer"
+      pageDescription="Transform long content into concise summaries using AI"
+      heroIcon={<FileText className="w-6 h-6 md:w-8 md:h-8 text-primary" />}
+      heroTitle="AI Text Summarizer"
+      heroDescription="Transform long content into concise summaries using AI"
+      floatingKeywords={['Concise', 'Summary', 'AI', 'Text', 'Smart', 'Efficient']}
+      inputTitle="Input Text"
+      inputDescription="Paste your text, article, or document to summarize"
+      inputChildren={inputContent}
+      outputTitle="Summary Result"
+      outputDescription="AI-generated summary of your content"
+      outputChildren={outputContent}
+      provider={provider}
+    />
   );
 }

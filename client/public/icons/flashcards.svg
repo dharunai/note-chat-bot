@@ -1,1 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="12" rx="2"/><path d="M7 9h6M7 13h10"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="flashcardGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D97706;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="flashcardGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Back card -->
+  <rect x="5" y="6" width="14" height="10" rx="2" fill="url(#flashcardGradient1)" stroke="#B45309" stroke-width="0.5" opacity="0.8"/>
+  <!-- Front card -->
+  <rect x="3" y="4" width="14" height="10" rx="2" fill="url(#flashcardGradient2)" stroke="#047857" stroke-width="0.5"/>
+  <text x="10" y="9.5" font-family="Arial, sans-serif" font-size="3" font-weight="bold" text-anchor="middle" fill="white">Q</text>
+  <circle cx="18" cy="7" r="2" fill="#8B5CF6" stroke="white" stroke-width="1"/>
+  <path d="M17.2 6.8l0.8 0.8 1.2-1.2" stroke="white" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+  <rect x="5" y="11" width="8" height="0.8" rx="0.4" fill="white" opacity="0.7"/>
+</svg>

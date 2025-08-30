@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import Index from "./pages/Index";
@@ -10,49 +10,49 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
-import { lazy, Suspense } from "react";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 
-const FeatureHub = lazy(() => import("./pages/FeatureHub"));
-const StudyTools = lazy(() => import("./pages/StudyTools"));
-const ImageToPDF = lazy(() => import("./pages/tools/ImageToPDF"));
-const TextToPDF = lazy(() => import("./pages/tools/TextToPDF"));
-const WordToPDF = lazy(() => import("./pages/tools/WordToPDF"));
-const PdfToWord = lazy(() => import("./pages/tools/PdfToWord"));
-const PdfMerge = lazy(() => import("./pages/tools/PdfMerge"));
-const PdfSplit = lazy(() => import("./pages/tools/PdfSplit"));
-const PdfCompressor = lazy(() => import("./pages/tools/PdfCompressor"));
-const ExcelToPDF = lazy(() => import("./pages/tools/ExcelToPDF"));
-const ImageCompressor = lazy(() => import("./pages/tools/ImageCompressor"));
-const Summarizer = lazy(() => import("./pages/tools/Summarizer"));
-const Translator = lazy(() => import("./pages/tools/Translator"));
-const CitationGenerator = lazy(() => import("./pages/tools/CitationGenerator"));
-const FlashcardCreator = lazy(() => import("./pages/tools/FlashcardCreator"));
-const ParaphraseTool = lazy(() => import("./pages/tools/ParaphraseTool"));
-const GrammarChecker = lazy(() => import("./pages/tools/GrammarChecker"));
-const FlyerCreator = lazy(() => import("./pages/tools/FlyerCreator"));
-const PresentationCreator = lazy(() => import("./pages/tools/PresentationCreator"));
-const OCRTool = lazy(() => import("./pages/tools/OCRTool"));
-const ResumeBuilder = lazy(() => import("./pages/tools/ResumeBuilder"));
-const ResumeBuilderPro = lazy(() => import("./pages/tools/ResumeBuilderPro"));
-const RemoveBg = lazy(() => import("./pages/tools/RemoveBg"));
-const ComingSoon = lazy(() => import("./pages/tools/ComingSoon"));
+import FeatureHub from "./pages/FeatureHub";
+import StudyTools from "./pages/StudyTools";
+import ImageToPDF from "./pages/tools/ImageToPDF";
+import TextToPDF from "./pages/tools/TextToPDF";
+import WordToPDF from "./pages/tools/WordToPDF";
+import PdfToWord from "./pages/tools/PdfToWord";
+import PdfMerge from "./pages/tools/PdfMerge";
+import PdfSplit from "./pages/tools/PdfSplit";
+import PdfCompressor from "./pages/tools/PdfCompressor";
+import ExcelToPDF from "./pages/tools/ExcelToPDF";
+import ImageCompressor from "./pages/tools/ImageCompressor";
+import Summarizer from "./pages/tools/Summarizer";
+import Translator from "./pages/tools/Translator";
+import CitationGenerator from "./pages/tools/CitationGenerator";
+import FlashcardCreator from "./pages/tools/FlashcardCreator";
+import ParaphraseTool from "./pages/tools/ParaphraseTool";
+import GrammarChecker from "./pages/tools/GrammarChecker";
+import AIEssayWriter from "./pages/tools/AIEssayWriter";
+import FlyerCreator from "./pages/tools/FlyerCreator";
+import PresentationCreator from "./pages/tools/PresentationCreator";
+import OCRTool from "./pages/tools/OCRTool";
+import ResumeBuilder from "./pages/tools/ResumeBuilder";
+import ResumeBuilderPro from "./pages/tools/ResumeBuilderPro";
+import RemoveBg from "./pages/tools/RemoveBg";
+import PlagiarismChecker from "./pages/tools/PlagiarismChecker";
 // Blog pages
-const Blogs = lazy(() => import("./pages/Blogs"));
-const ChatWithYourNotes = lazy(() => import("./pages/blog/ChatWithYourNotes"));
+import Blogs from "./pages/Blogs";
+import ChatWithYourNotes from "./pages/blog/ChatWithYourNotes";
 // Individual blog posts
-const ChatWithPDFs = lazy(() => import("./pages/blog/ChatWithPDFs"));
-const AISummarization = lazy(() => import("./pages/blog/AISummarization"));
-const MultiFileLearning = lazy(() => import("./pages/blog/MultiFileLearning"));
-const FreeForeverPlan = lazy(() => import("./pages/blog/FreeForeverPlan"));
-const BackbenchersGuide = lazy(() => import("./pages/blog/BackbenchersGuide"));
-const PdfEditingAnnotation = lazy(() => import("./pages/blog/PdfEditingAnnotation"));
-const ImageToPdfPdfToImage = lazy(() => import("./pages/blog/ImageToPdfPdfToImage"));
-const FileFormatConversions = lazy(() => import("./pages/blog/FileFormatConversions"));
-const FileCompression = lazy(() => import("./pages/blog/FileCompression"));
-const AICreativityDesignTools = lazy(() => import("./pages/blog/AICreativityDesignTools"));
-const SecurityPrivacyFeatures = lazy(() => import("./pages/blog/SecurityPrivacyFeatures"));
-const BlogPostComingSoon = lazy(() => import("./pages/BlogPostComingSoon"));
+import ChatWithPDFs from "./pages/blog/ChatWithPDFs";
+import AISummarization from "./pages/blog/AISummarization";
+import MultiFileLearning from "./pages/blog/MultiFileLearning";
+import FreeForeverPlan from "./pages/blog/FreeForeverPlan";
+import BackbenchersGuide from "./pages/blog/BackbenchersGuide";
+import PdfEditingAnnotation from "./pages/blog/PdfEditingAnnotation";
+import ImageToPdfPdfToImage from "./pages/blog/ImageToPdfPdfToImage";
+import FileFormatConversions from "./pages/blog/FileFormatConversions";
+import FileCompression from "./pages/blog/FileCompression";
+import AICreativityDesignTools from "./pages/blog/AICreativityDesignTools";
+import SecurityPrivacyFeatures from "./pages/blog/SecurityPrivacyFeatures";
+import BlogPostComingSoon from "./pages/BlogPostComingSoon";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -68,14 +68,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-          <Suspense fallback={
-            <div className="min-h-screen flex items-center justify-center">
-              <div className="text-center space-y-4">
-                <LoadingSpinner size="lg" />
-                <p className="text-muted-foreground">Loading...</p>
-              </div>
-            </div>
-          }>
+          
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/tools" element={<FeatureHub />} />
@@ -95,14 +88,17 @@ const App = () => (
               <Route path="/tools/flashcard-creator" element={<FlashcardCreator />} />
               <Route path="/tools/paraphrase" element={<ParaphraseTool />} />
               <Route path="/tools/grammar" element={<GrammarChecker />} />
+              <Route path="/tools/essay-writer" element={<AIEssayWriter />} />
               <Route path="/tools/flyer-creator" element={<FlyerCreator />} />
               <Route path="/tools/presentation-creator" element={<PresentationCreator />} />
               <Route path="/tools/ocr-tool" element={<OCRTool />} />
 {/* Explicit tool routes */}
 <Route path="/tools/remove-bg" element={<RemoveBg />} />
+<Route path="/tools/plagiarism-checker" element={<PlagiarismChecker />} />
+<Route path="/tools/plagrism-checker" element={<Navigate to="/tools/plagiarism-checker" />} />
 <Route path="/tools/resume-builder" element={<ResumeBuilderPro />} />
 {/* Scaffold the rest as coming soon */}
-<Route path="/tools/:slug" element={<ComingSoon title="Tool" description="This tool will be available soon." />} />
+<Route path="/tools/:slug" element={<NotFound />} />
 {/* Blog routes */}
 <Route path="/blog" element={<Blogs />} />
 <Route path="/blog/chat-with-your-notes" element={<ChatWithYourNotes />} />
@@ -124,7 +120,7 @@ const App = () => (
 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
 <Route path="*" element={<NotFound />} />
             </Routes>
-          </Suspense>
+          
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>

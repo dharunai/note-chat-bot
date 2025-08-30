@@ -22,15 +22,40 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({
     return <div className="text-xs md:text-sm text-muted-foreground text-center py-8">Document preview will appear here</div>;
   }
   if (ext.endsWith(".pdf") && url) {
-    return <div className="rounded-lg md:rounded-xl overflow-hidden border border-border/50 h-[40vh] md:h-[60vh] bg-background">
-        <iframe title="Document preview" src={url} className="w-full h-full" />
-      </div>;
+    return (
+      <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+        <div className="w-full h-full max-w-full">
+          <iframe 
+            title="Document preview" 
+            src={`${url}#toolbar=0&navpanes=0&scrollbar=1`}
+            className="w-full h-full border-0 rounded-lg"
+            style={{ minHeight: '800px' }}
+          />
+        </div>
+      </div>
+    );
   }
 
-  // Fallback preview for DOCX/TXT: show extracted text snippet
-  const preview = (extractedText || "").slice(0, 4000);
-  return <div className="rounded-lg md:rounded-xl border border-border/50 bg-muted/40 p-3 md:p-4 h-[40vh] md:h-[60vh] overflow-auto">
-      <pre className="whitespace-pre-wrap text-xs md:text-sm leading-relaxed text-foreground break-words">{preview || "Preview not available. The file will still be used for Q&A."}</pre>
-    </div>;
+  // Fallback preview for DOCX/TXT: show extracted text snippet with A4 styling
+  const preview = (extractedText || "").slice(0, 8000);
+  return (
+    <div className="w-full h-full bg-white p-8 overflow-auto">
+      <div 
+        className="mx-auto bg-white shadow-sm border rounded-lg p-8"
+        style={{
+          width: '100%',
+          maxWidth: '595px', // A4 width in points
+          minHeight: '842px', // A4 height in points
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+          lineHeight: '1.6',
+          fontSize: '12px'
+        }}
+      >
+        <pre className="whitespace-pre-wrap text-gray-800 leading-relaxed break-words">
+          {preview || "Preview not available. The file will still be used for Q&A."}
+        </pre>
+      </div>
+    </div>
+  );
 };
 export default DocumentViewer;

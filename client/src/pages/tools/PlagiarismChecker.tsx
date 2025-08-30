@@ -1,72 +1,139 @@
-import { useMemo, useState } from "react";
-import TopNav from "@/components/navigation/TopNav";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Progress } from "@/components/ui/progress";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/hooks/use-toast';
+import { copyToClipboard, downloadTxt } from '@/lib/clientUtils';
+import { FileText, Copy, Download, Loader2, Search } from 'lucide-react';
+import ToolLayout from '@/components/tools/ToolLayout';
+import { Card, CardContent } from '@/components/ui/card';
 
-interface Source { title: string; url: string; snippet: string; }
+interface PlagiarismResult {
+  url: string;
+  title: string;
+  snippet: string;
+}
 
 export default function PlagiarismChecker() {
-  const [text, setText] = useState("");
-  const [progress, setProgress] = useState(0);
-  const [score, setScore] = useState<number | null>(null);
-  const [sources, setSources] = useState<Source[]>([]);
-  useMemo(() => { document.title = "Plagiarism Checker – Note Bot AI"; }, []);
+  const [inputText, setInputText] = useState('');
+  const [results, setResults] = useState<PlagiarismResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [provider, setProvider] = useState('');
 
-  const run = async () => {
-    if (!text.trim()) return;
-    setProgress(20);
-    const response = await fetch('/api/plagiarism-check', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text })
-    });
-    
-    if (!response.ok) { setScore(null); setSources([]); setProgress(0); return; }
-    
-    const data = await response.json();
-    setScore(data.score);
-    setSources(data.suggestions || []);
-    setProgress(100);
+  const handlePlagiarismCheck = async () => {
+    if (!inputText.trim()) {
+      toast({
+        title: 'Input Required',
+        description: 'Please enter text to check for plagiarism',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setLoading(true);
+    setResults([]);
+    try {
+      const response = await fetch('/api/plagiarism-check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: inputText,
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to check for plagiarism');
+      }
+
+      const data = await response.json();
+      setResults(data.results);
+      setProvider(data.provider || '');
+      
+      toast({
+        title: 'Plagiarism Check Complete',
+        description: 'The plagiarism check has been completed successfully.'
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to check for plagiarism',
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const inputContent = (
+    <>
+      <Textarea
+        placeholder="Enter or paste your text here..."
+        value={inputText}
+        onChange={(e) => setInputText(e.target.value)}
+        className="min-h-[300px]"
+      />
+      
+      <Button 
+        onClick={handlePlagiarismCheck} 
+        disabled={loading || !inputText.trim()}
+        className="w-full hover-lift hover-glow ripple-effect bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300"
+      >
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            Checking...
+          </>
+        ) : (
+          <>
+            <Search className="h-4 w-4 mr-2" />
+            Check for Plagiarism
+          </>
+        )}
+      </Button>
+    </>
+  );
+
+  const outputContent = (
+    <>
+      {results.length > 0 ? (
+        <div className="space-y-4">
+          {results.map((result, index) => (
+            <Card key={index}>
+              <CardContent className="p-4">
+                <h4 className="font-semibold text-blue-600">
+                  <a href={result.url} target="_blank" rel="noopener noreferrer">
+                    {result.title}
+                  </a>
+                </h4>
+                <p className="text-sm text-muted-foreground break-words">{result.url}</p>
+                <p className="mt-2 text-sm" dangerouslySetInnerHTML={{ __html: result.snippet }}></p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="flex justify-center items-center h-full">
+          <p className="text-muted-foreground">No plagiarism results found.</p>
+        </div>
+      )}
+    </>
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/70">
-      <TopNav />
-      <main className="container mx-auto px-4 py-10">
-        <Card className="max-w-3xl mx-auto">
-          <CardHeader>
-            <CardTitle>Plagiarism Checker</CardTitle>
-            <CardDescription>Compare your text against Wikipedia sources.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Textarea value={text} onChange={(e) => setText(e.target.value)} className="min-h-48" placeholder="Paste text here..." />
-            <div className="flex gap-2">
-              <Button onClick={run} disabled={!text.trim()}>Check</Button>
-            </div>
-            {progress > 0 && (
-              <div className="space-y-2">
-                <Progress value={progress} />
-                <p className="text-xs text-muted-foreground">Processing... {progress}%</p>
-              </div>
-            )}
-            {score !== null && (
-              <div>
-                <p className="text-sm">Estimated overlap: <strong>{Math.round(score * 100)}%</strong></p>
-                <ul className="mt-3 space-y-2">
-                  {sources.map((s, i) => (
-                    <li key={i} className="p-3 rounded-md bg-muted">
-                      <a href={s.url} target="_blank" rel="noreferrer" className="font-medium text-primary">{s.title}</a>
-                      <p className="text-xs text-muted-foreground mt-1">{s.snippet}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </main>
-    </div>
+    <ToolLayout
+      pageTitle="Plagiarism Checker"
+      pageDescription="Check your text for potential plagiarism against online sources."
+      heroIcon={<Search className="w-6 h-6 md:w-8 md:h-8 text-primary" />}
+      heroTitle="Plagiarism Checker"
+      heroDescription="Check your text for potential plagiarism against online sources."
+      floatingKeywords={['Plagiarism', 'Checker', 'Academic', 'Integrity', 'Verify', 'Originality']}
+      inputTitle="Input Text"
+      inputDescription="Paste your text, article, or document to check for plagiarism"
+      inputChildren={inputContent}
+      outputTitle="Plagiarism Results"
+      outputDescription="Potential sources of plagiarism found online."
+      outputChildren={outputContent}
+      provider={provider}
+    />
   );
 }

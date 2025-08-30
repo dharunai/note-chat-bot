@@ -8,8 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, MessageSquare, LogOut, BookOpen, FileText, Sparkles, Cpu, Mail, Instagram, Linkedin } from 'lucide-react';
-import ModelSelector from '@/components/chat/ModelSelector';
+import { Upload, MessageSquare, LogOut, BookOpen, FileText, Sparkles, Cpu, Mail, Instagram, Linkedin, Bot, Zap, Stars, Send, FileUp, Brain, Lightbulb, User, Plus, Paperclip, Image as ImageIcon, RefreshCw, Download, ChevronDown, ChevronUp } from 'lucide-react';
 import { extractTextFromFile } from '@/lib/fileExtractors';
 import ChatMessage from '@/components/chat/ChatMessage';
 import SuggestionChips from '@/components/chat/SuggestionChips';
@@ -25,59 +24,159 @@ const Dashboard = () => {
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
   const [fileContent, setFileContent] = useState('');
-  const [model, setModel] = useState<string | null>(null);
-  const [showModelDialog, setShowModelDialog] = useState(false);
   const [showContactDialog, setShowContactDialog] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [showUploadAnimation, setShowUploadAnimation] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [userName] = useState('User');
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Dynamic suggestions based on document content
+  const [documentSuggestions, setDocumentSuggestions] = useState<string[]>([
+    "What is the main topic of this document?",
+    "Can you summarize the key points?",
+    "What are the important dates mentioned?",
+    "Who are the key people or organizations?",
+  ]);
+
+  const suggestedQuestions = [
+    "What is the main topic of this document?",
+    "Can you summarize the key points?",
+    "What are the important dates mentioned?",
+    "Who are the key people or organizations?",
+    "What are the main conclusions?",
+    "Are there any important statistics or data?",
+  ];
+
+  const downloadChat = () => {
+    if (!messages.length) return;
+    
+    const chatData = messages.map(msg => 
+      `${msg.role === 'user' ? 'You' : 'Assistant'}: ${msg.content}`
+    ).join('\n\n');
+    
+    const blob = new Blob([chatData], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chat-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const generateDocumentSuggestions = (fileName: string, content: string) => {
+    const isResume = fileName.toLowerCase().includes('resume') || fileName.toLowerCase().includes('cv');
+    const isBusinessDoc = content.toLowerCase().includes('business') || content.toLowerCase().includes('analytics');
+    
+    if (isResume) {
+      return [
+        "What are the key skills mentioned in this resume?",
+        "What work experience is highlighted?",
+        "What educational qualifications are listed?",
+        "What achievements or projects are mentioned?",
+        "What technical skills does this person have?",
+        "What certifications are included?"
+      ];
+    } else if (isBusinessDoc) {
+      return [
+        "What are the main business objectives?",
+        "What analytics tools or methods are discussed?",
+        "What are the key findings or insights?",
+        "What recommendations are provided?",
+        "What data sources are mentioned?",
+        "What business metrics are analyzed?"
+      ];
+    } else {
+      return [
+        "What is the main topic of this document?",
+        "Can you summarize the key points?",
+        "What are the important dates mentioned?",
+        "Who are the key people or organizations?",
+        "What are the main conclusions?",
+        "Are there any important statistics or data?"
+      ];
+    }
+  };
+
+  const formatAIResponse = (text: string) => {
+    // Better formatting for AI responses
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n\n/g, '<br><br>')
+      .replace(/\n/g, '<br>')
+      .replace(/• /g, '• ')
+      .replace(/\d+\. /g, (match) => `<strong>${match}</strong>`);
+  };
   const {
     toast
   } = useToast();
+  
   type ChatMessageType = {
     role: 'assistant' | 'user';
     content: string;
   };
+  
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([
+    'Write a to-do list for a personal project or task',
+    'Generate an email or reply to a job offer', 
+    'Summarize this article or text for me in one paragraph',
+    'How does AI work in a technical capacity'
+  ]);
+  
+  // Auto-select Gemini for seamless experience - no model selection needed
+  const model = "Google Gemini";
+  
   useEffect(() => {
-    const saved = sessionStorage.getItem('activeModel');
-    if (saved) setModel(saved);
     document.title = 'NoteBot AI — Dashboard';
   }, []);
-  const handleModelSelect = (choice: "Google Gemini" | "OpenAI GPT") => {
-    setModel(choice);
-    sessionStorage.setItem('activeModel', choice);
-    setShowModelDialog(false);
-    toast({
-      title: 'Model selected',
-      description: `Using ${choice} for this session.`
-    });
-    if (choice === 'OpenAI GPT') {
-      toast({
-        title: 'Heads up',
-        description: 'OpenAI support will be enabled next. Using Gemini endpoint for now.',
-        variant: 'default'
-      });
-    }
-  };
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.type !== 'application/pdf' && file.type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && file.type !== 'text/plain') {
-      toast({
-        title: "Invalid File Type",
-        description: "Please upload a PDF, DOCX, or TXT file.",
-        variant: "destructive"
-      });
-      return;
-    }
+
+  const handleFileUpload = async (file: File) => {
     setUploadedFile(file);
+    setShowUploadAnimation(true);
+    setUploadProgress(0);
+    
+    // Animate progress
+    const progressInterval = setInterval(() => {
+      setUploadProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(progressInterval);
+          return 100;
+        }
+        return prev + 15;
+      });
+    }, 120);
 
-    // File uploaded locally, no cloud storage needed
-
-    // Extract text client-side
     try {
+      // Extract text client-side
       const text = await extractTextFromFile(file);
       setFileContent(text);
+      
+      // Success animation
+      setTimeout(() => {
+        setUploadProgress(0);
+        setShowUploadAnimation(false);
+      }, 1000);
+      
+      toast({
+        title: "File Uploaded",
+        description: `${file.name} has been uploaded successfully.`
+      });
+      
+      // Update suggestions with document-specific questions
+      setSuggestions(suggestedQuestions);
+      
+      // Generate dynamic suggestions based on document type and content
+      const dynamicSuggestions = generateDocumentSuggestions(file.name, text);
+      setDocumentSuggestions(dynamicSuggestions);
+
+      // Don't auto-start with greeting - let user initiate conversation
+      
     } catch (err: any) {
       toast({
         title: 'Extraction failed',
@@ -85,27 +184,52 @@ const Dashboard = () => {
         variant: 'destructive'
       });
       setFileContent('');
-    }
-    toast({
-      title: "File Uploaded",
-      description: `${file.name} has been uploaded successfully.`
-    });
-    const defaultSuggestions = ['Summarize this document', 'What are the key points?', 'Explain this section in simple terms', `How does this relate to ${file.name.split('.')[0]}?`];
-    setSuggestions(defaultSuggestions);
-
-    // Auto-start: greeting + concise summary
-    if (model) {
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: "Analyzing your document… generating a quick summary."
-      }]);
-      const autoPrompt = "Provide a warm, friendly greeting and a concise summary of the uploaded document. Remove any markdown symbols like #, *, `, and keep the formatting clean with short paragraphs or bullet points.";
-      await handleAskQuestion(autoPrompt);
-    } else {
-      setShowModelDialog(true);
+      setUploadProgress(0);
+      setShowUploadAnimation(false);
     }
   };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    if (file.type !== 'application/pdf' && 
+        file.type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && 
+        file.type !== 'text/plain') {
+      toast({
+        title: "Invalid File Type",
+        description: "Please upload a PDF, DOCX, or TXT file.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    await handleFileUpload(file);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    
+    if (file.type !== 'application/pdf' && 
+        file.type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && 
+        file.type !== 'text/plain') {
+      toast({
+        title: "Invalid File Type",
+        description: "Please upload a PDF, DOCX, or TXT file.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    await handleFileUpload(file);
+  };
+
   const cleanText = (txt: string) => txt.replace(/^[#>*-]\s?/gm, '').replace(/[`*_]/g, '').replace(/\n{3,}/g, '\n\n').trim();
+  
   const handleAskQuestion = async (override?: string) => {
     const q = (override ?? question).trim();
     if (!q) {
@@ -116,21 +240,17 @@ const Dashboard = () => {
       });
       return;
     }
-    if (!model) {
-      setShowModelDialog(true);
-      toast({
-        title: "Choose a model",
-        description: "Please select Google Gemini or OpenAI GPT to continue."
-      });
-      return;
-    }
+    
     setLoading(true);
+    setIsTyping(true);
     setAnswer('');
     setQuestion('');
+    
     setMessages(prev => [...prev, {
       role: 'user',
       content: q
     }]);
+    
     try {
       const response = await fetch('/api/chat-with-ai', {
         method: 'POST',
@@ -152,11 +272,21 @@ const Dashboard = () => {
       
       const data = await response.json();
       const cleaned = cleanText(data.answer || '');
+      
+      // Simulate typing effect
+      setIsTyping(false);
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: cleaned
       }]);
+      
+      // Hide suggestions after first interaction
+      if (messages.length === 0) {
+        setTimeout(() => setShowSuggestions(false), 3000);
+      }
+      
     } catch (error: any) {
+      setIsTyping(false);
       toast({
         title: "Error",
         description: error.message || "Failed to get AI response",
@@ -166,149 +296,363 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
-  return <div className="min-h-screen bg-cosmic">
-      <header className="border-b bg-card/50 backdrop-blur-lg">
-        <div className="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="bg-primary/10 p-2 rounded-lg">
-              <BookOpen className="h-6 w-6 text-primary" />
-            </div>
-            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent tracking-tight">NoteBot AI</h1>
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Sidebar */}
+      <div className="fixed left-0 top-0 w-64 h-full bg-gray-900 text-white p-4 z-10">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+            <Bot className="h-5 w-5 text-white" />
           </div>
-          <div className="flex items-center gap-1 md:gap-2">
-            <Button onClick={() => setShowModelDialog(true)} className="px-2 md:px-4 py-2 bg-card rounded-lg shadow text-xs md:text-sm flex items-center gap-1 md:gap-2 border-0 transition-smooth text-violet-600">
-              <Cpu className="h-4 w-4" />
-              <span className="hidden sm:inline">{model ? `Model: ${model}` : 'Choose Model'}</span>
-              <span className="sm:hidden">{model ? model.split(' ')[0] : 'Model'}</span>
-            </Button>
-            <Button onClick={() => setShowContactDialog(true)} className="px-2 md:px-4 py-2 rounded-lg shadow text-xs md:text-sm flex items-center gap-1 md:gap-2 border-0 transition-smooth bg-stone-600 hover:bg-stone-500">
-              <Mail className="h-4 w-4" />
-              <span className="hidden sm:inline">Contact Us</span>
-            </Button>
-            {user && <Button onClick={signOut} className="px-2 md:px-4 py-2 bg-card rounded-lg shadow text-xs md:text-sm flex items-center gap-1 md:gap-2 border-0 transition-smooth">
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Sign Out</span>
-              </Button>}
-          </div>
+          <h1 className="text-xl font-semibold">NoteBot AI</h1>
         </div>
-      </header>
-      <div className="container mx-auto px-4 py-4 md:py-8">
-        <section className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-cosmic p-6 md:p-10 mb-6 md:mb-8 shadow-glow border border-border/50">
-          <div className="max-w-4xl">
-
-            <h2 className="text-2xl md:text-4xl lg:text-6xl font-bold mb-3 md:mb-4 tracking-tight leading-tight md:leading-[0.9]">
-              <span className="relative inline-block">
-                <span className="absolute -inset-1 blur-xl md:blur-2xl opacity-20 bg-gradient-to-r from-primary to-accent rounded-xl md:rounded-2xl"></span>
-                <span className="relative">Turn Your Notes Into a Conversation</span>
-              </span>
-            </h2>
-            <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6 max-w-2xl leading-relaxed">Upload your notes and I'll summarize them automatically so you can chat with your content right away.</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button onClick={() => fileInputRef.current?.click()} className="shadow-glow">Upload a File</Button>
+        
+        <Button className="w-full mb-4 bg-gray-800 hover:bg-gray-700 text-white border border-gray-600">
+          <Plus className="h-4 w-4 mr-2" />
+          New chat
+        </Button>
+        
+        <div className="space-y-2">
+          <div className="text-sm text-gray-400 px-2">Recent</div>
+          {uploadedFile && (
+            <div className="p-2 rounded hover:bg-gray-800 cursor-pointer text-sm">
+              📄 {uploadedFile.name.substring(0, 20)}...
+            </div>
+          )}
+        </div>
+        
+        {/* Download Chat Button */}
+        {messages.length > 0 && (
+          <div className="mt-4">
+            <Button 
+              onClick={downloadChat}
+              className="w-full bg-green-600 hover:bg-green-700 text-white text-sm"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download Chat
+            </Button>
+          </div>
+        )}
+        
+        <div className="absolute bottom-4 left-4 right-4">
+          <div className="flex items-center gap-3 p-2 hover:bg-gray-800 rounded cursor-pointer">
+            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+              {userName.charAt(0)}
+            </div>
+            <div className="flex-1">
+              <div className="text-sm font-medium">{userName}</div>
+              <div className="text-xs text-gray-400">Free plan</div>
             </div>
           </div>
-        </section>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-          <div className="space-y-6 md:space-y-8">
-            {/* File Upload Section */}
-            <Card className="shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
-              
-              <CardContent>
-                <div className="space-y-4 md:space-y-6">
-                  <div>
-                    <Label htmlFor="file-upload" className="text-sm font-medium">Choose File</Label>
-                    <Input id="file-upload" type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".pdf,.docx,.txt" className="mt-2 h-10 md:h-12 file:mr-2 md:file:mr-4 file:py-1 md:file:py-2 file:px-2 md:file:px-4 file:rounded-md md:file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-smooth text-sm" />
-                  </div>
-                  {uploadedFile && <div className="p-4 bg-muted/50 rounded-xl border border-border/50">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-green-500/10 p-2 rounded-lg">
-                          <FileText className="h-4 w-4 text-green-500" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">{uploadedFile.name}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {(uploadedFile.size / 1024).toFixed(1)} KB • Uploaded successfully
-                          </p>
-                        </div>
-                      </div>
-                    </div>}
-                </div>
-              </CardContent>
-            </Card>
+          
+          <Button 
+            onClick={() => setShowContactDialog(true)}
+            className="w-full mt-2 bg-gray-800 hover:bg-gray-700 text-white text-sm"
+          >
+            <Mail className="h-4 w-4 mr-2" />
+            Contact Us
+          </Button>
+          
+          {user && (
+            <Button 
+              onClick={signOut}
+              className="w-full mt-2 bg-red-900 hover:bg-red-800 text-white text-sm"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </Button>
+          )}
+        </div>
+      </div>
 
-            {/* Document Preview */}
-            <Card className="shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="text-lg md:text-xl">Document Preview</CardTitle>
-                <CardDescription>Embedded preview or extracted text</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <DocumentViewer file={uploadedFile} extractedText={fileContent} />
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Chat Section */}
-          <Card className="shadow-elegant border-0 bg-card/80 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-lg md:text-xl">
-                <div className="bg-green-500/10 p-2 rounded-lg">
-                  <MessageSquare className="h-5 w-5 text-green-500" />
+      {/* Main Content */}
+      <div className="ml-64 h-screen bg-gray-50 overflow-hidden">
+        {!uploadedFile ? (
+          <div className="flex flex-col items-center justify-center min-h-screen p-8">
+            <div className="max-w-2xl w-full text-center">
+              <div className="mb-8">
+                <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Upload className="h-8 w-8 text-blue-600" />
                 </div>
-                Chat
-              </CardTitle>
-              <CardDescription className="text-sm md:text-base">Don't worry Notebot AI is here to Assist You </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 md:space-y-4">
-                <div className="flex flex-col gap-2 md:gap-3 max-h-[50vh] md:max-h-[60vh] overflow-auto pr-1">
-                  {messages.map((m, idx) => <ChatMessage key={idx} role={m.role} content={m.content} />)}
-                </div>
-
-                {messages[messages.length - 1]?.role === 'assistant' && suggestions.length > 0 && <SuggestionChips suggestions={suggestions} onClick={t => handleAskQuestion(t)} />}
-
-                <div>
-                  <Label htmlFor="question" className="text-sm font-medium"></Label>
-                  <Textarea id="question" value={question} onChange={e => setQuestion(e.target.value)} placeholder="Type a question — or tap a suggestion above" className="mt-2 min-h-[80px] md:min-h-[100px] resize-none transition-smooth focus:ring-2 focus:ring-primary text-sm md:text-base" rows={3} />
-                </div>
-                <Button onClick={() => handleAskQuestion()} disabled={loading} className="w-full h-10 md:h-12 text-sm md:text-base gradient-primary shadow-glow hover:shadow-lg transition-smooth">
-                  {loading ? <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      Thinking...
-                    </div> : <>
-                      <MessageSquare className="h-4 w-4 mr-2" />
-                      Send
-                    </>}
-                </Button>
+                <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+                  Upload your document
+                </h2>
+                <p className="text-gray-600">
+                  Select a PDF, DOCX, or TXT file to start analyzing
+                </p>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              
+              {/* File Upload Zone */}
+              <div 
+                className={`border-2 border-dashed rounded-2xl p-8 transition-all duration-300 cursor-pointer ${
+                  isDragOver 
+                    ? 'border-blue-500 bg-blue-50 scale-105' 
+                    : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+                }`}
+                onDrop={handleDrop}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(true);
+                }}
+                onDragLeave={() => setIsDragOver(false)}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <div className="flex flex-col items-center">
+                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                    <FileText className="h-6 w-6 text-gray-500" />
+                  </div>
+                  <p className="text-lg font-medium text-gray-700 mb-1">
+                    Choose a file or drag it here
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    PDF, DOCX, TXT up to 10MB
+                  </p>
+                </div>
+              </div>
+              
+              <input
+                ref={fileInputRef}
+                type="file"
+                onChange={handleFileChange}
+                accept=".pdf,.docx,.txt"
+                className="hidden"
+              />
+              
+              {/* Upload Animation */}
+              {showUploadAnimation && (
+                <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <FileText className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-800">Uploading document...</p>
+                      <p className="text-sm text-gray-500">{uploadedFile?.name}</p>
+                    </div>
+                    <div className="text-sm font-medium text-blue-600">{uploadProgress}%</div>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500 ease-out"
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="flex h-screen">
+            {/* Left Side - Document */}
+            <div className="w-1/2 bg-white border-r border-gray-200 flex flex-col">
+              {/* Document Header */}
+              <div className="p-4 border-b border-gray-200 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-gray-800">Document</h2>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                    onClick={downloadChat}
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Download
+                  </Button>
+                </div>
+                <div className="flex items-center gap-3 mt-4 p-3 bg-white rounded-xl border border-gray-200">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <FileText className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-800 text-sm">{uploadedFile.name}</p>
+                    <p className="text-xs text-gray-500">
+                      {(uploadedFile.size / 1024).toFixed(1)} KB
+                    </p>
+                  </div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+              </div>
+              
+              {/* Document Preview */}
+              <div className="flex-1 overflow-auto p-4">
+                <div className="bg-gray-50 rounded-lg p-4 h-full">
+                  <DocumentViewer file={uploadedFile} extractedText={fileContent} />
+                </div>
+              </div>
+            </div>
 
+            {/* Right Side - Chat */}
+            <div className="w-1/2 bg-white flex flex-col">
+              {/* Chat Header */}
+              <div className="p-4 border-b border-gray-200 bg-gray-50">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                    <Bot className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Chat with PDF</h3>
+                    <p className="text-sm text-gray-500">Ask your PDF questions</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Suggested Questions */}
+              {showSuggestions && (
+                <div className="bg-blue-50 border-b border-blue-100 p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-sm font-medium text-blue-800">Suggested questions:</h4>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setShowSuggestions(false)}
+                      className="p-1 h-6 w-6 text-blue-600"
+                    >
+                      <ChevronUp className="h-3 w-3" />
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {documentSuggestions.slice(0, 4).map((suggestion, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setQuestion(suggestion);
+                          handleAskQuestion(suggestion);
+                        }}
+                        className="w-full text-left p-2 text-xs text-blue-700 bg-white rounded-lg border border-blue-200 hover:bg-blue-50 transition-colors"
+                      >
+                        {suggestion} →
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Chat Messages */}
+              <div className="flex-1 overflow-auto p-4 space-y-4">
+                {messages.map((message, index) => (
+                  <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+                      message.role === 'user' 
+                        ? 'bg-blue-500 text-white' 
+                        : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {message.role === 'assistant' ? (
+                        <div 
+                          className="text-sm leading-relaxed"
+                          dangerouslySetInnerHTML={{ __html: formatAIResponse(message.content) }}
+                        />
+                      ) : (
+                        <p className="text-sm leading-relaxed">{message.content}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                
+                {isTyping && (
+                  <div className="flex justify-start">
+                    <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Chat Input */}
+              <div className="p-4 border-t border-gray-200 bg-white">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    placeholder="Hey! Ask me anything about your PDF..."
+                    className="w-full rounded-full border border-gray-300 px-4 py-3 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleAskQuestion();
+                      }
+                    }}
+                  />
+                  <Button
+                    onClick={() => handleAskQuestion()}
+                    disabled={loading || !question.trim()}
+                    size="sm"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-full"
+                  >
+                    <Send className="h-4 w-4 text-white" />
+                  </Button>
+                </div>
+                <p className="text-xs text-gray-500 mt-2 text-center">0/1000</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+        {/* Enhanced Contact Dialog */}
         <Dialog open={showContactDialog} onOpenChange={setShowContactDialog}>
-          <DialogContent className="max-w-sm md:max-w-md mx-4">
+          <DialogContent className="bg-white border border-gray-200">
             <DialogHeader>
-              <DialogTitle>Contact Us</DialogTitle>
-              <DialogDescription>Get in touch with our team for support or feedback.</DialogDescription>
+              <DialogTitle className="text-2xl font-bold text-gray-800">
+                Get in Touch
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Connect with our team for support, feedback, or collaboration opportunities.
+              </DialogDescription>
             </DialogHeader>
-            <div className="space-y-1 md:space-y-2">
-              <a href="mailto:dharunshanmugavel12@gmail.com" className="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-primary/5 transition-smooth text-sm md:text-base">
-                <Mail className="h-4 w-4 text-primary" />
-                <span className="break-all">dharunshanmugavel12@gmail.com</span>
+            <div className="space-y-4">
+              <a 
+                href="mailto:dharunshanmugavel12@gmail.com" 
+                className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 transition-all duration-300 group"
+              >
+                <div className="bg-red-500 p-2 rounded-lg">
+                  <Mail className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800">Email</p>
+                  <p className="text-sm text-gray-600 break-all">dharunshanmugavel12@gmail.com</p>
+                </div>
               </a>
-              <a href="https://www.instagram.com/_havoc_dharun_/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-primary/5 transition-smooth text-sm md:text-base">
-                <Instagram className="h-4 w-4 text-primary" />
-                <span>_havoc_dharun_</span>
+              
+              <a 
+                href="https://www.instagram.com/_havoc_dharun_/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 transition-all duration-300 group"
+              >
+                <div className="bg-pink-500 p-2 rounded-lg">
+                  <Instagram className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800">Instagram</p>
+                  <p className="text-sm text-gray-600">@_havoc_dharun_</p>
+                </div>
               </a>
-              <a href="https://www.linkedin.com/in/dharun-shanmugavel-bb7304315" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-primary/5 transition-smooth text-sm md:text-base">
-                <Linkedin className="h-4 w-4 text-primary" />
-                <span>Dharun Shanmugavel</span>
+              
+              <a 
+                href="https://www.linkedin.com/in/dharun-shanmugavel-bb7304315" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 transition-all duration-300 group"
+              >
+                <div className="bg-blue-500 p-2 rounded-lg">
+                  <Linkedin className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800">LinkedIn</p>
+                  <p className="text-sm text-gray-600">Dharun Shanmugavel</p>
+                </div>
               </a>
             </div>
           </DialogContent>
         </Dialog>
-        <ModelSelector open={showModelDialog} onSelect={handleModelSelect} />
-      </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Dashboard;

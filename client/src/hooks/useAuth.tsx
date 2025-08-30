@@ -22,36 +22,72 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { toast } = useToast();
 
   const signUp = async (email: string, password: string) => {
-    // For now, create a mock user since we don't have authentication backend
-    // In a real app, this would make an API call to your authentication service
-    setUser({ id: 'mock-user', email });
-    
-    toast({
-      title: "Account Created",
-      description: "Welcome to Note Bot AI!",
-    });
-
-    return { error: null };
+    setLoading(true);
+    try {
+      // For now, create a mock user since we don't have authentication backend
+      // In a real app, this would make an API call to your authentication service
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setUser({ id: 'mock-user', email });
+      toast({
+        title: "Account Created",
+        description: "Welcome to Note Bot AI!",
+      });
+      return { error: null };
+    } catch (error) {
+      toast({
+        title: "Error creating account",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+      return { error };
+    } finally {
+      setLoading(false);
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    // Mock sign in
-    setUser({ id: 'mock-user', email });
-    
-    toast({
-      title: "Signed In",
-      description: "Welcome back!",
-    });
-
-    return { error: null };
+    setLoading(true);
+    try {
+      // Mock sign in
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setUser({ id: 'mock-user', email });
+      toast({
+        title: "Signed In",
+        description: "Welcome back!",
+      });
+      return { error: null };
+    } catch (error) {
+      toast({
+        title: "Error signing in",
+        description: "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+      return { error };
+    } finally {
+      setLoading(false);
+    }
   };
 
   const signOut = async () => {
-    setUser(null);
-    toast({
-      title: "Signed Out",
-      description: "Come back soon!",
-    });
+    setLoading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate logout delay
+      setUser(null);
+      toast({
+        title: "Signed Out",
+        description: "Come back soon!",
+      });
+    } catch (error) {
+      toast({
+        title: "Error signing out",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

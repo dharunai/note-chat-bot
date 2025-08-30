@@ -2,8 +2,35 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { callAI } from "./lib/aiClient";
+import { checkPlagiarism } from "./lib/plagiarism";
 import { db } from "./db";
 import { messages } from "@shared/schema";
+
+/**
+ * A robust function to find and parse a JSON object or array from a string.
+ * It first tries to parse the whole string, then falls back to a regex
+ * to extract the JSON part if the initial parse fails.
+ * @param raw The raw string content from the AI response.
+ * @returns The parsed JSON object/array, or null if parsing fails.
+ */
+function robustJSONParse(raw: string): any | null {
+  try {
+    // Ideal case: the entire response is valid JSON
+    return JSON.parse(raw);
+  } catch (e) {
+    // Fallback: find the first '{...}' or '[...]' substring
+    const jsonRegex = /({.*}|\[.*\])/;
+    const match = raw.match(jsonRegex);
+
+    if (match && match[0]) {
+      try {
+        return JSON.parse(match[0]);
+      } catch (parseError) { /* Fall through to return null */ }
+    }
+    console.warn('AI response does not contain a parsable JSON object or array.');
+    return null;
+  }
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // AI Chat Universal - replaces ai-chat-universal function
@@ -189,18 +216,13 @@ Developed by Havoc Dharun
       const result = await callAI(prompt);
       
       // Extract JSON from response
-      const raw = result.content;
-      const jsonStart = raw.indexOf('{');
-      const jsonEnd = raw.lastIndexOf('}') + 1;
-      
-      if (jsonStart === -1 || jsonEnd === 0) {
-        throw new Error('Invalid JSON response from AI');
-      }
-      
-      const jsonStr = raw.slice(jsonStart, jsonEnd);
-      const parsed = JSON.parse(jsonStr);
+      const parsed = robustJSONParse(result.content);
 
-      res.json({
+      if (!parsed) {
+        return res.status(500).json({ error: "AI returned malformed data. Could not parse translation." });
+      }
+
+      return res.json({
         ...parsed,
         provider: result.provider
       });
@@ -226,18 +248,13 @@ Developed by Havoc Dharun
       const result = await callAI(prompt);
       
       // Extract JSON array from response
-      const raw = result.content;
-      const jsonStart = raw.indexOf('[');
-      const jsonEnd = raw.lastIndexOf(']') + 1;
-      
-      if (jsonStart === -1 || jsonEnd === 0) {
-        throw new Error('Invalid JSON response from AI');
-      }
-      
-      const jsonStr = raw.slice(jsonStart, jsonEnd);
-      const cards = JSON.parse(jsonStr);
+      const cards = robustJSONParse(result.content);
 
-      res.json({ 
+      if (!cards || !Array.isArray(cards)) {
+        return res.status(500).json({ error: "AI returned malformed data. Could not parse flashcards." });
+      }
+
+      return res.json({ 
         cards,
         provider: result.provider 
       });
@@ -348,24 +365,17 @@ Text: ${text}`;
       const result = await callAI(prompt);
       
       // Try to extract JSON from response
-      const raw = result.content;
-      const jsonStart = raw.indexOf('{');
-      const jsonEnd = raw.lastIndexOf('}') + 1;
-      
-      if (jsonStart !== -1 && jsonEnd > 0) {
-        try {
-          const jsonStr = raw.slice(jsonStart, jsonEnd);
-          const parsed = JSON.parse(jsonStr);
-          return res.json({
-            ...parsed,
-            provider: result.provider
-          });
-        } catch (parseError) {
-          // If JSON parsing fails, return raw content
-        }
+      const parsed = robustJSONParse(result.content);
+
+      if (parsed) {
+        return res.json({
+          ...parsed,
+          provider: result.provider
+        });
       }
       
-      res.json({ 
+      // Fallback if JSON parsing fails
+      return res.json({ 
         citations: [result.content.trim()],
         suggestions: [],
         provider: result.provider 
@@ -387,42 +397,9 @@ Text: ${text}`;
         return res.status(400).json({ error: 'Missing text' });
       }
 
-      const prompt = `Analyze this text for potential plagiarism indicators. Check for:
-1. Inconsistent writing style
-2. Unusual phrasing or terminology
-3. Lack of original voice
-4. Signs of copy-paste content
-
-Provide a score from 0-100 (0=original, 100=likely plagiarized) and detailed analysis. Respond with JSON: {"score": number, "analysis": "detailed explanation", "suggestions": ["improvement suggestions"]}.
-
-Text: ${text}`;
-
-      const result = await callAI(prompt);
+      const results = await checkPlagiarism(text);
       
-      // Try to extract JSON from response
-      const raw = result.content;
-      const jsonStart = raw.indexOf('{');
-      const jsonEnd = raw.lastIndexOf('}') + 1;
-      
-      if (jsonStart !== -1 && jsonEnd > 0) {
-        try {
-          const jsonStr = raw.slice(jsonStart, jsonEnd);
-          const parsed = JSON.parse(jsonStr);
-          return res.json({
-            ...parsed,
-            provider: result.provider
-          });
-        } catch (parseError) {
-          // If JSON parsing fails, return default response
-        }
-      }
-      
-      res.json({ 
-        score: 25,
-        analysis: result.content.trim(),
-        suggestions: ["Review for originality", "Add more personal insights"],
-        provider: result.provider 
-      });
+      res.json({ results });
     } catch (error: any) {
       console.error('Plagiarism check error:', error);
       res.status(500).json({ 

@@ -1,1 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4 2 7-6.5-4.5L6 20l2-7L2 9h7z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="ocrGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06B6D4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0EA5E9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="3" width="16" height="18" rx="2" fill="url(#ocrGradient)" stroke="white" stroke-width="1"/>
+  <rect x="6" y="6" width="4" height="3" rx="0.5" fill="white" opacity="0.9"/>
+  <rect x="11" y="6" width="6" height="1" rx="0.5" fill="white" opacity="0.9"/>
+  <rect x="11" y="8" width="5" height="1" rx="0.5" fill="white" opacity="0.7"/>
+  <rect x="6" y="11" width="3" height="1" rx="0.5" fill="white" opacity="0.8"/>
+  <rect x="10" y="11" width="7" height="1" rx="0.5" fill="white" opacity="0.8"/>
+  <rect x="6" y="13" width="5" height="1" rx="0.5" fill="white" opacity="0.7"/>
+  <rect x="12" y="13" width="5" height="1" rx="0.5" fill="white" opacity="0.7"/>
+  <rect x="6" y="15" width="4" height="1" rx="0.5" fill="white" opacity="0.6"/>
+  <rect x="11" y="15" width="6" height="1" rx="0.5" fill="white" opacity="0.6"/>
+  <rect x="6" y="17" width="8" height="1" rx="0.5" fill="white" opacity="0.5"/>
+  <circle cx="18" cy="18" r="2" fill="#10B981" stroke="white" stroke-width="1"/>
+  <path d="M17 18l1 1l2-2" stroke="white" stroke-width="1.5" fill="none"/>
+</svg>

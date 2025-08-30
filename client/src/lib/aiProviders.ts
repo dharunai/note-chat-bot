@@ -307,7 +307,7 @@ export async function requestAI(prompt: string, options: {
       
       return { content, provider: provider.name };
 
-    } catch (error) {
+    } catch (error: any) {
       lastError = error as Error;
       const errorMessage = error.message || "Unknown error";
       
