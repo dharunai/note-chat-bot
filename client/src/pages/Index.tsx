@@ -80,7 +80,7 @@ const Index = () => {
   }, {
     title: 'Plagiarism Checker',
     desc: 'Ensure originality.',
-    to: '/tools/plagiarism-check',
+    to: '/tools/plagiarism-checker',
     iconSrc: '/icons/plagiarism.svg',
     alt: 'Plagiarism checker icon'
   }, {

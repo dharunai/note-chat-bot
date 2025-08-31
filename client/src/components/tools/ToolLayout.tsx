@@ -39,13 +39,31 @@ export default function ToolLayout({
       <TopNav />
       <div className="container mx-auto px-4 py-6 md:py-8 max-w-4xl">
         {/* Enhanced Hero Section */}
-        <section className="relative text-center mb-8 md:mb-12 py-8 md:py-12 tool-hero-section rounded-xl md:rounded-2xl">
-          {/* Floating keywords */}
-          {floatingKeywords.map((keyword, index) => (
-            <div key={index} className={`floating-text floating-text-${index + 1}`}>
-              {keyword}
-            </div>
-          ))}
+        <section className="relative text-center mb-6 py-8 md:py-12 tool-hero-section rounded-xl md:rounded-2xl overflow-hidden">
+          {/* Floating keywords - properly distributed */}
+          {floatingKeywords.map((keyword, index) => {
+            const positions = [
+              'top-4 left-6',      // top-left
+              'top-6 right-8',     // top-right  
+              'bottom-6 left-8',   // bottom-left
+              'bottom-4 right-6',  // bottom-right
+              'top-1/2 left-4 -translate-y-1/2',  // center-left
+              'top-1/2 right-4 -translate-y-1/2'  // center-right
+            ];
+            const delays = ['0s', '1s', '2s', '0.5s', '1.5s', '2.5s'];
+            const opacities = ['opacity-60', 'opacity-50', 'opacity-70', 'opacity-40', 'opacity-50', 'opacity-60'];
+            const colors = ['text-primary/70', 'text-accent/70', 'text-primary-glow/70', 'text-accent/80', 'text-primary/60', 'text-accent/60'];
+            
+            return (
+              <div 
+                key={index} 
+                className={`absolute ${positions[index % positions.length]} text-sm font-medium ${colors[index % colors.length]} ${opacities[index % opacities.length]} animate-pulse pointer-events-none select-none whitespace-nowrap`}
+                style={{animationDelay: delays[index % delays.length]}}
+              >
+                {keyword}
+              </div>
+            );
+          })}
 
           <div className="relative z-10">
             <div className="flex items-center justify-center mb-4 animate-fade-in opacity-0 animate-stagger-1">
@@ -56,11 +74,15 @@ export default function ToolLayout({
                 {heroTitle}
               </h1>
             </div>
-            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto animate-fade-in opacity-0 animate-stagger-2">
-              {heroDescription}
-            </p>
           </div>
         </section>
+
+        {/* Description moved outside and below the hero box */}
+        <div className="text-center mb-8">
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto animate-fade-in opacity-0 animate-stagger-2">
+            {heroDescription}
+          </p>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Input Section */}
