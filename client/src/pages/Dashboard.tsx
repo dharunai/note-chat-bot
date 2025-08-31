@@ -31,6 +31,7 @@ const Dashboard = () => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [userName] = useState('User');
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Dynamic suggestions based on document content
@@ -299,9 +300,21 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Sidebar */}
-      <div className="fixed left-0 top-0 w-64 h-full bg-gray-900 text-white p-4 z-10">
-        <div className="flex items-center gap-3 mb-8">
+      {/* Mobile Menu Button */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
+        <Button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="bg-gray-900 hover:bg-gray-800 text-white p-2"
+        >
+          <ChevronDown className={`h-5 w-5 transition-transform ${sidebarOpen ? 'rotate-180' : ''}`} />
+        </Button>
+      </div>
+
+      {/* Sidebar - Hidden on mobile, overlay on mobile when open */}
+      <div className={`fixed left-0 top-0 w-64 h-full bg-gray-900 text-white p-4 z-40 transition-transform duration-300 ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}>
+        <div className="flex items-center gap-3 mb-8 mt-12 md:mt-0">
           <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
             <Bot className="h-5 w-5 text-white" />
           </div>
@@ -367,27 +380,29 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 h-screen bg-gray-50 overflow-hidden">
+      <div className={`h-screen bg-gray-50 overflow-hidden transition-all duration-300 ${
+        sidebarOpen ? 'ml-0 md:ml-64' : 'ml-0 md:ml-64'
+      }`}>
         {!uploadedFile ? (
           <div className="flex flex-col items-center justify-center min-h-screen p-8">
             <div className="max-w-2xl w-full text-center">
-              <div className="mb-8">
-                <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Upload className="h-8 w-8 text-blue-600" />
+              <div className="mb-6 md:mb-8">
+                <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Upload className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+                <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2">
                   Upload your document
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-sm md:text-base text-gray-600 px-4 md:px-0">
                   Select a PDF, DOCX, or TXT file to start analyzing
                 </p>
               </div>
               
               {/* File Upload Zone */}
-              <div 
-                className={`border-2 border-dashed rounded-2xl p-8 transition-all duration-300 cursor-pointer ${
-                  isDragOver 
-                    ? 'border-blue-500 bg-blue-50 scale-105' 
+              <div
+                className={`border-2 border-dashed rounded-xl md:rounded-2xl p-4 md:p-8 transition-all duration-300 cursor-pointer ${
+                  isDragOver
+                    ? 'border-blue-500 bg-blue-50 scale-105'
                     : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
                 }`}
                 onDrop={handleDrop}
@@ -399,13 +414,13 @@ const Dashboard = () => {
                 onClick={() => fileInputRef.current?.click()}
               >
                 <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
-                    <FileText className="h-6 w-6 text-gray-500" />
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-lg md:rounded-xl flex items-center justify-center mb-3 md:mb-4">
+                    <FileText className="h-5 w-5 md:h-6 md:w-6 text-gray-500" />
                   </div>
-                  <p className="text-lg font-medium text-gray-700 mb-1">
+                  <p className="text-base md:text-lg font-medium text-gray-700 mb-1">
                     Choose a file or drag it here
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-xs md:text-sm text-gray-500 text-center">
                     PDF, DOCX, TXT up to 10MB
                   </p>
                 </div>
@@ -421,19 +436,19 @@ const Dashboard = () => {
               
               {/* Upload Animation */}
               {showUploadAnimation && (
-                <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <FileText className="h-4 w-4 text-blue-600" />
+                <div className="mt-4 md:mt-8 bg-white rounded-lg md:rounded-xl p-4 md:p-6 shadow-sm border">
+                  <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+                    <div className="w-6 h-6 md:w-8 md:h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <FileText className="h-3 w-3 md:h-4 md:w-4 text-blue-600" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-gray-800">Uploading document...</p>
-                      <p className="text-sm text-gray-500">{uploadedFile?.name}</p>
+                      <p className="font-medium text-gray-800 text-sm md:text-base">Uploading document...</p>
+                      <p className="text-xs md:text-sm text-gray-500">{uploadedFile?.name}</p>
                     </div>
-                    <div className="text-sm font-medium text-blue-600">{uploadProgress}%</div>
+                    <div className="text-xs md:text-sm font-medium text-blue-600">{uploadProgress}%</div>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
+                    <div
                       className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500 ease-out"
                       style={{ width: `${uploadProgress}%` }}
                     ></div>
@@ -443,75 +458,91 @@ const Dashboard = () => {
             </div>
           </div>
         ) : (
-          <div className="flex h-screen">
-            {/* Left Side - Document */}
-            <div className="w-1/2 bg-white border-r border-gray-200 flex flex-col">
+          <div className="flex overflow-x-auto snap-x snap-mandatory md:overflow-x-visible h-screen">
+            {/* Mobile: Horizontal Swipe Layout, Desktop: Side-by-side */}
+            {/* Document Panel */}
+            <div className="snap-start w-screen md:w-1/2 bg-white border-r border-gray-200 flex flex-col flex-shrink-0">
               {/* Document Header */}
-              <div className="p-4 border-b border-gray-200 bg-gray-50">
+              <div className="p-3 md:p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gray-800">Document</h2>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-base md:text-lg font-semibold text-gray-800">Document</h2>
+                    <div className="md:hidden flex items-center gap-1 text-xs text-gray-500">
+                      <span>•</span>
+                      <span>Swipe right for chat</span>
+                    </div>
+                  </div>
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                    className="text-blue-600 border-blue-200 hover:bg-blue-50 text-xs md:text-sm px-2 md:px-3"
                     onClick={downloadChat}
                   >
-                    <Download className="h-4 w-4 mr-2" />
-                    Download
+                    <Download className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+                    <span className="hidden sm:inline">Download</span>
                   </Button>
                 </div>
-                <div className="flex items-center gap-3 mt-4 p-3 bg-white rounded-xl border border-gray-200">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-blue-600" />
+                <div className="flex items-center gap-2 md:gap-3 mt-3 md:mt-4 p-2 md:p-3 bg-white rounded-lg md:rounded-xl border border-gray-200">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <FileText className="h-4 w-4 md:h-5 md:w-5 text-blue-600" />
                   </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-800 text-sm">{uploadedFile.name}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-800 text-xs md:text-sm truncate">{uploadedFile.name}</p>
                     <p className="text-xs text-gray-500">
                       {(uploadedFile.size / 1024).toFixed(1)} KB
                     </p>
                   </div>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div className="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full"></div>
                 </div>
               </div>
               
               {/* Document Preview */}
-              <div className="flex-1 overflow-auto p-4">
-                <div className="bg-gray-50 rounded-lg p-4 h-full">
+              <div className="flex-1 overflow-auto p-3 md:p-4">
+                <div className="bg-gray-50 rounded-lg p-3 md:p-4 h-full">
                   <DocumentViewer file={uploadedFile} extractedText={fileContent} />
                 </div>
               </div>
             </div>
 
-            {/* Right Side - Chat */}
-            <div className="w-1/2 bg-white flex flex-col">
+            {/* Chat Panel */}
+            <div className="snap-start w-screen md:w-1/2 bg-white flex flex-col flex-shrink-0 border-t md:border-t-0 md:border-l border-gray-200">
               {/* Chat Header */}
-              <div className="p-4 border-b border-gray-200 bg-gray-50">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <Bot className="h-4 w-4 text-white" />
+              <div className="p-3 md:p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                    <Bot className="h-3 w-3 md:h-4 md:w-4 text-white" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-800">Chat with PDF</h3>
-                    <p className="text-sm text-gray-500">Ask your PDF questions</p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-gray-800 text-sm md:text-base truncate">Chat with PDF</h3>
+                      <div className="md:hidden flex items-center gap-1 text-xs text-gray-500">
+                        <span>•</span>
+                        <span>Swipe left for document</span>
+                      </div>
+                    </div>
+                    <p className="text-xs md:text-sm text-gray-500 truncate">Ask your PDF questions</p>
                   </div>
                 </div>
               </div>
               
               {/* Suggested Questions */}
               {showSuggestions && (
-                <div className="bg-blue-50 border-b border-blue-100 p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-sm font-medium text-blue-800">Suggested questions:</h4>
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-b border-blue-100 p-2 md:p-4">
+                  <div className="flex items-center justify-between mb-2 md:mb-4">
+                    <div className="flex items-center gap-2">
+                      <Lightbulb className="h-4 w-4 text-blue-600" />
+                      <h4 className="text-sm font-medium text-blue-800">Suggested questions:</h4>
+                    </div>
                     <Button
                       size="sm"
                       variant="ghost"
                       onClick={() => setShowSuggestions(false)}
-                      className="p-1 h-6 w-6 text-blue-600"
+                      className="p-1 h-6 w-6 text-blue-600 hover:bg-blue-100"
                     >
                       <ChevronUp className="h-3 w-3" />
                     </Button>
                   </div>
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-1 gap-2">
                     {documentSuggestions.slice(0, 4).map((suggestion, index) => (
                       <button
                         key={index}
@@ -519,9 +550,12 @@ const Dashboard = () => {
                           setQuestion(suggestion);
                           handleAskQuestion(suggestion);
                         }}
-                        className="w-full text-left p-2 text-xs text-blue-700 bg-white rounded-lg border border-blue-200 hover:bg-blue-50 transition-colors"
+                        className="w-full text-left p-2 md:p-3 text-xs md:text-sm text-blue-700 bg-white rounded-lg md:rounded-xl border border-blue-200 hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow-md group"
                       >
-                        {suggestion} →
+                        <div className="flex items-center gap-2">
+                          <span className="text-blue-500 group-hover:text-blue-600 text-sm">💡</span>
+                          <span className="leading-relaxed text-left">{suggestion}</span>
+                        </div>
                       </button>
                     ))}
                   </div>
@@ -529,33 +563,51 @@ const Dashboard = () => {
               )}
               
               {/* Chat Messages */}
-              <div className="flex-1 overflow-auto p-4 space-y-4">
+              <div className="flex-1 overflow-auto p-2 md:p-4 space-y-3 md:space-y-6">
                 {messages.map((message, index) => (
-                  <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[85%] rounded-2xl px-4 py-3 ${
-                      message.role === 'user' 
-                        ? 'bg-blue-500 text-white' 
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
+                  <div key={index} className={`flex items-start gap-2 md:gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'} w-full`}>
+                    {/* Bot Avatar - Left Side */}
+                    {message.role === 'assistant' && (
+                      <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <Bot className="h-3.5 w-3.5 md:h-4 md:w-4 text-white" />
+                      </div>
+                    )}
+
+                    {/* Message Bubble */}
+                    <div className={`max-w-[80%] xs:max-w-[75%] sm:max-w-[70%] md:max-w-[65%] ${
+                      message.role === 'user'
+                        ? 'bg-blue-500 text-white rounded-2xl rounded-br-md ml-auto'
+                        : 'bg-gray-100 text-gray-800 rounded-2xl rounded-bl-md mr-auto'
+                    } px-3 py-2 md:px-4 md:py-3 shadow-sm`}>
                       {message.role === 'assistant' ? (
-                        <div 
-                          className="text-sm leading-relaxed"
+                        <div
+                          className="text-sm leading-relaxed prose prose-sm max-w-none"
                           dangerouslySetInnerHTML={{ __html: formatAIResponse(message.content) }}
                         />
                       ) : (
                         <p className="text-sm leading-relaxed">{message.content}</p>
                       )}
                     </div>
+
+                    {/* User Avatar - Right Side */}
+                    {message.role === 'user' && (
+                      <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <User className="h-3.5 w-3.5 md:h-4 md:w-4 text-white" />
+                      </div>
+                    )}
                   </div>
                 ))}
-                
+
                 {isTyping && (
-                  <div className="flex justify-start">
-                    <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                  <div className="flex items-start gap-2 md:gap-3 justify-start w-full">
+                    <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <Bot className="h-3.5 w-3.5 md:h-4 md:w-4 text-white" />
+                    </div>
+                    <div className="bg-gray-100 rounded-2xl rounded-bl-md px-3 py-2 md:px-4 md:py-3 shadow-sm mr-auto">
                       <div className="flex items-center gap-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
+                        <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
+                        <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
+                        <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
                       </div>
                     </div>
                   </div>
@@ -563,14 +615,17 @@ const Dashboard = () => {
               </div>
               
               {/* Chat Input */}
-              <div className="p-4 border-t border-gray-200 bg-white">
+              <div className="p-3 md:p-4 border-t border-gray-200 bg-white">
                 <div className="relative">
+                  <div className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                    <MessageSquare className="h-4 w-4 md:h-5 md:w-5" />
+                  </div>
                   <input
                     type="text"
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
-                    placeholder="Hey! Ask me anything about your PDF..."
-                    className="w-full rounded-full border border-gray-300 px-4 py-3 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Ask me anything about your document..."
+                    className="w-full rounded-full border border-gray-300 pl-10 md:pl-12 pr-12 md:pr-12 py-3 md:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
@@ -582,12 +637,22 @@ const Dashboard = () => {
                     onClick={() => handleAskQuestion()}
                     disabled={loading || !question.trim()}
                     size="sm"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-full"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 md:h-8 md:w-8 p-0 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
                   >
-                    <Send className="h-4 w-4 text-white" />
+                    <Send className="h-3 w-3 md:h-4 md:w-4 text-white" />
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500 mt-2 text-center">0/1000</p>
+                <div className="flex items-center justify-between mt-2">
+                  <p className="text-xs text-gray-500">
+                    {question.length}/1000
+                  </p>
+                  <div className="hidden sm:flex items-center gap-1 text-xs text-gray-400">
+                    <span>Press Enter to send</span>
+                  </div>
+                  <div className="sm:hidden text-xs text-gray-400">
+                    <span>Tap send</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

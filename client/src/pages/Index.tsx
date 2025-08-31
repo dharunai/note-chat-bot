@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import TopNav from '@/components/navigation/TopNav';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import heroRobot from '@/assets/hero-robot.webp';
+import heroRobot from '@/assets/removed-bg.jpg';
 import { useMemo, lazy, Suspense } from 'react';
 const Index = () => {
   const tools = [{
@@ -138,29 +138,29 @@ const Index = () => {
     iconSrc: '/icons/poster.svg',
     alt: 'Poster maker icon'
   }] as const;
-  return <div className="min-h-screen gradient-hero">
+  return <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       <TopNav />
       <main className="container mx-auto px-4 py-8 md:py-16">
         {/* Hero Section - Enhanced with animations */}
-        <section className="relative overflow-hidden rounded-2xl md:rounded-3xl gradient-hero shadow-elegant mb-12 md:mb-20 border border-border/20 particles-bg">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-50" />
+        <section className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-gradient-to-br from-purple-50 to-white dark:from-gray-900 dark:to-gray-800 shadow-xl mb-12 md:mb-20 border border-purple-200/50 dark:border-purple-800/50">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-100/30 via-transparent to-purple-100/30 dark:from-purple-900/30 dark:via-transparent dark:to-purple-900/30 opacity-50" />
           <div className="relative container mx-auto px-4 py-12 md:py-16 lg:py-24">
             <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
               {/* Left: Copy */}
               <div className="animate-slide-in-left opacity-0">
-                <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-4 md:mb-6 gradient-text-animated leading-tight text-left font-bold tracking-tight max-w-4xl">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-4 md:mb-6 text-purple-600 dark:text-purple-300 leading-tight text-left font-bold tracking-tight max-w-4xl">
                   Click, Convert, Create, Conquer, Chat — Notebot AI for Everything
                 </h1>
-                <p className="text-base md:text-lg lg:text-xl text-muted-foreground mb-6 md:mb-8 max-w-2xl leading-relaxed font-medium">
+                <p className="text-base md:text-lg lg:text-xl text-purple-500 dark:text-purple-400 mb-6 md:mb-8 max-w-2xl leading-relaxed font-medium">
                   From files to ideas, from PDFs to posters — Note Bot AI turns your work into wow in seconds.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-                  <Button size="default" className="px-6 md:px-8 py-3 md:py-4 text-base gradient-primary shadow-glow hover-glow transition-all duration-300 font-semibold group animate-pulse-glow" asChild>
+                  <Button size="default" className="px-6 md:px-8 py-3 md:py-4 text-base bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-500 text-white shadow-lg transition-all duration-300 font-semibold group" asChild>
                     <Link to="/dashboard" aria-label="Chat with your notes">
                       <span className="group-hover:scale-105 transition-transform duration-200">Chat with Your Notes</span>
                     </Link>
                   </Button>
-                  <Button size="default" className="px-6 md:px-8 py-3 md:py-4 text-base gradient-secondary shadow-glow hover-glow transition-all duration-300 font-semibold group animate-pulse-glow border-0" asChild>
+                  <Button size="default" className="px-6 md:px-8 py-3 md:py-4 text-base bg-purple-500 hover:bg-purple-600 dark:bg-purple-500 dark:hover:bg-purple-400 text-white shadow-lg transition-all duration-300 font-semibold group border-0" asChild>
                     <a href="#tools" aria-label="Explore all tools">
                       <span className="group-hover:scale-105 transition-transform duration-200">Explore All Tools</span>
                     </a>
@@ -170,16 +170,14 @@ const Index = () => {
 
               {/* Right: Visual */}
               <div className="relative flex items-center justify-center animate-slide-in-right opacity-0">
-                <div className="absolute -inset-6 md:-inset-10 rounded-2xl md:rounded-[3rem] opacity-40 glow-ellipse-purple float" aria-hidden="true" />
                 <div className="relative hover-tilt transition-transform duration-500">
-                  <img 
-                    src={heroRobot} 
-                    alt="Notebot AI hero illustration" 
-                    loading="lazy" 
-                    decoding="async" 
-                    className="relative w-full h-auto rounded-2xl md:rounded-3xl bg-gradient-to-br from-card to-card/80 shadow-elegant object-contain mx-auto p-3 md:p-4 border border-border/30" 
+                  <img
+                    src={heroRobot}
+                    alt="Notebot AI hero illustration"
+                    loading="lazy"
+                    decoding="async"
+                    className="relative w-full h-auto rounded-2xl md:rounded-3xl object-contain mx-auto"
                   />
-                  <div className="absolute inset-0 rounded-2xl md:rounded-3xl bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500" />
                 </div>
               </div>
             </div>
@@ -188,7 +186,7 @@ const Index = () => {
 
         {/* Tools Grid */}
         <section id="tools" aria-label="Tools grid" className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
              {tools.map(({
             title,
             desc,
@@ -206,14 +204,13 @@ const Index = () => {
                   
                   <CardHeader className="relative z-10 p-5 md:p-6">
                     <div className="flex items-start gap-4 mb-3 md:mb-4">
-                      <div className="relative rounded-xl bg-gradient-to-br from-primary/15 to-primary/10 p-3 md:p-3.5 flex-shrink-0 group-hover:from-primary/25 group-hover:to-primary/15 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                        <div className="absolute inset-0 rounded-xl bg-primary/20 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
-                        <img 
-                          src={iconSrc} 
-                          alt={alt} 
-                          className="relative h-5 w-5 md:h-6 md:w-6 object-contain filter group-hover:brightness-110 transition-all duration-300" 
-                          loading="lazy" 
-                          decoding="async" 
+                      <div className="relative rounded-xl p-3 md:p-3.5 flex-shrink-0 transition-all duration-300 group-hover:scale-105">
+                        <img
+                          src={iconSrc}
+                          alt={alt}
+                          className="relative h-5 w-5 md:h-6 md:w-6 object-contain filter group-hover:brightness-110 transition-all duration-300"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -222,7 +219,7 @@ const Index = () => {
                         </CardTitle>
                       </div>
                     </div>
-                    <CardDescription className="text-sm md:text-sm leading-relaxed text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300 font-medium break-words">
+                    <CardDescription className="text-sm md:text-base text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300 leading-relaxed">
                       {desc}
                     </CardDescription>
                     
