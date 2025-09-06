@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="powerpointGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D97706;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B45309;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main document shape -->
+  <path d="M6 2h8l4 4v14a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z" fill="white" stroke="#D97706" stroke-width="1"/>
+  
+  <!-- Folded corner -->
+  <path d="M14 2v4h4" fill="none" stroke="#D97706" stroke-width="1"/>
+  <path d="M14 6h4l-4-4z" fill="#FEF3C7"/>
+  
+  <!-- PowerPoint P logo -->
+  <rect x="4" y="3" width="8" height="8" rx="1" fill="url(#powerpointGradient)"/>
+  <text x="8" y="8.5" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="white" text-anchor="middle">P</text>
+  
+  <!-- Slide preview -->
+  <rect x="7" y="13" width="10" height="6" rx="1" fill="#FEF3C7" stroke="#D97706" stroke-width="0.5"/>
+  <circle cx="9" cy="15" r="0.8" fill="#D97706"/>
+  <rect x="11" y="14.5" width="5" height="0.5" fill="#D97706"/>
+  <rect x="11" y="16" width="3" height="0.5" fill="#D97706"/>
+</svg>

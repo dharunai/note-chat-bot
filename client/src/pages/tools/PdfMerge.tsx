@@ -58,6 +58,13 @@ export default function PdfMerge() {
             </div>
           </CardContent>
         </Card>
+        
+        {/* Footer */}
+        <div className="text-center mt-8 pt-6 border-t border-slate-200">
+          <p className="text-sm text-muted-foreground">
+            Notebot AI © 2025 All rights reserved
+          </p>
+        </div>
       </main>
     </div>
   );

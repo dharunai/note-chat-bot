@@ -7,133 +7,111 @@ import { useMemo, lazy, Suspense } from 'react';
 const Index = () => {
   const tools = [{
     title: 'Image → PDF',
-    desc: 'Combine images into a single PDF.',
     to: '/tools/image-to-pdf',
-    iconSrc: '/icons/image.svg',
+    iconSrc: '/icons/image-to-pdf.svg',
     alt: 'Image to PDF icon'
   }, {
     title: 'Text → PDF',
-    desc: 'Turn notes into clean PDFs.',
     to: '/tools/text-to-pdf',
     iconSrc: '/icons/text.svg',
     alt: 'Text to PDF icon'
   }, {
     title: 'PDF Merge',
-    desc: 'Combine multiple PDFs quickly.',
     to: '/tools/pdf-merge',
-    iconSrc: '/icons/pdf.svg',
+    iconSrc: '/icons/pdf-merge.svg',
     alt: 'PDF merge icon'
   }, {
     title: 'PDF Split',
-    desc: 'Split pages into separate PDFs.',
     to: '/tools/pdf-split',
     iconSrc: '/icons/pdf.svg',
     alt: 'PDF split icon'
   }, {
     title: 'PDF → Word',
-    desc: 'Convert PDFs to editable docs.',
     to: '/tools/pdf-to-word',
     iconSrc: '/icons/word.svg',
     alt: 'PDF to Word icon'
   }, {
     title: 'Excel → PDF',
-    desc: 'Make spreadsheets easy to read.',
     to: '/tools/excel-to-pdf',
     iconSrc: '/icons/excel.svg',
     alt: 'Excel to PDF icon'
   }, {
     title: 'PDF Compressor',
-    desc: 'Reduce PDF size smartly.',
     to: '/tools/pdf-compress',
-    iconSrc: '/icons/pdf.svg',
+    iconSrc: '/icons/pdf-compress.svg',
     alt: 'PDF compressor icon'
   }, {
     title: 'JPG ↔ PDF',
-    desc: 'Images to PDFs and back.',
     to: '/tools/jpg-to-pdf',
     iconSrc: '/icons/image.svg',
     alt: 'JPG and PDF icon'
   }, {
     title: 'PDF ↔ JPG',
-    desc: 'Export pages as images.',
     to: '/tools/pdf-to-jpg',
     iconSrc: '/icons/image.svg',
     alt: 'PDF and JPG icon'
   }, {
     title: 'Grammar Checker',
-    desc: 'Fix errors, improve clarity.',
     to: '/tools/grammar',
     iconSrc: '/icons/grammar.svg',
     alt: 'Grammar checker icon'
   }, {
     title: 'AI Essay Writer',
-    desc: 'Get help with academic writing.',
     to: '/tools/essay-writer',
-    iconSrc: '/icons/essay.svg',
+    iconSrc: '/icons/ai-writer.svg',
     alt: 'Essay writer icon'
   }, {
     title: 'Citation Generator',
-    desc: 'APA, MLA, Chicago formats.',
     to: '/tools/citation-generator',
     iconSrc: '/icons/citation.svg',
     alt: 'Citation generator icon'
   }, {
     title: 'Plagiarism Checker',
-    desc: 'Ensure originality.',
     to: '/tools/plagiarism-checker',
-    iconSrc: '/icons/plagiarism.svg',
+    iconSrc: '/icons/plagiarism-check.svg',
     alt: 'Plagiarism checker icon'
   }, {
     title: 'Paraphrasing Tool',
-    desc: 'Rewrite with better clarity.',
-    to: '/tools/paraphrase',
-    iconSrc: '/icons/paraphrase.svg',
+    to: '/tools/paraphrasing-tool',
+    iconSrc: '/icons/paraphrase-new.svg',
     alt: 'Paraphrasing tool icon'
   }, {
     title: 'Summarizer',
-    desc: 'Condense long texts.',
     to: '/tools/summarizer',
     iconSrc: '/icons/summarize.svg',
     alt: 'Summarizer icon'
   }, {
     title: 'Translator',
-    desc: 'Translate to 20+ languages.',
     to: '/tools/translator',
     iconSrc: '/icons/translator.svg',
     alt: 'Translator icon'
   }, {
     title: 'Flashcard Creator',
-    desc: 'Turn notes into Q&A cards.',
     to: '/tools/flashcard-creator',
     iconSrc: '/icons/flashcards.svg',
     alt: 'Flashcard creator icon'
   }, {
     title: 'Image Compressor',
-    desc: 'Reduce file size without quality loss.',
     to: '/tools/image-compress',
     iconSrc: '/icons/image.svg',
     alt: 'Image compressor icon'
   }, {
     title: 'Background Remover',
-    desc: 'Clean images for presentations.',
     to: '/tools/remove-bg',
     iconSrc: '/icons/magic-wand.svg',
     alt: 'Background remover icon'
   }, {
     title: 'Resume Builder',
-    desc: 'Create a job-ready resume.',
     to: '/tools/resume',
     iconSrc: '/icons/resume.svg',
     alt: 'Resume builder icon'
   }, {
     title: 'OCR (Handwriting → Text)',
-    desc: 'Scan and digitize notes.',
     to: '/tools/ocr-tool',
     iconSrc: '/icons/ocr.svg',
     alt: 'OCR icon'
   }, {
     title: 'Poster / Flyer Maker',
-    desc: 'Design eye-catching posters.',
     to: '/tools/flyer-creator',
     iconSrc: '/icons/poster.svg',
     alt: 'Poster maker icon'
@@ -189,7 +167,6 @@ const Index = () => {
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
              {tools.map(({
             title,
-            desc,
             to,
             iconSrc,
             alt
@@ -208,7 +185,7 @@ const Index = () => {
                         <img
                           src={iconSrc}
                           alt={alt}
-                          className="h-8 w-8 md:h-10 md:w-10 object-contain filter group-hover:brightness-110 group-hover:scale-110 transition-all duration-300"
+                          className="h-10 w-10 md:h-12 md:w-12 object-contain filter group-hover:brightness-110 group-hover:scale-110 transition-all duration-300"
                           loading="lazy"
                           decoding="async"
                         />
@@ -219,9 +196,6 @@ const Index = () => {
                         </CardTitle>
                       </div>
                     </div>
-                    <CardDescription className="text-sm md:text-base text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300 leading-relaxed">
-                      {desc}
-                    </CardDescription>
                     
                     {/* Subtle gradient overlay on hover */}
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-glow to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

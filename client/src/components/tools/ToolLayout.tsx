@@ -128,6 +128,13 @@ export default function ToolLayout({
             </CardContent>
           </Card>
         </div>
+        
+        {/* Footer */}
+        <div className="text-center mt-8 pt-6 border-t border-border">
+          <p className="text-sm text-muted-foreground">
+            Notebot AI © 2025 All rights reserved
+          </p>
+        </div>
       </div>
     </div>
   );

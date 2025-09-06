@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#111827;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- AI Chip -->
+  <rect x="5" y="5" width="14" height="14" rx="2" fill="url(#aiGradient)" stroke="white" stroke-width="1"/>
+  
+  <!-- Circuit pattern -->
+  <rect x="7" y="7" width="10" height="10" rx="1" fill="#1F2937" stroke="#6B7280" stroke-width="0.5"/>
+  
+  <!-- AI face -->
+  <circle cx="10" cy="11" r="1" fill="white"/>
+  <circle cx="14" cy="11" r="1" fill="white"/>
+  <path d="M10 14h4" stroke="white" stroke-width="1" stroke-linecap="round"/>
+  
+  <!-- Circuit lines -->
+  <line x1="8" y1="9" x2="16" y2="9" stroke="#6B7280" stroke-width="0.5"/>
+  <line x1="8" y1="15" x2="16" y2="15" stroke="#6B7280" stroke-width="0.5"/>
+  <line x1="9" y1="7" x2="9" y2="17" stroke="#6B7280" stroke-width="0.5"/>
+  <line x1="15" y1="7" x2="15" y2="17" stroke="#6B7280" stroke-width="0.5"/>
+  
+  <!-- AI label -->
+  <text x="12" y="22" font-family="Arial, sans-serif" font-size="3" font-weight="bold" fill="#374151" text-anchor="middle">AI</text>
+  
+  <!-- Writing indicator -->
+  <circle cx="18" cy="6" r="2" fill="#10B981"/>
+  <path d="M17 6l0.5 0.5l1-1" stroke="white" stroke-width="1" fill="none" stroke-linecap="round"/>
+</svg>

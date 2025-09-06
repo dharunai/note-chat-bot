@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="docGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#111827;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Documents stack -->
+  <rect x="3" y="4" width="10" height="14" rx="1" fill="white" stroke="url(#docGradient)" stroke-width="1"/>
+  <rect x="5" y="2" width="10" height="14" rx="1" fill="white" stroke="url(#docGradient)" stroke-width="1"/>
+  
+  <!-- Document lines -->
+  <line x1="7" y1="5" x2="13" y2="5" stroke="#6B7280" stroke-width="0.5"/>
+  <line x1="7" y1="7" x2="12" y2="7" stroke="#6B7280" stroke-width="0.5"/>
+  <line x1="7" y1="9" x2="13" y2="9" stroke="#6B7280" stroke-width="0.5"/>
+  <line x1="7" y1="11" x2="11" y2="11" stroke="#6B7280" stroke-width="0.5"/>
+  
+  <!-- Magnifying glass -->
+  <circle cx="17" cy="15" r="4" fill="none" stroke="url(#docGradient)" stroke-width="2"/>
+  <circle cx="17" cy="15" r="2.5" fill="none" stroke="#6B7280" stroke-width="1"/>
+  <path d="M19.5 17.5l2 2" stroke="url(#docGradient)" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Check mark in magnifying glass -->
+  <path d="M15.5 15l1 1l2-2" stroke="#10B981" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -5,28 +5,28 @@ import { Button } from "@/components/ui/button";
 import TopNav from "@/components/navigation/TopNav";
 
 const tools = [
-  { title: "Image → PDF", desc: "Convert images into a single PDF.", to: "/tools/image-to-pdf", iconPath: "/icons/image.svg" },
-  { title: "Text → PDF", desc: "Turn notes into a clean PDF.", to: "/tools/text-to-pdf", iconPath: "/icons/text.svg" },
-  { title: "Word → PDF", desc: "Save DOCX as PDF.", to: "/tools/word-to-pdf", iconPath: "/icons/word.svg" },
-  { title: "PDF → Word", desc: "Convert PDFs back to DOCX.", to: "/tools/pdf-to-word", iconPath: "/icons/pdf.svg" },
-  { title: "PDF Merge", desc: "Combine multiple PDFs.", to: "/tools/pdf-merge", iconPath: "/icons/pdf.svg" },
-  { title: "PDF Split", desc: "Split a PDF by pages.", to: "/tools/pdf-split", iconPath: "/icons/pdf.svg" },
-  { title: "PDF Compressor", desc: "Reduce PDF size.", to: "/tools/pdf-compress", iconPath: "/icons/pdf.svg" },
-  { title: "Excel → PDF", desc: "Export XLSX to PDF.", to: "/tools/excel-to-pdf", iconPath: "/icons/excel.svg" },
-  { title: "Image Compressor", desc: "Resize & compress images.", to: "/tools/image-compress", iconPath: "/icons/image.svg" },
-  { title: "Plagiarism Checker", desc: "Check for originality.", to: "/tools/plagiarism-checker", iconPath: "/icons/plagiarism.svg" },
-  { title: "AI Essay Writer", desc: "Drafts and outlines.", to: "/tools/essay-writer", iconPath: "/icons/essay.svg" },
-  { title: "Grammar Checker", desc: "Fix grammar & spelling.", to: "/tools/grammar", iconPath: "/icons/grammar.svg" },
-  { title: "Citation Generator", desc: "APA, MLA, Chicago.", to: "/tools/citation-generator", iconPath: "/icons/citation.svg" },
-  { title: "Paraphrasing Tool", desc: "Improve clarity.", to: "/tools/paraphrase", iconPath: "/icons/paraphrase.svg" },
-  { title: "Summarizer", desc: "Condense long text.", to: "/tools/summarizer", iconPath: "/icons/summarize.svg" },
-  { title: "Translator", desc: "Translate to 20+ languages.", to: "/tools/translator", iconPath: "/icons/translator.svg" },
-  { title: "Flashcard Creator", desc: "Turn notes into Q&A.", to: "/tools/flashcard-creator", iconPath: "/icons/flashcards.svg" },
-  { title: "Image Background Remover", desc: "Remove backgrounds in 1 click (Eremove.bg)", to: "/tools/remove-bg", iconPath: "/icons/magic-wand.svg" },
-  { title: "Resume Builder", desc: "Live preview, templates, export", to: "/tools/resume-builder", iconPath: "/icons/resume.svg" },
-  { title: "Presentation Maker", desc: "Slides from notes.", to: "/tools/presentation-creator", iconPath: "/icons/presentation.svg" },
-  { title: "Poster / Flyer", desc: "Generate designs.", to: "/tools/flyer-creator", iconPath: "/icons/poster.svg" },
-  { title: "OCR (Handwriting → Text)", desc: "OCR handwritten notes.", to: "/tools/ocr-tool", iconPath: "/icons/ocr.svg" },
+  { title: "Image → PDF", to: "/tools/image-to-pdf", iconPath: "/icons/image-to-pdf.svg" },
+  { title: "Text → PDF", to: "/tools/text-to-pdf", iconPath: "/icons/text.svg" },
+  { title: "Word → PDF", to: "/tools/word-to-pdf", iconPath: "/icons/word.svg" },
+  { title: "PDF → Word", to: "/tools/pdf-to-word", iconPath: "/icons/pdf.svg" },
+  { title: "PDF Merge", to: "/tools/pdf-merge", iconPath: "/icons/pdf-merge.svg" },
+  { title: "PDF Split", to: "/tools/pdf-split", iconPath: "/icons/pdf.svg" },
+  { title: "PDF Compressor", to: "/tools/pdf-compress", iconPath: "/icons/pdf-compress.svg" },
+  { title: "Excel → PDF", to: "/tools/excel-to-pdf", iconPath: "/icons/excel.svg" },
+  { title: "Image Compressor", to: "/tools/image-compress", iconPath: "/icons/image.svg" },
+  { title: "Plagiarism Checker", to: "/tools/plagiarism-checker", iconPath: "/icons/plagiarism-check.svg" },
+  { title: "AI Essay Writer", to: "/tools/essay-writer", iconPath: "/icons/ai-writer.svg" },
+  { title: "Grammar Checker", to: "/tools/grammar", iconPath: "/icons/grammar.svg" },
+  { title: "Citation Generator", to: "/tools/citation-generator", iconPath: "/icons/citation.svg" },
+  { title: "Paraphrasing Tool", to: "/tools/paraphrase", iconPath: "/icons/paraphrase-new.svg" },
+  { title: "Summarizer", to: "/tools/summarizer", iconPath: "/icons/summarize.svg" },
+  { title: "Translator", to: "/tools/translator", iconPath: "/icons/translator.svg" },
+  { title: "Flashcard Creator", to: "/tools/flashcard-creator", iconPath: "/icons/flashcards.svg" },
+  { title: "Image Background Remover", to: "/tools/remove-bg", iconPath: "/icons/magic-wand.svg" },
+  { title: "Resume Builder", to: "/tools/resume-builder", iconPath: "/icons/resume.svg" },
+  { title: "Presentation Maker", to: "/tools/presentation-creator", iconPath: "/icons/powerpoint.svg" },
+  { title: "Poster / Flyer", to: "/tools/flyer-creator", iconPath: "/icons/poster.svg" },
+  { title: "OCR (Handwriting → Text)", to: "/tools/ocr-tool", iconPath: "/icons/ocr.svg" },
 ];
 
 const FeatureHub = () => {
@@ -47,7 +47,7 @@ const FeatureHub = () => {
         </header>
 
         <section aria-label="Tools" className="grid gap-5 md:gap-6 lg:gap-7 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {tools.map(({ title, desc, to, iconPath }, index) => (
+          {tools.map(({ title, to, iconPath }, index) => (
             <Link 
               key={title} 
               to={to} 
@@ -63,7 +63,7 @@ const FeatureHub = () => {
                       <img 
                         src={iconPath} 
                         alt={`${title} icon`} 
-                        className="h-8 w-8 md:h-10 md:w-10 object-contain filter group-hover:brightness-110 group-hover:scale-110 transition-all duration-300" 
+                        className="h-10 w-10 md:h-12 md:w-12 object-contain filter group-hover:brightness-110 group-hover:scale-110 transition-all duration-300" 
                         loading="lazy" 
                         decoding="async" 
                       />
@@ -74,9 +74,6 @@ const FeatureHub = () => {
                       </CardTitle>
                     </div>
                   </div>
-                  <CardDescription className="text-sm md:text-sm leading-relaxed text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300 font-medium break-words">
-                    {desc}
-                  </CardDescription>
 
                   {/* Progress bar effect on hover */}
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-glow to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

@@ -332,9 +332,6 @@ export default function StudentProductivity() {
                             <CardTitle className="text-lg group-hover:text-primary transition-colors">
                               {tool.name}
                             </CardTitle>
-                            <CardDescription className="text-sm mt-2">
-                              {tool.description}
-                            </CardDescription>
                           </div>
                         </CardHeader>
                         <CardContent>
