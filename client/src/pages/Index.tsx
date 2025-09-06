@@ -202,13 +202,13 @@ const Index = () => {
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-accent/20 rounded-xl opacity-0 group-hover:opacity-100 blur-sm transition-all duration-500 -z-10" />
                   
-                  <CardHeader className="relative z-10 p-5 md:p-6">
-                    <div className="flex items-start gap-4 mb-3 md:mb-4">
-                      <div className="relative rounded-xl p-3 md:p-3.5 flex-shrink-0 transition-all duration-300 group-hover:scale-105">
+                  <CardHeader className="relative z-10 p-5 md:p-6 text-center">
+                    <div className="flex flex-col items-center gap-4 mb-3 md:mb-4">
+                      <div className="flex justify-center">
                         <img
                           src={iconSrc}
                           alt={alt}
-                          className="relative h-5 w-5 md:h-6 md:w-6 object-contain filter group-hover:brightness-110 transition-all duration-300"
+                          className="h-8 w-8 md:h-10 md:w-10 object-contain filter group-hover:brightness-110 group-hover:scale-110 transition-all duration-300"
                           loading="lazy"
                           decoding="async"
                         />

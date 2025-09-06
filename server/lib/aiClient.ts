@@ -14,42 +14,53 @@ interface AIProvider {
 // Provider configurations in fallback order
 const AI_PROVIDERS: AIProvider[] = [
   {
-    name: "Groq",
+    name: "Groq (Free)",
     baseUrl: "https://api.groq.com/openai/v1/chat/completions",
     apiKey: process.env.GROQ_API_KEY,
     model: "llama-3.1-8b-instant",
     transformRequest: (prompt: string) => ({
       model: "llama-3.1-8b-instant",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 2048,
+      max_tokens: 1024,
       temperature: 0.7
     }),
     transformResponse: (response: any) => response.choices?.[0]?.message?.content || ""
   },
   {
-    name: "OpenRouter",
-    baseUrl: "https://openrouter.ai/api/v1/chat/completions",
-    apiKey: process.env.OPENROUTER_API_KEY,
-    model: "mistralai/mistral-7b-instruct",
+    name: "Gemini (Free)",
+    baseUrl: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    apiKey: process.env.GEMINI_API_KEY,
+    model: "gemini-1.5-flash",
     transformRequest: (prompt: string) => ({
-      model: "mistralai/mistral-7b-instruct",
+      contents: [{ parts: [{ text: prompt }] }]
+    }),
+    transformResponse: (response: any) => response.candidates?.[0]?.content?.parts?.[0]?.text || ""
+  },
+  {
+    name: "Together AI (Free)",
+    baseUrl: "https://api.together.xyz/v1/chat/completions",
+    apiKey: process.env.TOGETHER_API_KEY,
+    model: "meta-llama/Llama-3.2-3B-Instruct-Turbo",
+    transformRequest: (prompt: string) => ({
+      model: "meta-llama/Llama-3.2-3B-Instruct-Turbo",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 2048,
+      max_tokens: 1024,
       temperature: 0.7
     }),
     transformResponse: (response: any) => response.choices?.[0]?.message?.content || ""
   },
   {
-    name: "HuggingFace",
-    baseUrl: "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium",
+    name: "HuggingFace (Free)",
+    baseUrl: "https://api-inference.huggingface.co/models/microsoft/DialoGPT-small",
     apiKey: process.env.HUGGINGFACE_API_KEY,
-    model: "microsoft/DialoGPT-medium",
+    model: "microsoft/DialoGPT-small",
     transformRequest: (prompt: string) => ({
       inputs: prompt,
       parameters: {
-        max_length: 2048,
+        max_length: 512,
         temperature: 0.7,
-        return_full_text: false
+        return_full_text: false,
+        do_sample: true
       }
     }),
     transformResponse: (response: any) => {
@@ -60,37 +71,31 @@ const AI_PROVIDERS: AIProvider[] = [
     }
   },
   {
-    name: "TogetherAI",
-    baseUrl: "https://api.together.xyz/v1/chat/completions",
-    apiKey: process.env.TOGETHER_API_KEY,
-    model: "meta-llama/Llama-2-7b-chat-hf",
+    name: "OpenRouter (Free)",
+    baseUrl: "https://openrouter.ai/api/v1/chat/completions",
+    apiKey: process.env.OPENROUTER_API_KEY,
+    model: "microsoft/phi-3-mini-128k-instruct:free",
+    headers: {
+      "HTTP-Referer": "https://localhost:5000",
+      "X-Title": "NotBot AI Student Platform"
+    },
     transformRequest: (prompt: string) => ({
-      model: "meta-llama/Llama-2-7b-chat-hf",
+      model: "microsoft/phi-3-mini-128k-instruct:free",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 2048,
+      max_tokens: 1024,
       temperature: 0.7
     }),
     transformResponse: (response: any) => response.choices?.[0]?.message?.content || ""
   },
   {
-    name: "Gemini",
-    baseUrl: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
-    apiKey: process.env.GEMINI_API_KEY,
-    model: "gemini-1.5-flash",
-    transformRequest: (prompt: string) => ({
-      contents: [{ parts: [{ text: prompt }] }]
-    }),
-    transformResponse: (response: any) => response.candidates?.[0]?.content?.parts?.[0]?.text || ""
-  },
-  {
-    name: "Mistral",
+    name: "Mistral (Paid)",
     baseUrl: "https://api.mistral.ai/v1/chat/completions",
     apiKey: process.env.MISTRAL_API_KEY,
     model: "mistral-tiny",
     transformRequest: (prompt: string) => ({
       model: "mistral-tiny",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 2048,
+      max_tokens: 1024,
       temperature: 0.7
     }),
     transformResponse: (response: any) => response.choices?.[0]?.message?.content || ""
@@ -107,10 +112,18 @@ async function tryProvider(provider: AIProvider, prompt: string): Promise<string
   const requestBody = provider.transformRequest(prompt);
   
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${provider.apiKey}`,
-    ...provider.headers
+    "Content-Type": "application/json"
   };
+
+  // Only add Authorization header for providers that need it
+  if (provider.name !== "Gemini") {
+    headers["Authorization"] = `Bearer ${provider.apiKey}`;
+  }
+
+  // Add any additional headers
+  if (provider.headers) {
+    Object.assign(headers, provider.headers);
+  }
 
   const response = await fetch(provider.baseUrl, {
     method: "POST",

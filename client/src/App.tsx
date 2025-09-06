@@ -37,6 +37,22 @@ import ResumeBuilder from "./pages/tools/ResumeBuilder";
 import ResumeBuilderPro from "./pages/tools/ResumeBuilderPro";
 import RemoveBg from "./pages/tools/RemoveBg";
 import PlagiarismChecker from "./pages/tools/PlagiarismChecker";
+
+// Student Productivity Platform
+import StudentProductivity from "./pages/tools/StudentProductivity";
+import CoverLetterGenerator from "./pages/tools/CoverLetterGenerator";
+import EmailAssistant from "./pages/tools/EmailAssistant";
+import BlogGenerator from "./pages/tools/BlogGenerator";
+import StoryWriter from "./pages/tools/StoryWriter";
+import ImageCompressorResizer from "./pages/tools/ImageCompressorResizer";
+import AudioTranscriber from "./pages/tools/AudioTranscriber";
+import VideoToGif from "./pages/tools/VideoToGif";
+import FileConverter from "./pages/tools/FileConverter";
+import LanguageTranslator from "./pages/tools/LanguageTranslator";
+import TextToSpeech from "./pages/tools/TextToSpeech";
+import SpeechToText from "./pages/tools/SpeechToText";
+import ReadabilityChecker from "./pages/tools/ReadabilityChecker";
+
 // Blog pages
 import Blogs from "./pages/Blogs";
 import ChatWithYourNotes from "./pages/blog/ChatWithYourNotes";
@@ -92,6 +108,22 @@ const App = () => (
               <Route path="/tools/flyer-creator" element={<FlyerCreator />} />
               <Route path="/tools/presentation-creator" element={<PresentationCreator />} />
               <Route path="/tools/ocr-tool" element={<OCRTool />} />
+
+{/* Student Productivity Platform */}
+<Route path="/tools/student-productivity" element={<StudentProductivity />} />
+<Route path="/tools/cover-letter-generator" element={<CoverLetterGenerator />} />
+<Route path="/tools/email-assistant" element={<EmailAssistant />} />
+<Route path="/tools/blog-generator" element={<BlogGenerator />} />
+<Route path="/tools/story-writer" element={<StoryWriter />} />
+<Route path="/tools/image-compressor-resizer" element={<ImageCompressorResizer />} />
+<Route path="/tools/audio-transcriber" element={<AudioTranscriber />} />
+<Route path="/tools/video-to-gif" element={<VideoToGif />} />
+<Route path="/tools/file-converter" element={<FileConverter />} />
+<Route path="/tools/language-translator" element={<LanguageTranslator />} />
+<Route path="/tools/text-to-speech" element={<TextToSpeech />} />
+<Route path="/tools/speech-to-text" element={<SpeechToText />} />
+<Route path="/tools/readability-checker" element={<ReadabilityChecker />} />
+
 {/* Explicit tool routes */}
 <Route path="/tools/remove-bg" element={<RemoveBg />} />
 <Route path="/tools/plagiarism-checker" element={<PlagiarismChecker />} />

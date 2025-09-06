@@ -443,7 +443,6 @@ const Dashboard = () => {
                     </div>
                     <div className="flex-1">
                       <p className="font-medium text-gray-800 text-sm md:text-base">Uploading document...</p>
-                      <p className="text-xs md:text-sm text-gray-500">{uploadedFile?.name}</p>
                     </div>
                     <div className="text-xs md:text-sm font-medium text-blue-600">{uploadProgress}%</div>
                   </div>

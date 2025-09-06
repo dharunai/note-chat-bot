@@ -57,14 +57,13 @@ const FeatureHub = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-accent/3 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-accent/20 rounded-xl opacity-0 group-hover:opacity-100 blur-sm transition-all duration-500 -z-10" />
 
-                <CardHeader className="relative z-10 p-5 md:p-6">
-                  <div className="flex items-start gap-4 mb-3 md:mb-4">
-                    <div className="relative rounded-xl bg-gradient-to-br from-primary/15 to-primary/10 p-3 md:p-3.5 flex-shrink-0 group-hover:from-primary/25 group-hover:to-primary/15 transition-all duration-300 group-hover:scale-110 group-hover:rotate-2">
-                      <div className="absolute inset-0 rounded-xl bg-primary/20 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
+                <CardHeader className="relative z-10 p-5 md:p-6 text-center">
+                  <div className="flex flex-col items-center gap-4 mb-3 md:mb-4">
+                    <div className="flex justify-center">
                       <img 
                         src={iconPath} 
                         alt={`${title} icon`} 
-                        className="relative h-5 w-5 md:h-6 md:w-6 object-contain filter group-hover:brightness-110 transition-all duration-300" 
+                        className="h-8 w-8 md:h-10 md:w-10 object-contain filter group-hover:brightness-110 group-hover:scale-110 transition-all duration-300" 
                         loading="lazy" 
                         decoding="async" 
                       />
