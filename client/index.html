@@ -5,6 +5,29 @@
     <link rel="icon" href="http://127.0.0.1:5000/src/assets/logo-main.webp">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#8b5cf6" />
+    <meta name="description" content="NoteBot AI - Your AI Study Companion. Generate essays, citations, chat with PDFs, and more!" />
+    <meta name="keywords" content="AI, study, education, essay writer, citation generator, PDF chat, student tools" />
+    <meta name="author" content="NoteBot AI" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- PWA Icons -->
+    <link rel="apple-touch-icon" href="/favicon.webp" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicon.webp" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/new-favicon.webp" />
+    
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="NoteBot AI" />
+    
+    <!-- Windows PWA Support -->
+    <meta name="msapplication-TileImage" content="/favicon.webp" />
+    <meta name="msapplication-TileColor" content="#8b5cf6" />
+    
     <!-- Google Fonts for Presentation Creator -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,6 +36,65 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+              
+              // Check for updates
+              registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed') {
+                    if (navigator.serviceWorker.controller) {
+                      // New content available, prompt user to refresh
+                      if (confirm('New version available! Refresh to update?')) {
+                        window.location.reload();
+                      }
+                    }
+                  }
+                });
+              });
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+
+      // PWA Install Prompt
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Show install button (you can add this to your UI)
+        const installButton = document.getElementById('install-button');
+        if (installButton) {
+          installButton.style.display = 'block';
+          installButton.addEventListener('click', () => {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+              }
+              deferredPrompt = null;
+              installButton.style.display = 'none';
+            });
+          });
+        }
+      });
+
+      // Track PWA install
+      window.addEventListener('appinstalled', (evt) => {
+        console.log('PWA was installed');
+      });
+    </script>
+    
     <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
     <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
   </body>

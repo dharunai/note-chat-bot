@@ -39,26 +39,30 @@ export default function ToolLayout({
       <TopNav />
       <div className="container mx-auto px-4 py-6 md:py-8 max-w-4xl">
         {/* Enhanced Hero Section */}
-        <section className="relative text-center mb-6 py-8 md:py-12 tool-hero-section rounded-xl md:rounded-2xl overflow-hidden">
-          {/* Floating keywords - properly distributed */}
+        <section className="relative text-center mb-6 py-8 md:py-12 tool-hero-section rounded-xl md:rounded-2xl overflow-hidden bg-gradient-to-br from-purple-50/80 via-indigo-50/60 to-purple-100/40 backdrop-blur-sm">
+          {/* Floating keywords - properly distributed with purple blur effect */}
           {floatingKeywords.map((keyword, index) => {
             const positions = [
-              'top-4 left-6',      // top-left
-              'top-6 right-8',     // top-right  
-              'bottom-6 left-8',   // bottom-left
-              'bottom-4 right-6',  // bottom-right
-              'top-1/2 left-4 -translate-y-1/2',  // center-left
-              'top-1/2 right-4 -translate-y-1/2'  // center-right
+              'top-8 left-12',      // top-left
+              'top-12 right-16',     // top-right  
+              'bottom-12 left-16',   // bottom-left
+              'bottom-8 right-12',  // bottom-right
+              'top-1/2 left-8 -translate-y-1/2',  // center-left
+              'top-1/2 right-8 -translate-y-1/2',  // center-right
+              'top-20 left-1/2 -translate-x-1/2', // top-center
+              'bottom-20 left-1/2 -translate-x-1/2' // bottom-center
             ];
-            const delays = ['0s', '1s', '2s', '0.5s', '1.5s', '2.5s'];
-            const opacities = ['opacity-60', 'opacity-50', 'opacity-70', 'opacity-40', 'opacity-50', 'opacity-60'];
-            const colors = ['text-primary/70', 'text-accent/70', 'text-primary-glow/70', 'text-accent/80', 'text-primary/60', 'text-accent/60'];
+            const delays = ['0s', '1s', '2s', '0.5s', '1.5s', '2.5s', '3s', '1.8s'];
+            const sizes = ['text-lg', 'text-base', 'text-xl', 'text-sm', 'text-lg', 'text-base', 'text-lg', 'text-base'];
             
             return (
               <div 
                 key={index} 
-                className={`absolute ${positions[index % positions.length]} text-sm font-medium ${colors[index % colors.length]} ${opacities[index % opacities.length]} animate-pulse pointer-events-none select-none whitespace-nowrap`}
-                style={{animationDelay: delays[index % delays.length]}}
+                className={`absolute ${positions[index % positions.length]} ${sizes[index % sizes.length]} font-semibold text-purple-400/30 blur-[0.5px] animate-pulse pointer-events-none select-none whitespace-nowrap z-0`}
+                style={{
+                  animationDelay: delays[index % delays.length],
+                  animationDuration: '4s'
+                }}
               >
                 {keyword}
               </div>

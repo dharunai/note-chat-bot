@@ -123,12 +123,26 @@ export default function AIEssayWriter() {
 
   const outputContent = (
     <>
-      <Textarea
-        value={result}
-        placeholder="Your generated essay will appear here..."
-        className="min-h-[300px]"
-        readOnly
-      />
+      {/* Render formatted paragraphs instead of dumping everything into a textarea */}
+      <div className="min-h-[300px] w-full p-4 rounded border border-border/20 bg-card/40 overflow-auto prose prose-invert max-w-none">
+        {result ? (
+          // Split into paragraph blocks by two or more newlines, preserve single newlines as <br />
+          result.trim().split(/\n{2,}/).map((para, idx) => {
+            const escaped = para
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;');
+            const html = escaped.replace(/\n/g, '<br />');
+            return (
+              <p key={idx} dangerouslySetInnerHTML={{ __html: html }} />
+            );
+          })
+        ) : (
+          <div className="text-muted-foreground">Your generated essay will appear here...</div>
+        )}
+      </div>
       
       {result && (
         <div className="flex gap-2">
@@ -162,7 +176,7 @@ export default function AIEssayWriter() {
       heroIcon={<PenSquare className="w-6 h-6 md:w-8 md:h-8 text-primary" />}
       heroTitle="AI Essay Writer"
       heroDescription="Generate well-structured essays on any topic using AI."
-      floatingKeywords={['Essay', 'Writer', 'AI', 'Academic', 'Generate', 'Content']}
+      floatingKeywords={['Smart', 'Concise', 'Efficient', 'Academic', 'Research', 'Essay', 'AI', 'Writer', 'Content', 'Analysis', 'Structure', 'Summary']}
       inputTitle="Essay Topic & Requirements"
       inputDescription="Provide a topic and select the desired length and style for your essay."
       inputChildren={inputContent}

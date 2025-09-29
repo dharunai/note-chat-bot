@@ -315,8 +315,10 @@ const Dashboard = () => {
         sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
       }`}>
         <div className="flex items-center gap-3 mb-8 mt-12 md:mt-0">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-            <Bot className="h-5 w-5 text-white" />
+          <div className="w-8 h-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H11V21H5V19H7V17H5V15H9V17H7V19H9V21H11V23H19C20.11 23 21 22.11 21 21V9M12 15C10.9 15 10 14.1 10 13S10.9 11 12 11 14 11.9 14 13 13.1 15 12 15Z"/>
+            </svg>
           </div>
           <h1 className="text-xl font-semibold">NoteBot AI</h1>
         </div>
@@ -508,8 +510,11 @@ const Dashboard = () => {
               {/* Chat Header */}
               <div className="p-3 md:p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
                 <div className="flex items-center gap-2 md:gap-3">
-                  <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <Bot className="h-3 w-3 md:h-4 md:w-4 text-white" />
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+                    <svg className="h-3 w-3 md:h-4 md:w-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                      <path d="M12 11C10.9 11 10 11.9 10 13S10.9 15 12 15 14 14.1 14 13 13.1 11 12 11M16 13C16 15.2 14.2 17 12 17S8 15.2 8 13 9.8 9 12 9 16 10.8 16 13Z"/>
+                    </svg>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -567,8 +572,11 @@ const Dashboard = () => {
                   <div key={index} className={`flex items-start gap-2 md:gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'} w-full`}>
                     {/* Bot Avatar - Left Side */}
                     {message.role === 'assistant' && (
-                      <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <Bot className="h-3.5 w-3.5 md:h-4 md:w-4 text-white" />
+                      <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-md">
+                        <svg className="h-3.5 w-3.5 md:h-4 md:w-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                          <path d="M12 11C10.9 11 10 11.9 10 13S10.9 15 12 15 14 14.1 14 13 13.1 11 12 11M16 13C16 15.2 14.2 17 12 17S8 15.2 8 13 9.8 9 12 9 16 10.8 16 13Z"/>
+                        </svg>
                       </div>
                     )}
 
@@ -599,8 +607,11 @@ const Dashboard = () => {
 
                 {isTyping && (
                   <div className="flex items-start gap-2 md:gap-3 justify-start w-full">
-                    <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <Bot className="h-3.5 w-3.5 md:h-4 md:w-4 text-white" />
+                    <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-md">
+                      <svg className="h-3.5 w-3.5 md:h-4 md:w-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                        <path d="M12 11C10.9 11 10 11.9 10 13S10.9 15 12 15 14 14.1 14 13 13.1 11 12 11M16 13C16 15.2 14.2 17 12 17S8 15.2 8 13 9.8 9 12 9 16 10.8 16 13Z"/>
+                      </svg>
                     </div>
                     <div className="bg-gray-100 rounded-2xl rounded-bl-md px-3 py-2 md:px-4 md:py-3 shadow-sm mr-auto">
                       <div className="flex items-center gap-1">

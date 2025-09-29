@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import OfflineIndicator from "@/components/pwa/OfflineIndicator";
+import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -154,6 +156,11 @@ const App = () => (
             </Routes>
           
         </BrowserRouter>
+        
+        {/* PWA Components */}
+        <OfflineIndicator />
+        <PWAInstallPrompt />
+        
       </TooltipProvider>
     </AuthProvider>
     </ThemeProvider>

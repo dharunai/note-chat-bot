@@ -1,0 +1,42 @@
+directories:
+  output: dist-electron
+  buildResources: build
+appId: com.notebot.ai
+productName: NoteBot AI
+files:
+  - filter:
+      - dist/**/*
+      - electron/main.cjs
+      - node_modules/**/*
+      - package.json
+extraFiles:
+  - from: dist
+    to: dist
+    filter:
+      - '**/*'
+mac:
+  category: public.app-category.education
+  icon: build/icon.png
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+win:
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch:
+        - x64
+linux:
+  icon: build/icon.png
+  target:
+    - target: AppImage
+      arch:
+        - x64
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+electronVersion: 38.1.0

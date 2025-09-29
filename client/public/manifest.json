@@ -1,0 +1,89 @@
+{
+  "name": "NoteBot AI - Your AI Study Companion",
+  "short_name": "NoteBot AI",
+  "description": "AI-powered tools for students including essay writing, citation generation, plagiarism checking, and document chat.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/new-favicon.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity", "utilities"],
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "shortcuts": [
+    {
+      "name": "AI Essay Writer",
+      "short_name": "Essay Writer",
+      "description": "Generate AI-powered essays",
+      "url": "/tools/essay-writer",
+      "icons": [{ "src": "/icons/ai-essay-writer-new.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Citation Generator",
+      "short_name": "Citations",
+      "description": "Generate academic citations",
+      "url": "/tools/citation-generator",
+      "icons": [{ "src": "/favicon.webp", "sizes": "96x96" }]
+    },
+    {
+      "name": "Chat with PDF",
+      "short_name": "PDF Chat",
+      "description": "Chat with your documents",
+      "url": "/dashboard",
+      "icons": [{ "src": "/favicon.webp", "sizes": "96x96" }]
+    },
+    {
+      "name": "All Tools",
+      "short_name": "Tools",
+      "description": "Browse all AI tools",
+      "url": "/tools",
+      "icons": [{ "src": "/favicon.webp", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "NoteBot AI Dashboard"
+    },
+    {
+      "src": "/screenshot-narrow.png", 
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "NoteBot AI Mobile"
+    }
+  ]
+}

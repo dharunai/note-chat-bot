@@ -1,0 +1,11 @@
+version: 1.0.0
+files:
+  - url: NoteBot-AI-1.0.0.dmg
+    sha512: ah0oCTFuwSB+5khD6BSQts1lf5GasE5/v8QcgcUGGlFH7Xa+Cu6Sboc37sDBnkogir4H4AEtwoUt3rR6A9eNZg==
+    size: 208010178
+  - url: NoteBot-AI-1.0.0-arm64.dmg
+    sha512: QiOCTap+/l4TFfeGhgnZWUAZepdz5bpN5nWwNrxpiwaA644a/9xc27R4mg9lhAiitlo5ReHVqh8QV7hqDbonKA==
+    size: 202826670
+path: NoteBot-AI-1.0.0.dmg
+sha512: ah0oCTFuwSB+5khD6BSQts1lf5GasE5/v8QcgcUGGlFH7Xa+Cu6Sboc37sDBnkogir4H4AEtwoUt3rR6A9eNZg==
+releaseDate: '2025-09-14T17:19:16.534Z'
